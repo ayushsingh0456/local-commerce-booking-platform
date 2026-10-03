@@ -1,0 +1,489 @@
+TC ID,Title,Module,Type,Technique,Priority,Preconditions,Test Data,Steps,Expected Result,Requirement IDs,Business Rule IDs,User Story IDs,Automation,Last Result
+TC-ACC-001,"Guest browses freely and is prompted to sign in at Add, save and Bookings",ACC,Functional,Use case,P1,App freshly installed; no account,menu-items.csv: IT-1001,"1. Open Café Mohnblume as a guest and open Topfengolatsche.
+2. Tap Add.
+3. Tap the heart on the Café Mohnblume card.
+4. Sign in as Sophie from the prompt.
+5. Open the Bookings tab as a guest on a second device.","1. Price € 3,40 and allergens A, C, G are visible; button reads ""Melde dich an, um zu bestellen"".
+2. Sign-in prompt; nothing added.
+3. Sign-in prompt; nothing saved.
+4. Back on the card; heart completes without a second tap.
+5. Signed-out state ""Melde dich an, um deine Buchungen zu sehen"".",FR-ACC-01; FR-DSC-08,BR-001,US-001,Automated,Pass
+TC-ACC-002,"Sign-up stores only the minimum data set; name, password and age boundaries",ACC,Boundary,Boundary value analysis,P1,No account for sophie.wallner@example.com,Sign-up inputs from US-002-AC1 and AC2,"1. Enter first name S, then Jo, then Sophie2.
+2. Enter passwords Mohn202, mohn2026, Password1, Mohn2026.
+3. Submit with every field valid but the age box unticked.
+4. Tick the age box and submit.
+5. Inspect the stored customer row and consent rows.","1. S and Sophie2 rejected with the first-name message; Jo accepted.
+2. First three rejected (length, composition, breached); Mohn2026 accepted.
+3. Not created; ""Bitte bestätige, dass du mindestens 14 Jahre alt bist.""
+4. Created and signed in.
+5. Only first name, last name, email, mobile, password hash, age declaration, locale; terms and privacy consents with versions; marketing not granted.",FR-ACC-02,BR-002,US-002,Automated,Pass
+TC-ACC-003,Sign-up refuses an email or mobile already in use and a portal email,ACC,Negative,Equivalence partitioning,P1,Customer daniela.costa@example.com with +43 676 5550123 exists; elif.aydin@mohnblume.example is a portal user,US-002-AC4 rows,"1. Sign up with daniela.costa@example.com.
+2. Sign up with a new email and +43 676 5550123.
+3. Sign up with elif.aydin@mohnblume.example.","1. 409 EMAIL_IN_USE; message with Sign In link.
+2. 409 MOBILE_IN_USE.
+3. 409 EMAIL_RESERVED_FOR_PORTAL; ""This email address is registered for a business account. Use a different one for the app.""",FR-ACC-05,BR-002,US-002,Automated,Pass
+TC-ACC-004,Password sign-in locks after 5 failures for exactly 15 minutes; Google still works,ACC,Boundary,Boundary value analysis,P1,Daniela's account; virtual clock,Account U-CUS-0002,"1. Make 4 wrong attempts.
+2. Make a fifth wrong attempt at 08:00:00.
+3. Sign in with the correct password at 08:14:59.
+4. Sign in with the correct password at 08:15:00.
+5. During the lock, sign in with Google.","1. Each returns INVALID_CREDENTIALS.
+2. 423 ACCOUNT_LOCKED with the 15-minute message.
+3. Still locked.
+4. Signed in.
+5. Signed in with Google.",FR-ACC-03,BR-004,US-003,Automated,Pass
+TC-ACC-005,"Password reset code: 10-minute validity, 60-second resend, 5 attempts, other sessions ended",ACC,Boundary,Boundary value analysis,P1,Sophie signed in on two devices; virtual clock,Account U-CUS-0001,"1. Request a code at 19:00:00 and verify it at 19:09:59.
+2. Request again; verify the new code at 19:10:00 after it was issued at 19:00:00.
+3. Tap resend at 19:00:59 and at 19:01:00.
+4. Enter 5 wrong codes.
+5. Complete a reset on device 1; call the API from device 2.","1. Accepted.
+2. CODE_EXPIRED.
+3. First disabled with ""Neuer Code in 0:01""; second sends a new code and the old code fails.
+4. Fifth attempt returns CODE_ATTEMPTS_EXHAUSTED; correct code then fails.
+5. Device 2 gets 401; Sign In shows ""Dein Passwort wurde geändert. Bitte melde dich an.""",FR-ACC-04,BR-004,US-004,Automated,Pass
+TC-ACC-006,"Consents are separate, versioned and withdrawable; analytics starts only after opt-in",ACC,Functional,State transition,P1,Fresh install; network proxy capturing analytics traffic,Account U-CUS-0002,"1. Sign up without ticking marketing; browse 3 screens.
+2. Grant analytics in Profile; browse 3 screens.
+3. Withdraw analytics and marketing email in Profile.
+4. Inspect consent rows.","1. No analytics traffic.
+2. Analytics events sent.
+3. Analytics traffic stops in the same session.
+4. Rows per change with purpose, granted, version, source and timestamp.",FR-ACC-08; FR-ACC-02,BR-003,US-002; US-005,Automated,Pass
+TC-ACC-007,Account deletion refused while open; erased and pseudonymized within 30 days; records kept,ACC,Functional,Decision table,P1,Daniela has an order in Ready,Account U-CUS-0002,"1. Request deletion with password.
+2. Complete the order; request deletion again on 2026-09-02.
+3. Run the deletion job with the clock at 2026-10-02.
+4. Query orders and payments of the account.
+5. Sign in with the old email.","1. 409 OPEN_BOOKINGS_EXIST.
+2. 202; ""Your account will be deleted within 30 days.""
+3. Name, email, mobile, consents and device tokens erased.
+4. Orders, payments, receipts present under a pseudonymous customer ID.
+5. INVALID_CREDENTIALS.",FR-ACC-07,BR-005,US-005,Automated,Pass
+TC-ACC-008,Platform Admin exports a customer's data as JSON and the export is audited,ACC,Functional,Use case,P2,Verified access request from Daniela,Account U-CUS-0002,"1. Paul runs the export for Daniela.
+2. Open the file.
+3. Search the audit trail.","1. JSON file produced.
+2. Contains profile, consents, orders, appointments, saved locations.
+3. Event with Paul as actor and the customer ID.",FR-ACC-09,BR-005,US-005,Manual,Pass
+TC-ACC-009,Language switch and push opt-out; transactional email still sent,ACC,Functional,Equivalence partitioning,P2,"Daniela in German, push on",Account U-CUS-0002,"1. Switch language to English.
+2. Switch order and appointment push off.
+3. Place an order and have it accepted.","1. UI switches without restart.
+2. Preference stored.
+3. No push; confirmation email received in English.",FR-ACC-06,BR-041,US-005,Automated,Pass
+TC-DSC-001,Home sections and Near you order by distance; name order without location,DSC,Functional,Use case,P1,Sophie at Neubaugasse; order in Preparing,"Locations L-1001, L-1002, L-1004, L-2001, L-3001","1. Open Home with location permission.
+2. Deny location permission and open See all.","1. Sections in order with Ongoing card; Near you: Café Mohnblume 0,4 km, Haarstudio Linde 0,6 km, Nudelbar Sesam Neubau 0,7 km, Konditorei Pomeranze 1,1 km, Massageatelier Ruhepol 2,4 km.
+2. Card ""Standort aktivieren ...""; list ""5 Geschäfte · sortiert nach Name"".",FR-DSC-01,BR-006,US-006,Automated,Pass
+TC-DSC-002,"Business card shows open state in words and no ratings, counts or promoted badges",DSC,Boundary,Boundary value analysis,P1,Café Mohnblume open 07:30 to 18:00 on 2026-09-17; virtual clock,L-1001,"1. View the card at 07:29, 07:30, 17:59 and 18:00.
+2. Inspect every card element in Home, listing and search.","1. ""Öffnet um 07:30"", ""Geöffnet bis 18:00"", ""Geöffnet bis 18:00"", ""Heute geschlossen"".
+2. No stars, score, review count or ""Empfohlen"" anywhere.",FR-DSC-04,BR-007; BR-008,US-006,Automated,Pass
+TC-DSC-003,Menu rows show VAT-inclusive prices and letters; sold-out dimmed; hidden absent,DSC,Functional,Equivalence partitioning,P1,Mohnkuchen sold out; Mitarbeiter-Frühstück hidden,"menu-items.csv: IT-1001, IT-1003, IT-1004, IT-1005, IT-1007","1. Open the Café Mohnblume menu.
+2. Search for ""Mitarbeiter"".","1. Topfengolatsche € 3,40 ""A C G""; Limonade € 3,90 without letters; Linsen-Bowl € 9,80 ""L + je nach Auswahl""; Mohnkuchen dimmed ""Ausverkauft"" without add.
+2. No result for the hidden item.",FR-DSC-06,BR-014; BR-015; BR-010,US-009,Automated,Pass
+TC-DSC-004,Item Details shows allergens above options in every declaration state,DSC,Functional,Decision table,P1,App in English,"menu-items.csv: IT-1001, IT-1003, IT-1005, IT-1006","1. Open Topfengolatsche.
+2. Open Hausgemachte Limonade.
+3. Open Linsen-Bowl.
+4. Open Nussschnecke.
+5. Tap the information control.","1. ""Contains: A Cereals containing gluten, C Eggs, G Milk or lactose"".
+2. ""Contains none of the 14 main allergens.""
+3. ""Contains: L Celery. Depending on your choice also: H Tree nuts, N Sesame."" above Topping; choices show H and N.
+4. A, C, G, H listed.
+5. Sheet lists all 14 letters and ends with the traces sentence.",FR-DSC-07,BR-010; BR-011; BR-012,US-010,Automated,Pass
+TC-DSC-005,"Business page shows legal information, location selector and brand color",DSC,Functional,Use case,P2,Nudelbar Sesam has two locations,"L-1001; L-1003, L-1004","1. Open Café Mohnblume and expand About.
+2. Scroll the menu.
+3. Open Nudelbar Sesam Neubau and select Mariahilf.","1. Legal name Mohnblume Kaffeehaus e.U., FN 512376k, ATU71234567, phone, email.
+2. Category chips stay on top; headings use the brand color.
+3. Address, hours and menu switch to Mariahilf.",FR-DSC-05,BR-006,US-009,Automated,Pass
+TC-DSC-006,"Category listing chips, Open now filter and one card per location",DSC,Functional,Equivalence partitioning,P2,Clock 06:45; only Pomeranze open,L-1001 to L-1004,"1. Open Essen & Trinken; tap Bäckerei.
+2. Tap Alle and switch on Jetzt geöffnet.
+3. Switch off the filter and count Nudelbar Sesam cards.
+4. Select Restaurant with Jetzt geöffnet.","1. Only Pomeranze; ""1 Geschäft · sortiert nach Entfernung"".
+2. Only Pomeranze.
+3. Two cards: Neubau and Mariahilf.
+4. Empty state message.",FR-DSC-03,BR-006; BR-007,US-008,Automated,Pass
+TC-DSC-007,"Search runs from 2 characters, accent-insensitive, grouped, at most 20 per group",DSC,Boundary,Boundary value analysis,P2,"Staging catalog with 25 items containing ""Kaffee""",menu-items.csv: IT-1002,"1. Type ""k"".
+2. Type ""ka"".
+3. Search ""kaese"" and ""Käse"".
+4. Search ""kaffee"".
+5. Tap the dish result Schinken-Käse-Sandwich.","1. No request sent.
+2. Grouped results.
+3. Identical results including Schinken-Käse-Sandwich.
+4. Dishes group shows 20 and ""20+"".
+5. Business page opens scrolled to the item.",FR-DSC-02,BR-009,US-007,Automated,Pass
+TC-DSC-008,"Allergen filter marks M1, M2, M3 and never leaves the device",DSC,Functional,Decision table,P1,Filter avoids H; network proxy and error-monitoring sandbox capture traffic,"menu-items.csv: IT-1001, IT-1003, IT-1005, IT-1006","1. Open the Café Mohnblume menu.
+2. Place an order and browse 3 menus.
+3. Inspect all captured requests and events.
+4. Reinstall the app.","1. Nussschnecke dimmed ""Contains H""; Linsen-Bowl ""Depending on choice: H""; Topfengolatsche and Limonade without label; banner states the source and traces note.
+2. Order placed normally.
+3. No request, analytics event or error event contains the filter.
+4. Filter empty.",FR-DSC-09,BR-010; BR-012,US-010,Automated,Pass
+TC-DSC-009,Save and unsave locations; saved list in Profile,DSC,Functional,State transition,P3,Sophie signed in,"L-1001, L-1004","1. Save Café Mohnblume and Nudelbar Sesam Neubau.
+2. Unsave Café Mohnblume.
+3. Repeat the unsave call.","1. Both in Profile, Gespeichert.
+2. Only Nudelbar Sesam Neubau remains.
+3. 204 again (idempotent).",FR-DSC-08,BR-001,US-001,Automated,Pass
+TC-ORD-001,One cart per location; replace prompt; cart expires after 24 hours,ORD,Boundary,Boundary value analysis,P2,Virtual clock; Sophie signed in,"menu-items.csv: IT-1001, IT-1002, IT-1301","1. Add 2 x Topfengolatsche and 1 x Sandwich.
+2. Add Pho Bo at Nudelbar Sesam; keep the current cart.
+3. Leave the cart untouched from 12:00; open at 11:59 next day, then at 12:00 next day.","1. Cart bar ""3 Artikel · € 13,70"".
+2. Prompt shown; cart unchanged.
+3. Kept at 11:59; discarded at 12:00.",FR-ORD-01,BR-016,US-011,Automated,Pass
+TC-ORD-002,"Earliest pickup slot with 20-minute lead time at 11:52, 11:55 and 11:56",ORD,Boundary,Boundary value analysis,P1,"L-1001 lead time 20, capacity 6, slots empty; virtual clock 2026-09-17",L-1001,"1. Request slots at 11:52.
+2. Request slots at 11:55.
+3. Request slots at 11:56.
+4. Request slots at 17:00.","1. First slot 12:15 - 12:30.
+2. First slot 12:15 - 12:30.
+3. First slot 12:30 - 12:45.
+4. No slots; ""Heute sind keine Abholzeiten mehr frei.""",FR-ORD-02,BR-017,US-012,Automated,Pass
+TC-ORD-003,Slot is full at 5 orders plus 1 active hold,ORD,Boundary,Boundary value analysis,P1,"Slot 12:15 has 5 orders in Placed, Accepted, Preparing or Ready; clock 11:52",L-1001,"1. Create 1 hold on 12:15 as customer B.
+2. Customer A requests slots.
+3. Customer B's hold expires; A requests slots again.","1. Hold created.
+2. 12:15 status full, not selectable; first selectable 12:30.
+3. 12:15 available.",FR-ORD-02,BR-018,US-012,Automated,Pass
+TC-ORD-004,"Checkout shows seller identity and the order button ""Zahlungspflichtig bestellen""",ORD,Functional,Use case,P1,Canonical cart with MOHN3,"menu-items.csv: IT-1001, IT-1002, IT-1003","1. Open checkout.
+2. Switch the language to English.","1. Lines, slot, voucher, payment method, subtotal, discount, total, VAT per rate; ""Verkäufer: Mohnblume Kaffeehaus e.U., Kornblumengasse 9, 1070 Wien""; button ""Zahlungspflichtig bestellen · € 15,70"".
+2. Button ""Place order and pay · € 15.70"".",FR-ORD-04,BR-035; BR-036,US-014,Automated,Pass
+TC-ORD-005,Pickup hold lasts 10 minutes and is released on leaving checkout,ORD,Boundary,Boundary value analysis,P1,Hold on 12:15 created at 11:40:00,L-1001,"1. Press the order button at 11:49:59 (payment not started).
+2. Repeat with a new hold and press at 11:50:00.
+3. Create a hold on the last unit and leave checkout.
+4. Customer B requests slots.","1. Payment starts.
+2. ""Deine reservierte Abholzeit ist abgelaufen. Bitte wähle sie erneut.""
+3. Hold released.
+4. 12:15 available to B.",FR-ORD-03,BR-019,US-012,Automated,Pass
+TC-ORD-006,"Placing an order issues a pickup code, reaches the board and confirms by email",ORD,Functional,Use case,P1,Canonical cart; order board open,L-1001,"1. Place the order at 11:53:30.
+2. Observe the order board.
+3. Check the email inbox.","1. Order QO-2026-004218 Placed with a 4-character code and QR.
+2. Ticket in Neu within 3 s.
+3. Confirmation email with lines and total € 15,70.",FR-ORD-05,BR-021,US-015,Automated,Pass
+TC-ORD-007,Auto-reject at 5 minutes; pre-order placed while closed waits for opening plus 30 minutes,ORD,Boundary,Boundary value analysis,P1,Virtual clock; order placed 11:53:30; Pomeranze opens 06:30,"L-1001, L-1002, IT-1102","1. Accept at 11:58:29 (order A).
+2. Do nothing on order B placed 11:53:30 until 11:58:30.
+3. Place a pre-order at Pomeranze on Monday 20:10.
+4. Advance the clock to Tuesday 06:59:59 and 07:00:00.","1. Accepted; captured.
+2. Rejected with ""Keine Antwort vom Geschäft""; authorization voided; customer notified.
+3. Accept deadline Tuesday 07:00.
+4. Still Placed at 06:59:59; auto-rejected at 07:00:00.",FR-ORD-07,BR-022,US-015; US-018,Automated,Pass
+TC-ORD-008,Customer cancellation by status and cutoff (table 3.6a),ORD,Boundary,Decision table,P1,Slot 12:15; cutoff 30 minutes; virtual clock,L-1001,"1. Cancel a Placed in-app order.
+2. Cancel an Accepted captured order at 11:45.
+3. Try to cancel an Accepted order at 11:46.
+4. Try to cancel a Preparing order at 11:30.
+5. Cancel a Placed pay-at-pickup order.","1. Canceled; authorization voided; slot released.
+2. Canceled; € 15,70 refunded automatically; dialog states 5 to 10 working days.
+3. No cancel; phone +43 1 5234567 shown.
+4. No cancel shown.
+5. Canceled; no payment action.",FR-ORD-08,BR-023,US-016,Automated,Pass
+TC-ORD-009,"Rebook uses current prices, skips unavailable items and copies no slot or voucher",ORD,Functional,Equivalence partitioning,P2,"Past order: Linsen-Bowl + Sesam-Topping at € 10,30 and Mohnkuchen; Bowl now € 10,20; Mohnkuchen unpublished","menu-items.csv: IT-1004, IT-1005","1. Tap Erneut bestellen.
+2. Open checkout.
+3. Open an order in Preparing.","1. Cart ""1 Artikel · € 10,70""; price-change note; ""1 Artikel ist nicht mehr verfügbar ..."".
+2. No slot, note or voucher; default payment method.
+3. No rebook control.",FR-ORD-10,BR-025,US-017,Automated,Pass
+TC-ORD-010,"Slow 3-D Secure: hold extended once; full slot at authorization offers alternatives (INC-2026-011 regression, CR-006)",ORD,Integration,State transition,P1,Slot 12:15 capacity 6 with 5 orders; Sophie's hold at 11:40:00; sandbox card ending 3155,L-1001,"1. Start payment; provider signals challenge start at 11:43:10.
+2. Signal a second challenge start.
+3. Let the hold expire at 11:55:00; customer B places an order at 11:55:30.
+4. Approve Sophie's challenge at 11:56:20.
+5. Choose 12:30 at 11:57:40.
+6. Repeat steps 1 to 4 and choose nothing until 11:59:20.
+7. Check slot 12:15 order count.","1. Hold expiry moves to 11:55:00.
+2. No further extension.
+3. B's order Placed in 12:15 (6 of 6).
+4. 409 SLOT_FULL_AT_AUTHORISATION with 12:30, 12:45, 13:00 held for 3 minutes; no order in 12:15.
+5. Order Placed in 12:30 with the same authorization.
+6. Authorisation voided; ""Reservierung aufgehoben, es wurde nichts abgebucht"".
+7. Never more than 6.",FR-ORD-12,BR-019; BR-020,US-020,Automated,Pass
+TC-ORD-011,"Allergen version changed after add: re-confirmation required before payment (INC-2026-006 regression, CR-005)",ORD,Functional,Decision table,P1,Topfentorte (Stück) at version 3 (A C G) in Daniela's cart since 08:40,menu-items.csv: IT-1101,"1. Confirm version 4 (A C G H) in the portal at 08:52.
+2. Press the order button at 09:05.
+3. Tick ""Neue Allergenangaben gelesen"" and pay.
+4. Remove only an allergen in a test item and repeat (row V3).","1. Version 4 live by 08:53.
+2. Payment not started; line expanded with ""Neu: H Schalenfrüchte"" in bold.
+3. Order placed with line declaration version 4.
+4. Change shown; confirmation required.",FR-ORD-12,BR-013,US-020,Automated,Pass
+TC-ORD-012,Pre-order with 48-hour lead time: earliest and latest slots,ORD,Boundary,Boundary value analysis,P2,Monday 2026-09-14 10:00; Pomeranze ordering 06:30 to 18:30,"menu-items.csv: IT-1101, IT-1102","1. Add Schokoladentorte, ganz and list slots for Wednesday.
+2. List slots for Monday 2026-09-21.
+3. Add Topfentorte (Stück) and list today's slots.","1. 09:45 not offered; 10:00 offered.
+2. 10:00 offered; 10:15 not offered.
+3. No same-day slot.",FR-ORD-11,BR-017,US-018,Automated,Pass
+TC-ORD-013,"Status timeline updates live; push on Accepted, Ready and delay; app never advances",ORD,Functional,State transition,P1,Order Placed; Booking Details open,L-1001,"1. Accept, start, mark Ready.
+2. Delay by 15 minutes.
+3. Send a client request trying to set Completed.
+4. Check the Bookings list.","1. Timeline updates within 3 s each; push on Accepted and Ready.
+2. ""Neue Abholzeit ca. 12:30"" and push.
+3. 403 FORBIDDEN_FOR_ROLE.
+4. Ready order under Upcoming with ""Fertig zur Abholung"".",FR-ORD-06; FR-ORD-09,BR-021; BR-041,US-015,Automated,Pass
+TC-PAY-001,Card payment with 3-D Secure challenge through hosted fields; no card data at Quartier,PAY,Security,Use case,P1,Sandbox card ending 3155; log capture on API and error monitoring,L-1001,"1. Enter the card in checkout and complete the challenge.
+2. Search API logs, database and error events for the card number.","1. Order Placed; payment Authorised.
+2. No occurrence of the card number or CVC anywhere.",FR-PAY-01,BR-032,US-013,Automated,Pass
+TC-PAY-002,"Authorise at placement, capture at acceptance, void at rejection",PAY,Integration,State transition,P1,Two canonical orders Placed,L-1001,"1. Accept order 1.
+2. Reject order 2 with ""Artikel ausverkauft"".
+3. Check provider sandbox.","1. Captured € 15,70 with application fee € 1,51.
+2. Voided; customer sees ""Reservierung aufgehoben ..."".
+3. One capture, one void, no refund.",FR-PAY-02,BR-033,US-013,Automated,Pass
+TC-PAY-003,Canonical VAT basket with voucher MOHN3 (worked example),PAY,Functional,Decision table,P1,Voucher MOHN3 active; Sophie has not used it,"menu-items.csv: IT-1001, IT-1002, IT-1003 with choice CH-1003-2","1. Quote 2 x Topfengolatsche, 1 x Schinken-Käse-Sandwich, 1 x Hausgemachte Limonade 0,5 l with MOHN3.
+2. Place and capture the order.
+3. Open the receipt.","1. Gross 1870; discount 300 split 220 (10%) and 80 (20%); total 1570; 10%: gross 1150, VAT 105, net 1045; 20%: gross 420, VAT 70, net 350.
+2. order_vat_groups rows equal the quote.
+3. Receipt shows the same per-rate values; total VAT € 1,75.",FR-PAY-05; FR-ORD-04,BR-035,US-014,Automated,Pass
+TC-PAY-004,"Voucher eligibility rows G1 to G6 including the € 14,99 / € 15,00 boundary",PAY,Boundary,Decision table,P1,MOHN3 valid 2026-09-01 to 2026-12-31; SOMMER25 expired; SESAM5 belongs to Nudelbar Sesam,"menu-items.csv: IT-1008, IT-1001, IT-1004, IT-1003","1. Apply MOHN33.
+2. Apply SOMMER25.
+3. Apply SESAM5.
+4. Apply MOHN3 to Marillenmarmelade + Topfengolatsche (€ 14,99).
+5. Apply MOHN3 to Topfengolatsche + Mohnkuchen + 2 x Limonade 0,3 l (€ 15,00).
+6. Apply MOHN3 again after a completed redemption.","1. VOUCHER_UNKNOWN.
+2. VOUCHER_NOT_VALID_NOW.
+3. VOUCHER_OTHER_BUSINESS.
+4. VOUCHER_MIN_ORDER ""... ab einem Bestellwert von € 15,00.""
+5. Applied; total € 12,00.
+6. VOUCHER_EXHAUSTED (once per customer).",FR-PAY-06,BR-036,US-014,Automated,Pass
+TC-PAY-005,"Partial and full refunds, VAT allocation and the captured-amount cap",PAY,Boundary,Boundary value analysis,P1,"Canonical order captured for € 15,70",Order QO-2026-004218,"1. Refund € 5,00 with reason as Business Admin.
+2. Refund € 10,71.
+3. Refund € 10,70.
+4. Customer cancels a different Accepted order within the cutoff.","1. Allocated 366 (10%) and 134 (20%); VAT reversed 33 and 22; commission 40 + VAT 8 reversed; state Partially refunded.
+2. REFUND_EXCEEDS_CAPTURED ""Höchstens € 10,70 erstattbar.""
+3. State Refunded.
+4. Automatic full refund.",FR-PAY-04,BR-034,US-016; US-032,Automated,Pass
+TC-PAY-006,"Receipt content and the € 400,00 in-app limit",PAY,Boundary,Boundary value analysis,P1,Canonical order captured; catering test items,Order QO-2026-004218,"1. Open the receipt.
+2. Quote a cart of € 400,00.
+3. Quote a cart of € 400,01.","1. Seller Mohnblume Kaffeehaus e.U., address, ATU71234567, lines, voucher, total, per-rate gross, net and VAT, ""Vermittelt über Quartier"".
+2. In-app payment allowed.
+3. ORDER_LIMIT_EXCEEDED; in-app payment unavailable.",FR-PAY-07,BR-038,US-019,Automated,Pass
+TC-PAY-007,"Webhooks: signature verified, duplicates ignored, hourly reconciliation",PAY,Integration,Error guessing,P1,Provider sandbox; webhook replay tool,Order in Authorised,"1. Send payment.authorized with a bad signature.
+2. Send it correctly twice with the same event ID.
+3. Suppress the payment.captured webhook after acceptance; run reconciliation 15 minutes later.","1. 400 SIGNATURE_INVALID; no state change.
+2. One state change; second returns 200 and is ignored.
+3. Reconciliation sets Captured from the provider record.",FR-PAY-09,BR-033,US-013,Automated,Pass
+TC-PAY-008,"Commission, VAT on commission and payout for the canonical order",PAY,Functional,Use case,P1,Week of 2026-09-14 contains only the canonical order,Order QO-2026-004218,"1. Open the payout statement for the week.
+2. Open the September commission invoice.","1. Captured € 15,70; commission € 1,26; VAT € 0,25; payout € 14,19.
+2. Commission € 1,26 plus 20% VAT € 0,25 from Quartier GmbH (fictional).",FR-PAY-08,BR-037,US-032,Automated,Pass
+TC-PAY-009,Pay at pickup offered only where enabled and labeled correctly,PAY,Functional,Equivalence partitioning,P2,Café Mohnblume enabled; Nudelbar Sesam disabled,"L-1001, L-1004","1. Open payment methods at Café Mohnblume.
+2. Open payment methods at Nudelbar Sesam.
+3. Place a pay-at-pickup order at Café Mohnblume.","1. ""Bezahlung bei Abholung"" shown.
+2. Not shown.
+3. Order Placed; payment state Due at pickup; button still ""Zahlungspflichtig bestellen"".",FR-PAY-03,BR-032; BR-024,US-013,Automated,Pass
+TC-PAY-010,Small-business exempt receipt shows the exemption and no VAT,PAY,Functional,Equivalence partitioning,P2,Kaffeebar Zimtstern is VAT exempt,menu-items.csv: IT-1501,"1. Order 2 x Espresso and capture.
+2. Open the receipt.","1. Total € 5,20; one VAT group at 0%.
+2. ""Umsatzsteuerbefreit, Kleinunternehmer""; no VAT amounts.",FR-PAY-05; FR-PAY-07,BR-015,US-019,Automated,Pass
+TC-APT-001,"Service list, qualified staff only and Beliebig union",APT,Functional,Equivalence partitioning,P2,Viewed 2026-10-12 18:00,salon-schedule.csv: SS-01 to SS-08,"1. Open Haarstudio Linde services.
+2. Choose Ansatzfarbe.
+3. Choose Damenhaarschnitt with Beliebig for 2026-10-13.","1. ""Damenhaarschnitt ... 45 Min. · € 52,00"" and ""Ansatzfarbe · 60 Min. · ab € 65,00"".
+2. Staff: Aylin Demir, Beliebig.
+3. Lena's 7 times plus Aylin's 13:00 to 17:00 every 15 minutes.",FR-APT-01; FR-APT-02,BR-015; BR-027,US-021,Automated,Pass
+TC-APT-002,"Canonical start times with buffer: 7 offered, 12:15 excluded, 4 after booking 09:30 (worked example)",APT,Boundary,Decision table,P1,Viewed 2026-10-12 18:00,"salon-schedule.csv: SS-01, SS-03, SS-05","1. Get availability for Damenhaarschnitt with Lena on 2026-10-13.
+2. Check 09:30, 09:45, 11:00, 11:15, 12:00, 12:15.
+3. Book 09:30 and get availability again.","1. Exactly 09:00, 09:15, 09:30, 11:15, 11:30, 11:45, 12:00.
+2. Offered, not, not, offered, offered, not (buffer to 13:15 exceeds the shift).
+3. Exactly 11:15, 11:30, 11:45, 12:00.",FR-APT-02,BR-026,US-022,Automated,Pass
+TC-APT-003,Minimum notice and booking horizon boundaries,APT,Boundary,Boundary value analysis,P1,Virtual clock,"salon-schedule.csv: SS-01, SS-03","1. On 2026-10-13 at 07:15 get Lena's times.
+2. At 07:16 get Lena's times.
+3. On 2026-10-12 open 2026-12-07 and 2026-12-08.","1. First 09:15.
+2. First 09:30.
+3. 2026-12-07 bookable; 2026-12-08 not.",FR-APT-02,BR-026,US-022,Automated,Pass
+TC-APT-004,"Hold 10 minutes, confirm with price and ""Bezahlung vor Ort"", note limit",APT,Boundary,Boundary value analysis,P1,Hold on Lena 09:30 created 18:02:00,salon-schedule.csv: SS-01,"1. Check the confirmation screen.
+2. Confirm at 18:11:59 with a 300-character note.
+3. In a second run confirm at 18:12:00.
+4. Enter a 301-character note.","1. ""€ 52,00 · Bezahlung vor Ort""; button ""Zahlungspflichtig buchen""; no payment step.
+2. Confirmed 09:30 to 10:15; email with calendar file.
+3. ""Deine Reservierung ist abgelaufen ...""
+4. ""Bitte kürze deine Anmerkung auf 300 Zeichen.""",FR-APT-03; FR-APT-04; FR-APT-08; FR-APT-09,BR-028; BR-032,US-023,Automated,Pass
+TC-APT-005,Two concurrent confirmations for the same staff interval: one wins,APT,Integration,Error guessing,P1,Two customer tokens; load tool fires both requests within 5 ms,salon-schedule.csv: SS-01,"1. Send two bookAppointment requests for Lena 09:30 at the same moment.
+2. Query appointments for Lena on 2026-10-13.","1. One 201; one 409 TIME_NO_LONGER_FREE with 11:15, 11:30, 11:45.
+2. Exactly one appointment occupying 09:30 to 10:30.",FR-APT-04,BR-028,US-023,Automated,Pass
+TC-APT-006,Beliebig assigns the staff member with fewer booked minutes; tie by display order,APT,Functional,Decision table,P2,"2026-10-14: Lena 120 booked minutes, Aylin 60; both free at 14:00",salon-schedule.csv: SS-09 to SS-12,"1. Book Herrenhaarschnitt at 14:00 with Beliebig.
+2. Reset; give both 60 minutes and book again.","1. Aylin assigned.
+2. Lena assigned (first in display order).",FR-APT-04,BR-027,US-023,Automated,Pass
+TC-APT-007,Reminder 24 hours before by email and push; none for short-notice bookings,APT,Functional,Equivalence partitioning,P1,Appointment 2026-10-13 09:30; second appointment 15:00 booked same day 08:00; Sophie push off for a third run,salon-schedule.csv: SS-01,"1. Advance the clock to 2026-10-12 09:30.
+2. Check the same-day appointment.
+3. Repeat step 1 with push off.","1. Email and push with reschedule and cancel links.
+2. Only the confirmation, no reminder.
+3. Email only.",FR-APT-05,BR-041,US-024,Automated,Pass
+TC-APT-008,Free cancellation and reschedule until 24 hours before; atomic reschedule,APT,Boundary,Boundary value analysis,P1,Appointment 2026-10-13 09:30,salon-schedule.csv: SS-01,"1. Cancel on 2026-10-12 at 09:30.
+2. In a second run try at 09:31.
+3. Reschedule to 11:30 successfully.
+4. Reschedule to 11:30 when 11:30 was just taken.","1. Canceled free of charge.
+2. CANCELLATION_CUTOFF_PASSED with phone +43 1 5267788.
+3. Old Canceled and new Confirmed in one transaction.
+4. TIME_NO_LONGER_FREE; old appointment still Confirmed.",FR-APT-06,BR-029,US-024,Automated,Pass
+TC-APT-009,Appointment lifecycle and no-show only from start plus 15 minutes,APT,Boundary,State transition,P1,Confirmed appointment 09:30,salon-schedule.csv: SS-01,"1. Mark no-show at 09:44.
+2. Mark no-show at 09:45.
+3. On another appointment check in, then complete.
+4. Try to complete a Confirmed appointment directly.","1. NO_SHOW_TOO_EARLY ""Erst ab 09:45 möglich.""
+2. No-show recorded.
+3. Confirmed to Checked in to Completed; app shows Abgeschlossen.
+4. INVALID_TRANSITION.",FR-APT-07; FR-POS-06,BR-030,US-025,Automated,Pass
+TC-APT-010,Business cancellation needs a reason and notifies the customer with a rebook link,APT,Negative,Equivalence partitioning,P2,Sophie's appointment 09:30,salon-schedule.csv: SS-01,"1. Cancel without a reason.
+2. Cancel with ""Mitarbeiterin erkrankt"".","1. REASON_REQUIRED ""Bitte wählen Sie einen Grund.""
+2. Canceled; push and email with the reason and a rebook link.",FR-APT-10,BR-031,US-025,Automated,Pass
+TC-CAT-001,"Item editor: name, price range and tax category validation",CAT,Boundary,Boundary value analysis,P2,Elif in the item editor,menu-items.csv: IT-1003,"1. Save names of 1, 2, 80 and 81 characters.
+2. Save prices 0,09, 0,10, 999,99 and 1000,00.
+3. Save without a tax category, then with Normalsteuersatz 20 %.","1. 1 and 81 rejected; 2 and 80 accepted.
+2. 0,09 and 1000,00 rejected with the range message; others accepted.
+3. ""Bitte wählen Sie die Steuerkategorie.""; then saved.",FR-CAT-03,BR-015,US-030,Automated,Pass
+TC-CAT-002,Publication blocked without a complete declaration on the item or any choice,CAT,Negative,Decision table,P1,Draft items,"menu-items.csv: IT-1005, IT-1006","1. Publish Nussschnecke with no allergens and no ""none"" confirmation.
+2. Publish Linsen-Bowl with Cashew-Topping undeclared.
+3. Tick ""Enthält keines der 14 Allergene"" on Limonade.","1. DECLARATION_INCOMPLETE with the SRS message.
+2. CHOICE_DECLARATION_MISSING ""Die Auswahl „Cashew-Topping“ hat noch keine Allergenangaben.""
+3. List cleared and disabled; confirmation required to publish.",FR-CAT-04; FR-CAT-05,BR-011; BR-012,US-029,Automated,Pass
+TC-CAT-003,"Declaration change creates a new version, audited, live within 60 seconds; pre-order customers emailed",CAT,Functional,State transition,P1,Nussschnecke published at version 2; a pre-order of 4 x Nussschnecke for Saturday exists,menu-items.csv: IT-1006,"1. Add F Soja without confirming; view the menu in the app.
+2. Confirm at 21:15:00.
+3. Poll the catalog until the change appears.
+4. Check the audit trail and the pre-order customer's inbox.","1. App still shows version 2.
+2. Version 3 (A C F G H); editor shows ""Live in der App in spätestens 1 Minute · Version 3"".
+3. Visible by 21:16:00.
+4. allergen.confirmed with before and after; email within 5 minutes with a free cancellation link.",FR-CAT-04,BR-013; BR-045,US-029,Automated,Pass
+TC-CAT-004,Option groups: required and min/max choices; choice prices and allergens,CAT,Functional,Equivalence partitioning,P2,"Limonade with Größe (required, 1) and Sorte (required, 1)","menu-items.csv: IT-1003, CH-1003-1 to CH-1003-4","1. Add Limonade without a size in the app.
+2. Choose 0,5 l and Holunder.
+3. Set Topping max 1 on Linsen-Bowl and try two toppings.","1. Add disabled; ""Bitte wähle eine Option für „Größe“.""
+2. Button ""In den Warenkorb · € 5,00"".
+3. Second choice deselects the first.",FR-CAT-05,BR-012,US-029,Automated,Pass
+TC-CAT-005,Location settings ranges and ordering hours inside opening hours,CAT,Boundary,Boundary value analysis,P2,Opening hours 07:30 to 18:00,L-1001,"1. Set capacity 0, 6, 31.
+2. Set lead time 4 and cutoff 120.
+3. Set ordering hours 07:00 to 17:30.
+4. Add a closure on a date with an accepted pre-order.","1. 0 and 31 refused; 6 accepted.
+2. 4 refused; 120 accepted.
+3. ""Bestellzeiten müssen innerhalb der Öffnungszeiten liegen.""
+4. CLOSURE_HAS_PREORDERS listing the order.",FR-CAT-02,BR-017; BR-018; BR-023; BR-007,US-036,Automated,Pass
+TC-CAT-006,Service duration and buffer ranges,CAT,Boundary,Boundary value analysis,P2,Martina in services,salon-schedule.csv: SS-05,"1. Save duration 10, 45, 47 with buffer 15.
+2. Save buffer 61.","1. 10 and 47 refused; 45 accepted.
+2. Refused: buffer 0 to 60.",FR-CAT-06,BR-026,US-031,Automated,Pass
+TC-CAT-007,Working-hours change that orphans an appointment is refused until resolved,CAT,Functional,Decision table,P1,Sophie's appointment with Lena 2026-10-13 09:30,salon-schedule.csv: SS-01,"1. Change Lena's Tuesday start to 11:00.
+2. Resolve by canceling with ""Dienstplanänderung"".
+3. Repeat and resolve by reassigning to a qualified staff member free 09:30 to 10:30.","1. 409 APPOINTMENTS_IN_CONFLICT listing the appointment.
+2. Saved; Sophie notified of the cancellation.
+3. Saved; Sophie notified of the new stylist.",FR-CAT-08,BR-031,US-031,Automated,Pass
+TC-CAT-008,Staff invitation with role; deactivation ends sessions immediately,CAT,Security,Use case,P1,Former employee signed in on the POS tablet,Business B-2001,"1. Invite lena.auer@haarstudio-linde.example as Staff and bookable.
+2. Deactivate the former employee.
+3. Former employee's tablet makes its next request.","1. Invitation sent; Lena bookable after accepting.
+2. User status Deactivated.
+3. 401; session ended.",FR-CAT-07,BR-039,US-031,Automated,Pass
+TC-CAT-009,Business-funded voucher created with all parameters,CAT,Functional,Equivalence partitioning,P3,Elif in vouchers,Business B-1001,"1. Create MOHN3: € 3,00 off from € 15,00, 01.09.2026 to 31.12.2026, once per customer, 200 total.
+2. Create a voucher with a negative value.","1. Active, funded by business.
+2. Validation error.",FR-CAT-09,BR-036,US-030,Candidate,Pass
+TC-CAT-010,Brand color accepted only with 4.5:1 contrast against white,CAT,Accessibility,Boundary value analysis,P2,Elif in profile,Business B-1001,"1. Set #F4C430.
+2. Set #8A3B12.","1. Refused; ""... (Kontrast 1,6:1) ...""
+2. Accepted (7.7:1).",FR-CAT-01,BR-043,US-036,Automated,Pass
+TC-POS-001,"New order alert repeats until acted on, with countdown to auto-rejection",POS,Functional,Use case,P1,Board open on the counter tablet,L-1001,"1. Place the canonical order at 11:53:30.
+2. Wait 20 seconds without acting.
+3. Wait until 11:57:30.","1. Ticket in Neu within 3 s with sound and flashing border; ""Annehmen bis 11:58:30"".
+2. Sound repeated at 10 and 20 seconds.
+3. order.accept_warning shown with 60 seconds left.",FR-POS-01,BR-040; BR-022,US-026,Automated,Pass
+TC-POS-002,Accept captures; reject requires a reason and voids,POS,Functional,Decision table,P1,Two orders Placed,L-1001,"1. Accept order 1.
+2. Reject order 2 without a reason.
+3. Reject order 2 with Too busy.","1. Accepted; captured.
+2. REASON_REQUIRED.
+3. Rejected; voided; reason shown to the customer.",FR-POS-02,BR-022; BR-033,US-026,Automated,Pass
+TC-POS-003,Hand-over requires the pickup code; wrong codes lock for 5 minutes; delay notifies,POS,Negative,Error guessing,P1,Order Ready with code K7PM,Order QO-2026-004218,"1. Delay an Accepted order by 15 minutes.
+2. Enter K7PN five times within 10 minutes.
+3. Enter K7PM within the lock.
+4. Enter K7PM after 5 minutes.","1. New ready time; customer notified.
+2. PICKUP_CODE_MISMATCH each time, then HANDOVER_LOCKED.
+3. Still locked.
+4. Completed.",FR-POS-03,BR-024; BR-021,US-027,Automated,Pass
+TC-POS-004,Pay-at-pickup hand-over records status only: no amount or method captured,POS,Functional,Equivalence partitioning,P1,"Pay-at-pickup order Ready for € 9,80",L-1001,"1. Match the code without ""Bezahlt an der Kassa"".
+2. Tick ""Bezahlt an der Kassa"" and hand over.
+3. Inspect the payment record and the POS view.","1. PAID_AT_COUNTER_REQUIRED.
+2. Completed; payment state Paid at counter.
+3. No amount, method or receipt number stored; the POS view has no cash or card entry function.",FR-POS-03; FR-PAY-03,BR-024,US-027,Automated,Pass
+TC-POS-005,Sold out until end of day resets at next opening; until reset stays,POS,Functional,State transition,P2,Virtual clock Thursday 14:10,menu-items.csv: IT-1004,"1. Mark Mohnkuchen sold out until end of day.
+2. Advance to Friday 07:30.
+3. Mark it sold out until reset and advance a day.
+4. Mark Topfengolatsche sold out at 11:20:00 and poll the app.","1. Dimmed in the app within 60 s.
+2. Available again.
+3. Still sold out.
+4. Shown sold out by 11:21:00; carts with it cannot be checked out.",FR-POS-04,BR-014,US-028,Automated,Pass
+TC-POS-006,"Ticket shows configured allergens, note, first name and slot only",POS,Functional,Equivalence partitioning,P1,Order with Linsen-Bowl + Cashew-Topping and a note,"menu-items.csv: IT-1005, CH-1005-2","1. Open the ticket.
+2. Inspect the realtime payload.","1. Line shows ""L H""; note; ""Sophie""; ""Abholung 12:15"".
+2. First name only; no phone, email or last name.",FR-POS-09,BR-012,US-026,Automated,Pass
+TC-POS-007,"Pause for 15, 30, 60 minutes or until resumed; automatic pause without a connected board",POS,Functional,State transition,P2,Board connected; ordering open,L-1001,"1. Pause for 15 minutes at 12:05 and list slots.
+2. Resume.
+3. Disconnect all boards at 10:00:00; wait to 10:02:00.
+4. Reconnect two tabs and disconnect both again.","1. No slots until 12:20; placed orders unaffected.
+2. Slots offered again.
+3. Auto-paused with reason no_board_connected; Business Admin emailed once.
+4. One email per pause event.",FR-POS-05,BR-040,US-028,Automated,Fail (DEF-121)
+TC-POS-008,Staff role denied Business Admin functions in the UI and the API,POS,Security,Equivalence partitioning,P1,Tobias signed in as Staff,Business B-1001,"1. Inspect navigation.
+2. Call upsertItem, refundOrder, listStatements and updateLocationSettings with his token.","1. Only Bestellungen, Ausverkauft, Pause, Termine heute.
+2. 403 FORBIDDEN_FOR_ROLE for each.",FR-POS-07,BR-039,US-026,Automated,Pass
+TC-POS-009,Not collected only from 60 minutes after the slot ends,POS,Boundary,Boundary value analysis,P2,Order for slot 12:15 - 12:30 Ready,L-1001,"1. Mark Not collected at 13:29.
+2. Mark Not collected at 13:30.","1. NOT_COLLECTED_TOO_EARLY ""Erst ab 13:30 möglich.""
+2. Not collected; no automatic refund.",FR-POS-08,BR-024,US-027,Automated,Pass
+TC-POS-010,"Appointment day view shows staff columns, notes and actions",POS,Functional,Use case,P2,Appointments of 2026-10-13,"salon-schedule.csv: SS-01, SS-03","1. Open the day view as Martina.
+2. Check in Sophie and complete.","1. Lena column: 09:30 Sophie W. with note; 10:30 Herrenhaarschnitt.
+2. Statuses update in the app.",FR-POS-06,BR-030,US-025,Automated,Pass
+TC-ONB-001,Application form validation and terms acceptance,ONB,Boundary,Equivalence partitioning,P1,Email verified,Applicant Mohnblume Kaffeehaus e.U.,"1. Submit FN 512376k and 512376k.
+2. Submit ATU71234567 and ATU7123456.
+3. Submit postcode 107.
+4. Submit a Graz location.
+5. Submit without accepting the partner terms.
+6. Submit the complete application.","1. First accepted; second rejected with the format message.
+2. First accepted; second rejected.
+3. Postcode message.
+4. OUTSIDE_SERVICE_AREA with waitlist text.
+5. Terms message.
+6. Applied; UID check valid; terms version stored.",FR-ONB-01,BR-042,US-033,Automated,Pass
+TC-ONB-002,"Verification queue: UID outcomes, reasons required, decisions audited",ONB,Functional,Decision table,P1,"VIES stub returns valid, invalid or unavailable",Applications in queue,"1. Open the queue.
+2. Approve with UID valid.
+3. Approve with UID invalid, then unavailable.
+4. Reject without a reason; request info with a reason.","1. Oldest first with evidence.
+2. Approved; audit event verification.decided.
+3. Approve disabled; UID_CHECK_PENDING for unavailable.
+4. Reason required; info requested emailed.",FR-ONB-02,BR-042; BR-043,US-034,Automated,Pass
+TC-ONB-003,Payment onboarding status from provider webhooks gates food businesses only,ONB,Integration,State transition,P1,Mohnblume Approved; Haarstudio Linde Approved,"B-1001, B-2001","1. Start onboarding for Mohnblume.
+2. Send account.verification_updated Pending, Restricted, Verified.
+3. Open Haarstudio Linde's checklist.","1. Redirect to hosted onboarding.
+2. Checklist labels change accordingly; publish enabled only after Verified.
+3. No payment step.",FR-ONB-03,BR-043,US-035,Automated,Pass
+TC-ONB-004,Go-live gate rows L1 to L6 for food and for salon,ONB,Functional,Decision table,P1,"Mohnblume Approved and Verified, no item published; Ruhepol Approved, therapist without hours","B-1001, B-3001","1. Publish Mohnblume.
+2. Publish Topfengolatsche; publish Mohnblume again.
+3. Publish Ruhepol; add working hours; publish again.","1. GO_LIVE_GATE_FAILED listing L5.
+2. Live; appears in the app.
+3. Failed on L6, then Live.",FR-ONB-04,BR-043,US-036,Automated,Pass
+TC-ONB-005,Suspension needs a statement; delisted at once; open orders continue; reinstate,ONB,Functional,State transition,P1,Nudelbar Sesam Live with 2 open orders and 1 accepted pre-order,B-1003,"1. Suspend without a statement.
+2. Suspend with a statement.
+3. Search for Nudelbar Sesam; open the board.
+4. Reinstate.","1. Statement required.
+2. Suspended; Business Admin emailed the statement.
+3. Not found in the app; the 3 orders remain workable on the board.
+4. Live and listed again.",FR-ONB-05,BR-044,US-037,Automated,Pass
+TC-ONB-006,Effective-dated VAT rate applies by order date without a release,ONB,Boundary,Boundary value analysis,P2,Staging; Reduced 10% valid from 2022-01-01; test rate 8% from 2027-01-01,menu-items.csv: IT-1001,"1. Place an order at 2026-12-31 23:59.
+2. Place an order at 2027-01-01 00:00.","1. VAT group at 10%.
+2. VAT group at 8%.",FR-ONB-06,BR-015; BR-035,US-038,Automated,Pass
+TC-ONB-007,Audit trail search; events cannot be changed,ONB,Security,Error guessing,P1,Allergen change at Pomeranze on 2026-08-14,menu-items.csv: IT-1101,"1. Filter by business, action allergen.confirmed and date.
+2. Attempt update and delete of an event through every API surface.","1. Version 3 (A C G) to version 4 (A C G H) at 08:52 with the confirming user.
+2. Refused; attempt logged.",FR-ONB-07,BR-045,US-038,Automated,Pass
+TC-ONB-008,Private feedback visible only to Platform Admins,ONB,Security,Equivalence partitioning,P2,Completed order,Order QO-2026-004218,"1. Send feedback 3 ""Lange gewartet"".
+2. Look for it in the app, the Business Web Portal and the Platform Admin portal.","1. Stored.
+2. Visible only in the Platform Admin portal.",FR-ONB-08,BR-008,US-037,Automated,Pass
+TC-ONB-009,Quartier-funded voucher: commission base before discount and reimbursement in payout,ONB,Functional,Use case,P2,"WILLKOMMEN3 (€ 3,00 off from € 15,00, Quartier-funded)","menu-items.csv: IT-1001, IT-1002, IT-1003","1. Apply WILLKOMMEN3 to the canonical basket and pay.
+2. Open the payout statement.","1. Total € 15,70; VAT as TC-PAY-003.
+2. Commission base € 18,70 (commission € 1,50, VAT € 0,30); reimbursement € 3,00.",FR-ONB-09,BR-036; BR-037,US-038,Automated,Pass
+TC-NFR-001,API read latency and Vienna capacity under lunch-peak load,NFR,Performance,Load test,P1,"Production-sized staging data: 1,500 locations",Staging data set,"1. Run 150 requests per second of mixed reads for 30 minutes.
+2. Run 900 orders in 15 minutes with 1,200 board connections.","1. p95 300 ms or less; p99 800 ms or less.
+2. No errors; NFR-PERF-04 still met.",NFR-PERF-01; NFR-CAP-01,,,Automated,Pass
+TC-NFR-002,Cold start to first business card on the reference Android device; app size; crash-free rate,NFR,Performance,Device lab,P2,Reference device 3 years old; 10 Mbit/s,Staging data set,"1. Measure 20 cold starts.
+2. Check store size and 7-day crash-free sessions.","1. p90 3.0 s or less.
+2. 40 MB or less; 99.5% or more.",NFR-PERF-02; NFR-MOB-01,,,Automated,Fail (DEF-118)
+TC-NFR-003,Availability computation time for 8 staff and 60 appointments,NFR,Performance,Load test,P2,"Test salon with 8 staff, 60 appointments",Staging data set,1. Request availability 500 times.,1. p95 400 ms or less.,NFR-PERF-03,,,Automated,Pass
+TC-NFR-004,Order board latency probe in production,NFR,Performance,Synthetic monitoring,P1,Probe location with 1-cent test orders,Staging data set,1. Run the probe every 5 minutes for 7 days.,1. p95 3 s or less; p99 6 s or less.,NFR-PERF-04,,,Automated,Pass
+TC-NFR-005,Release penetration test and authentication controls,NFR,Security,Penetration test,P1,Release candidate 1.1.0-rc.2,Staging data set,"1. Run the external test against ASVS 4.0.3 Level 2 scope.
+2. Verify Argon2id, token lifetimes and rotation, TOTP for admins.","1. No open Critical or High finding.
+2. All controls as specified.",NFR-SEC-01; NFR-SEC-03; NFR-SEC-04,,,Manual,Pass
+TC-NFR-006,Business isolation by row-level security,NFR,Security,Isolation suite,P1,Two businesses with tokens,Staging data set,1. Call every Business operation with business A's token on business B's resources.,1. 404 for each and an audit log entry; no data returned.,NFR-SEC-05,,,Automated,Pass
+TC-NFR-007,Order board falls back to polling when the WebSocket drops,NFR,Reliability,Chaos test,P1,Lunch simulation with board connected,Staging data set,"1. Drop the WebSocket for 3 minutes while 12 orders arrive.
+2. Restore the connection.","1. Banner within 10 s; polling every 15 s; all 12 orders shown.
+2. Replay from last sequence; banner removed; no duplicates.",NFR-AVL-03,,,Automated,Pass
+TC-NFR-008,Accessibility audit and two-tap discovery,NFR,Accessibility,Audit and usability test,P1,EN 301 549 checklist; 8 participants,Staging data set,"1. Audit portals against WCAG 2.2 AA and the app at 200% text with screen readers.
+2. Ask participants to reach a named business page.","1. No open AA failure; statuses and allergens never by color alone.
+2. All within 2 taps.",NFR-ACC-01; NFR-USE-01,,,Manual,Pass
+TC-NFR-009,No personal data or allergen selections in error events and analytics,NFR,Security,Inspection,P1,Error monitoring sandbox; filter set to H,Staging data set,"1. Force errors on checkout and Booking Details.
+2. Inspect 50 error events and analytics payloads.","1. Events created.
+2. No names, emails, phone numbers, card data or filter selections.",NFR-OBS-01; NFR-PRIV-01,,,Automated,Pass
+TC-NFR-010,Localisation formats and messages in de-AT and en,NFR,Usability,Equivalence partitioning,P2,Both languages,Staging data set,"1. Check dates, times, amounts and distances on 10 screens.
+2. Trigger 20 validation messages in each language.","1. DD.MM.YYYY, HH:mm, € 15,70 / € 15.70, 2,4 km / 2.4 km; du in the app, Sie in the portals.
+2. Every message has text in both; no raw codes.",NFR-I18N-01; NFR-USE-02,,,Automated,Pass
+TC-NFR-011,Pickup slots and availability on daylight-saving change days,NFR,Functional,Boundary value analysis,P2,Test location open 00:00 to 06:00 on 2026-10-25 and 2027-03-28,Staging data set,1. List pickup slots and staff start times on both days.,1. No duplicated or missing 15-minute slot; times correct in UTC and local.,NFR-DAT-01,,,Automated,Pass
+TC-NFR-012,Allergen and price changes visible within 60 seconds; cache headers,NFR,Functional,Synthetic monitoring,P1,Freshness probe item,Staging data set,"1. Confirm a declaration change and poll catalog every 5 s.
+2. Inspect Cache-Control and ETag on catalog responses and the CDN configuration.","1. Change visible in 60 s or less.
+2. max-age 30, must-revalidate; ETag changes per version; no shared cache above 60 s.",NFR-DAT-02,,,Automated,Pass
+TC-NFR-013,Business anomaly alerts fire in staging,NFR,Reliability,Alert test,P1,Alert rules deployed,Staging data set,"1. Force a slot over capacity, slow 3-D Secure p90, hold expiry above 5%, stale menu cache and a disconnected board.",1. Each alert pages on-call within 2 minutes.,NFR-OBS-02,,,Automated,Pass
+TC-NFR-014,Availability report and quarterly restore drill,NFR,Reliability,Drill,P2,Backup of production-sized staging,Staging data set,"1. Restore to a point in time and measure.
+2. Review the monthly uptime report.","1. RPO 15 minutes or less; RTO 4 hours or less.
+2. 99.5% or more between 06:00 and 23:00.",NFR-AVL-01; NFR-AVL-02,,,Manual,Not run
+TC-NFR-015,Card data scope review for SAQ A,NFR,Security,Inspection,P2,Architecture and data flow documents,Staging data set,1. Review every screen and endpoint that touches payment.,1. Card data only in hosted fields and wallet sheets.,NFR-SEC-02,,,Manual,Pass
+TC-NFR-016,Device and browser compatibility matrix,NFR,Compatibility,Pairwise,P2,iOS 16 and 18; Android 9 and 15; 4 browsers; 10-inch tablet,Staging data set,1. Run the smoke suite on each combination from the pairwise set.,1. All pass; POS view usable in landscape at 1280 x 800.,NFR-CMP-01,,,Automated,Pass
+TC-NFR-017,Rule coverage gate and configuration without release,NFR,Maintainability,Inspection,P2,CI pipeline,Staging data set,"1. Remove a test for BR-018 in a branch.
+2. Change a location's cutoff and a VAT rate in staging.","1. Merge blocked by the coverage gate.
+2. Effective without deployment.",NFR-MNT-01; NFR-MNT-02,,,Automated,Pass
+TC-NFR-018,"EU residency, processor register and data subject request log",NFR,Security,Inspection,P2,Processor register; request log,Staging data set,"1. Check region of every processor.
+2. Sample 10 erasure and access requests.","1. All in the EU with an Article 28 agreement.
+2. All completed within 30 days.",NFR-PRIV-01; NFR-PRIV-02,,,Manual,Pass

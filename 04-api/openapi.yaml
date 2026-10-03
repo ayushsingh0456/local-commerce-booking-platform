@@ -1,0 +1,1895 @@
+openapi: 3.1.0
+info:
+  title: Quartier API
+  version: 1.3.0
+  summary: One API for the Customer Mobile App, the Business Web Portal (with POS view) and the Platform Admin portal.
+  description: |
+    Fictional case study. Quartier GmbH, its businesses and all data are invented.
+
+    Conventions (see api-guidelines.md):
+    - JSON with camelCase; money in integer cents (`...Cents`), always VAT-inclusive unless the field says net.
+    - Times in RFC 3339 with offset; businesses operate in Europe/Vienna.
+    - Errors are RFC 9457 problem details (`application/problem+json`) with a stable `code`.
+    - Unsafe POSTs accept an `Idempotency-Key` header; a repeat with the same key returns the first result.
+    - Cursor pagination with `cursor` and `limit`.
+    - Route groups: `/` customer surface, `/business` portal surface, `/platform` Platform Admin surface.
+    - `x-requirements` on each operation lists the SRS functional requirements it serves.
+  contact:
+    name: Quartier API team (fictional)
+    email: api@quartier.example
+servers:
+  - url: https://api.quartier.example/v1
+    description: Production (EU region)
+  - url: https://api.staging.quartier.example/v1
+    description: Staging with virtual clock and payment sandbox
+tags:
+  - name: Accounts
+    description: Customer sign-up, sign-in, password reset, profile and deletion (EP-01)
+  - name: Discovery
+    description: Locations, search, catalog with allergens, saved locations (EP-02)
+  - name: Orders
+    description: Pickup slots, holds, checkout quotes, orders and the Bookings tab (EP-03)
+  - name: Appointments
+    description: Availability and booking for salons and spas (EP-04)
+  - name: Payments
+    description: Card payment provider webhooks (EP-03, EP-06)
+  - name: Business
+    description: Business Web Portal and POS view (EP-05)
+  - name: Platform
+    description: Business applications, verification and lifecycle (EP-06)
+security:
+  - customerAuth: []
+paths:
+  /auth/sign-up:
+    post:
+      tags: [Accounts]
+      operationId: signUp
+      summary: Register a customer with the minimum data set
+      x-requirements: [FR-ACC-02, FR-ACC-05, FR-ACC-08]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SignUpRequest' }
+      responses:
+        '201':
+          description: Account created and signed in
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Session' }
+        '409':
+          description: EMAIL_IN_USE, MOBILE_IN_USE or EMAIL_RESERVED_FOR_PORTAL
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+  /auth/sign-in:
+    post:
+      tags: [Accounts]
+      operationId: signIn
+      summary: Sign in with password, Google or Apple
+      x-requirements: [FR-ACC-03]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SignInRequest' }
+      responses:
+        '200':
+          description: Signed in
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Session' }
+        '401':
+          description: INVALID_CREDENTIALS (same for unknown email and wrong password)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '423':
+          description: ACCOUNT_LOCKED for 15 minutes after 5 consecutive failures
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /auth/password-reset/codes:
+    post:
+      tags: [Accounts]
+      operationId: requestResetCode
+      summary: Send a 6-digit reset code if an account exists
+      x-requirements: [FR-ACC-04]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        '202':
+          description: Accepted. The response is identical for known and unknown addresses.
+        '429':
+          description: RESEND_TOO_SOON (within 60 seconds of the previous code)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /auth/password-reset/verifications:
+    post:
+      tags: [Accounts]
+      operationId: verifyResetCode
+      summary: Verify a reset code and receive a short-lived reset token
+      x-requirements: [FR-ACC-04]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, code]
+              properties:
+                email: { type: string, format: email }
+                code: { type: string, pattern: '^[0-9]{6}$' }
+      responses:
+        '200':
+          description: Code valid
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [resetToken]
+                properties:
+                  resetToken: { type: string }
+        '400':
+          description: CODE_INVALID (with attemptsLeft), CODE_EXPIRED or CODE_ATTEMPTS_EXHAUSTED
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /auth/password-reset/completions:
+    post:
+      tags: [Accounts]
+      operationId: completePasswordReset
+      summary: Set the new password and end all other sessions
+      x-requirements: [FR-ACC-04]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resetToken, newPassword]
+              properties:
+                resetToken: { type: string }
+                newPassword: { type: string, minLength: 8, maxLength: 128 }
+      responses:
+        '204':
+          description: Password changed; other sessions revoked
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+  /me:
+    get:
+      tags: [Accounts]
+      operationId: getMe
+      summary: Read the signed-in customer's profile and consent state
+      x-requirements: [FR-ACC-06]
+      responses:
+        '200':
+          description: Profile
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Customer' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+    patch:
+      tags: [Accounts]
+      operationId: updateMe
+      summary: Update name, mobile, language, push preference or optional consents
+      x-requirements: [FR-ACC-06, FR-ACC-08]
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema: { $ref: '#/components/schemas/CustomerUpdate' }
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Customer' }
+        '409':
+          description: MOBILE_IN_USE
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+  /me/deletion-requests:
+    post:
+      tags: [Accounts]
+      operationId: requestAccountDeletion
+      summary: Request account deletion after re-authentication
+      x-requirements: [FR-ACC-07]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reauthentication]
+              properties:
+                reauthentication:
+                  description: Current password, or a fresh Google or Apple ID token
+                  type: object
+                  properties:
+                    password: { type: string }
+                    idToken: { type: string }
+      responses:
+        '202':
+          description: Deletion scheduled; personal data erased or pseudonymized within 30 days
+        '409':
+          description: OPEN_BOOKINGS_EXIST (an open order or an upcoming appointment)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /locations:
+    get:
+      tags: [Discovery]
+      operationId: listLocations
+      summary: List Live locations near a point or by name
+      x-requirements: [FR-DSC-01, FR-DSC-03, FR-DSC-04]
+      security: [{}, {customerAuth: []}]
+      parameters:
+        - { name: lat, in: query, schema: { type: number, minimum: -90, maximum: 90 } }
+        - { name: lng, in: query, schema: { type: number, minimum: -180, maximum: 180 } }
+        - name: category
+          in: query
+          schema: { type: string, enum: [FOOD, SALON, SPA] }
+        - name: businessType
+          in: query
+          schema: { type: string, enum: [RESTAURANT, CAFE, BAKERY, HAIRDRESSER, NAIL_STUDIO, BEAUTY_SALON, MASSAGE_STUDIO, DAY_SPA, WELLNESS_STUDIO] }
+        - { name: openNow, in: query, schema: { type: boolean, default: false } }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Locations ordered by distance, or alphabetically when no point is given (BR-006)
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, sort]
+                properties:
+                  sort: { type: string, enum: [distance, name] }
+                  total: { type: integer }
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/LocationCard' }
+                  nextCursor: { type: [string, 'null'] }
+  /search:
+    get:
+      tags: [Discovery]
+      operationId: search
+      summary: Search businesses, dishes and services (from 2 characters)
+      x-requirements: [FR-DSC-02]
+      security: [{}, {customerAuth: []}]
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string, minLength: 2, maxLength: 60 }
+        - { name: lat, in: query, schema: { type: number } }
+        - { name: lng, in: query, schema: { type: number } }
+      responses:
+        '200':
+          description: Up to 20 results per group, accent- and case-insensitive (BR-009)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SearchResults' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+  /locations/{locationId}:
+    get:
+      tags: [Discovery]
+      operationId: getLocation
+      summary: Business detail for one location, including legal information
+      x-requirements: [FR-DSC-05]
+      security: [{}, {customerAuth: []}]
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+      responses:
+        '200':
+          description: Location detail
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LocationDetail' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '410':
+          description: BUSINESS_NOT_AVAILABLE (suspended or closed)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /locations/{locationId}/catalog:
+    get:
+      tags: [Discovery]
+      operationId: getCatalog
+      summary: Menu or service list with allergens and declaration versions
+      description: Never cached by shared caches for more than 60 seconds (NFR-DAT-02). The ETag changes with every confirmed allergen declaration or price change.
+      x-requirements: [FR-DSC-06, FR-DSC-07, FR-DSC-09, FR-APT-01]
+      security: [{}, {customerAuth: []}]
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+        - name: If-None-Match
+          in: header
+          schema: { type: string }
+      responses:
+        '200':
+          description: Catalog
+          headers:
+            ETag:
+              schema: { type: string }
+            Cache-Control:
+              schema: { type: string, examples: ['max-age=30, must-revalidate'] }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Catalog' }
+        '304':
+          description: Not modified
+        '404': { $ref: '#/components/responses/NotFound' }
+  /me/saved-locations/{locationId}:
+    put:
+      tags: [Discovery]
+      operationId: saveLocation
+      summary: Save a location
+      x-requirements: [FR-DSC-08, FR-ACC-01]
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+      responses:
+        '204':
+          description: Saved (idempotent)
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+    delete:
+      tags: [Discovery]
+      operationId: unsaveLocation
+      summary: Remove a saved location
+      x-requirements: [FR-DSC-08]
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+      responses:
+        '204':
+          description: Removed (idempotent)
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /locations/{locationId}/pickup-slots:
+    get:
+      tags: [Orders]
+      operationId: listPickupSlots
+      summary: Pickup slots for a date, with availability per slot
+      x-requirements: [FR-ORD-02, FR-ORD-11]
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+        - name: date
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: maxItemLeadTimeHours
+          in: query
+          description: Largest pre-order lead time in the cart; 0 when none (BR-017)
+          schema: { type: integer, minimum: 0, maximum: 72, default: 0 }
+      responses:
+        '200':
+          description: Slots evaluated by table 3.2
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [slots]
+                properties:
+                  paused: { type: boolean }
+                  nextOrderingTime: { type: [string, 'null'], format: date-time }
+                  slots:
+                    type: array
+                    items: { $ref: '#/components/schemas/PickupSlot' }
+  /slot-holds:
+    post:
+      tags: [Orders]
+      operationId: createSlotHold
+      summary: Hold one unit of a pickup slot or a staff member's time for 10 minutes
+      x-requirements: [FR-ORD-03, FR-APT-03]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SlotHoldRequest' }
+      responses:
+        '201':
+          description: Hold created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SlotHold' }
+        '409':
+          description: SLOT_FULL or TIME_NO_LONGER_FREE
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /checkout-quotes:
+    post:
+      tags: [Orders]
+      operationId: quoteCheckout
+      summary: Price the cart, apply a voucher and report changes since the lines were added
+      x-requirements: [FR-ORD-04, FR-PAY-05, FR-PAY-06]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/QuoteRequest' }
+      responses:
+        '200':
+          description: Totals per BR-035; changes per table 3.1c
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Quote' }
+        '422':
+          description: VOUCHER_UNKNOWN, VOUCHER_NOT_VALID_NOW, VOUCHER_EXHAUSTED, VOUCHER_OTHER_BUSINESS, VOUCHER_MIN_ORDER or validation errors
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /orders:
+    post:
+      tags: [Orders]
+      operationId: placeOrder
+      summary: Place a pickup order (authorizes in-app payment)
+      description: |
+        Re-checks availability, prices and allergen versions before authorization and again when
+        authorization succeeds (BR-020). Re-submitting with the same `paymentRef` and a held alternative slot
+        completes an order whose first slot filled during 3-D Secure.
+      x-requirements: [FR-ORD-05, FR-ORD-12, FR-PAY-01, FR-PAY-03, FR-PAY-07]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PlaceOrderRequest' }
+      responses:
+        '201':
+          description: Order Placed
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+        '202':
+          description: Payment action required (3-D Secure); the order is created when authorization succeeds
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [paymentRef, clientSecret]
+                properties:
+                  paymentRef: { type: string }
+                  clientSecret: { type: string, description: Passed to the card payment provider's SDK }
+        '409':
+          description: ITEM_CHANGED (price or allergen version), ITEM_SOLD_OUT or SLOT_FULL_AT_AUTHORISATION with alternatives
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '422':
+          description: ORDER_LIMIT_EXCEEDED (above EUR 400.00 in-app), LOCATION_NOT_ACCEPTING_ORDERS or validation errors
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /orders/{orderId}/rebook:
+    post:
+      tags: [Orders]
+      operationId: rebookOrder
+      summary: Build a new cart from a completed or canceled order at current prices
+      x-requirements: [FR-ORD-10]
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        '200':
+          description: Cart lines at current prices; unavailable items listed (BR-025)
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [locationId, lines, unavailable]
+                properties:
+                  locationId: { type: string, format: uuid }
+                  lines:
+                    type: array
+                    items: { $ref: '#/components/schemas/CartLine' }
+                  unavailable:
+                    type: array
+                    items: { type: string, description: Item name }
+                  pricesChanged: { type: boolean }
+        '409':
+          description: ORDER_STILL_OPEN or BUSINESS_NOT_AVAILABLE
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /me/bookings:
+    get:
+      tags: [Orders]
+      operationId: listBookings
+      summary: The customer's orders and appointments (Upcoming or Past)
+      x-requirements: [FR-ORD-09]
+      parameters:
+        - name: segment
+          in: query
+          required: true
+          schema: { type: string, enum: [upcoming, past] }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Upcoming soonest first; Past most recent first
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/BookingCard' }
+                  nextCursor: { type: [string, 'null'] }
+  /me/bookings/{bookingId}:
+    get:
+      tags: [Orders]
+      operationId: getBooking
+      summary: Booking Details for an order or an appointment
+      x-requirements: [FR-ORD-06, FR-ORD-09, FR-APT-07, FR-PAY-07]
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: Order or appointment
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Order'
+                  - $ref: '#/components/schemas/Appointment'
+                discriminator:
+                  propertyName: kind
+                  mapping:
+                    order: '#/components/schemas/Order'
+                    appointment: '#/components/schemas/Appointment'
+        '404': { $ref: '#/components/responses/NotFound' }
+  /me/bookings/{bookingId}/cancellation:
+    post:
+      tags: [Orders]
+      operationId: cancelBooking
+      summary: Cancel an order or an appointment while the app allows it
+      x-requirements: [FR-ORD-08, FR-APT-06]
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '200':
+          description: Canceled; for orders the payment outcome is included (void or refund)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Order'
+                  - $ref: '#/components/schemas/Appointment'
+                discriminator:
+                  propertyName: kind
+                  mapping:
+                    order: '#/components/schemas/Order'
+                    appointment: '#/components/schemas/Appointment'
+        '409':
+          description: CANCELLATION_CUTOFF_PASSED (with businessPhone) or INVALID_TRANSITION
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /locations/{locationId}/availability:
+    get:
+      tags: [Appointments]
+      operationId: getAvailability
+      summary: Bookable start times for a service on a date
+      x-requirements: [FR-APT-02]
+      security: [{}, {customerAuth: []}]
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+        - name: serviceId
+          in: query
+          required: true
+          schema: { type: string, format: uuid }
+        - name: staffId
+          in: query
+          description: Omit for Beliebig (any available)
+          schema: { type: string, format: uuid }
+        - name: date
+          in: query
+          required: true
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Start times evaluated by table 3.5
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Availability' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /appointments:
+    post:
+      tags: [Appointments]
+      operationId: bookAppointment
+      summary: Confirm an appointment, or reschedule by replacing an existing one
+      x-requirements: [FR-APT-04, FR-APT-06, FR-APT-08, FR-APT-09]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BookAppointmentRequest' }
+      responses:
+        '201':
+          description: Confirmed (BR-028); calendar file sent by email
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Appointment' }
+        '409':
+          description: TIME_NO_LONGER_FREE with the 3 nearest free start times, or CANCELLATION_CUTOFF_PASSED for a reschedule
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+  /webhooks/payment-provider:
+    post:
+      tags: [Payments]
+      operationId: receivePaymentWebhook
+      summary: Receive a signed event from the card payment provider
+      x-requirements: [FR-PAY-02, FR-PAY-09, FR-ONB-03]
+      security:
+        - webhookSignature: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentProviderEvent' }
+      responses:
+        '200':
+          description: Received (also for a repeated event ID, which is ignored)
+        '400':
+          description: SIGNATURE_INVALID or TIMESTAMP_TOO_OLD
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /business/locations/{locationId}/orders:
+    get:
+      tags: [Business]
+      operationId: listBoardOrders
+      summary: Orders for the order board (open statuses by default)
+      x-requirements: [FR-POS-01, FR-POS-09]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+        - name: status
+          in: query
+          schema:
+            type: array
+            items: { $ref: '#/components/schemas/OrderStatus' }
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: Board tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/BoardTicket' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /business/orders/{orderId}/transitions:
+    post:
+      tags: [Business]
+      operationId: transitionOrder
+      summary: Accept, reject, start, mark ready, delay, hand over or mark not collected
+      x-requirements: [FR-POS-02, FR-POS-03, FR-POS-08, FR-PAY-03]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OrderTransitionRequest' }
+      responses:
+        '200':
+          description: New state
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BoardTicket' }
+        '409':
+          description: INVALID_TRANSITION, ACCEPT_DEADLINE_PASSED, NOT_COLLECTED_TOO_EARLY or CAPTURE_FAILED
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '422':
+          description: REASON_REQUIRED, PICKUP_CODE_MISMATCH, PAID_AT_COUNTER_REQUIRED or HANDOVER_LOCKED
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /business/locations/{locationId}/item-availability/{itemId}:
+    put:
+      tags: [Business]
+      operationId: setItemAvailability
+      summary: Mark an item sold out at a location, or available again
+      x-requirements: [FR-POS-04]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+        - $ref: '#/components/parameters/ItemId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [soldOut]
+              properties:
+                soldOut: { type: string, enum: ['no', until_end_of_day, until_reset] }
+      responses:
+        '204':
+          description: Updated; visible to customers within 60 seconds
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /business/locations/{locationId}/ordering-pause:
+    put:
+      tags: [Business]
+      operationId: setOrderingPause
+      summary: Pause new orders for 15, 30 or 60 minutes or until resumed, or resume
+      x-requirements: [FR-POS-05]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action: { type: string, enum: [pause, resume] }
+                minutes:
+                  type: [integer, 'null']
+                  enum: [15, 30, 60, null]
+                  description: null pauses until resumed
+      responses:
+        '200':
+          description: Pause state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pausedUntil: { type: [string, 'null'], format: date-time }
+                  reason: { type: string, enum: [manual, no_board_connected] }
+  /business/locations/{locationId}:
+    put:
+      tags: [Business]
+      operationId: updateLocationSettings
+      summary: Opening and ordering hours, closures and pickup settings of a location
+      x-requirements: [FR-CAT-02]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LocationSettings' }
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LocationSettings' }
+        '409':
+          description: CLOSURE_HAS_PREORDERS (lists affected orders)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+  /business/items/{itemId}:
+    put:
+      tags: [Business]
+      operationId: upsertItem
+      summary: Create or replace an item with its option groups (draft changes)
+      description: Allergen fields here create a pending change; nothing is live until confirmed (BR-013).
+      x-requirements: [FR-CAT-03, FR-CAT-05]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ItemUpsert' }
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Item' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+  /business/items/{itemId}/allergen-declarations:
+    post:
+      tags: [Business]
+      operationId: confirmAllergenDeclaration
+      summary: Confirm a complete allergen declaration for an item or one of its choices and publish it
+      x-requirements: [FR-CAT-04]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AllergenDeclarationRequest' }
+      responses:
+        '201':
+          description: New declaration version live within 60 seconds; audit event written
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AllergenDeclaration' }
+        '422':
+          description: DECLARATION_INCOMPLETE, CONFIRMATION_REQUIRED or CHOICE_DECLARATION_MISSING
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /business/services/{serviceId}:
+    put:
+      tags: [Business]
+      operationId: upsertService
+      summary: Create or replace a bookable service
+      x-requirements: [FR-CAT-06]
+      security:
+        - portalAuth: []
+      parameters:
+        - name: serviceId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Service' }
+      responses:
+        '200':
+          description: Saved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Service' }
+        '422': { $ref: '#/components/responses/ValidationFailed' }
+  /business/locations/{locationId}/appointments:
+    get:
+      tags: [Business]
+      operationId: listDayAppointments
+      summary: Appointments for one day, grouped by staff member
+      x-requirements: [FR-POS-06, FR-APT-08]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/LocationId'
+        - name: date
+          in: query
+          required: true
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Day view
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [staff]
+                properties:
+                  staff:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        staffId: { type: string, format: uuid }
+                        displayName: { type: string }
+                        appointments:
+                          type: array
+                          items: { $ref: '#/components/schemas/Appointment' }
+  /business/appointments/{appointmentId}/transitions:
+    post:
+      tags: [Business]
+      operationId: transitionAppointment
+      summary: Check in, complete, mark no-show or cancel with a reason
+      x-requirements: [FR-POS-06, FR-APT-07, FR-APT-10]
+      security:
+        - portalAuth: []
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action: { type: string, enum: [check_in, complete, no_show, cancel] }
+                reason: { type: string, maxLength: 300, description: Required for cancel }
+      responses:
+        '200':
+          description: New state
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Appointment' }
+        '409':
+          description: INVALID_TRANSITION or NO_SHOW_TOO_EARLY (before start plus 15 minutes)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /business/staff/{staffId}/working-hours:
+    put:
+      tags: [Business]
+      operationId: setWorkingHours
+      summary: Replace a staff member's working intervals and absences
+      x-requirements: [FR-CAT-08]
+      security:
+        - portalAuth: []
+      parameters:
+        - name: staffId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WorkingHoursRequest' }
+      responses:
+        '200':
+          description: Saved
+        '409':
+          description: APPOINTMENTS_IN_CONFLICT; lists each affected appointment, which must be reassigned or canceled in the same request
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /business/orders/{orderId}/refunds:
+    post:
+      tags: [Business]
+      operationId: refundOrder
+      summary: Refund a captured order in full or in part
+      x-requirements: [FR-PAY-04]
+      security:
+        - portalAuth: []
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amountCents, reason]
+              properties:
+                amountCents: { type: integer, minimum: 1 }
+                reason: { type: string, minLength: 3, maxLength: 300 }
+      responses:
+        '201':
+          description: Refund issued; VAT and commission reversal per BR-034 and BR-037
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Refund' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422':
+          description: REFUND_EXCEEDS_CAPTURED or REASON_REQUIRED
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /business/statements:
+    get:
+      tags: [Business]
+      operationId: listStatements
+      summary: Weekly payout statements and monthly commission invoices
+      x-requirements: [FR-PAY-08]
+      security:
+        - portalAuth: []
+      parameters:
+        - name: kind
+          in: query
+          schema: { type: string, enum: [payout, commission_invoice] }
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Statements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Statement' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /business-applications:
+    post:
+      tags: [Platform]
+      operationId: submitBusinessApplication
+      summary: Submit a business application (public, email verified)
+      x-requirements: [FR-ONB-01]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BusinessApplication' }
+      responses:
+        '201':
+          description: Application received; UID check result included
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessApplication' }
+        '422':
+          description: Validation errors, EMAIL_NOT_VERIFIED or OUTSIDE_SERVICE_AREA
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /platform/business-applications:
+    get:
+      tags: [Platform]
+      operationId: listBusinessApplications
+      summary: Verification queue
+      x-requirements: [FR-ONB-02]
+      security:
+        - platformAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [Applied, InReview, InfoRequested] }
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Oldest first
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/BusinessApplication' }
+  /platform/business-applications/{applicationId}/decisions:
+    post:
+      tags: [Platform]
+      operationId: decideBusinessApplication
+      summary: Approve, reject or request information
+      x-requirements: [FR-ONB-02]
+      security:
+        - platformAuth: []
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision: { type: string, enum: [approve, reject, request_info] }
+                reason: { type: string, maxLength: 1000, description: Required for reject and request_info }
+      responses:
+        '200':
+          description: Decision recorded and audited
+        '409':
+          description: UID_CHECK_PENDING (approve needs a valid UID or a confirmed exemption)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /platform/businesses/{businessId}/status-changes:
+    post:
+      tags: [Platform]
+      operationId: changeBusinessStatus
+      summary: Publish, suspend or reinstate a business
+      x-requirements: [FR-ONB-04, FR-ONB-05]
+      security:
+        - platformAuth: []
+      parameters:
+        - name: businessId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action: { type: string, enum: [publish, suspend, reinstate] }
+                statementOfReasons: { type: string, maxLength: 4000, description: Required for suspend }
+                cancelFutureAppointments: { type: boolean, default: false }
+      responses:
+        '200':
+          description: New status
+        '409':
+          description: GO_LIVE_GATE_FAILED (lists failing rows of table 3.8) or INVALID_TRANSITION
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+components:
+  securitySchemes:
+    customerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Customer access token (15 minutes), refreshed with a rotating refresh token
+    portalAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Business Web Portal token; carries business, role (BIZ-ADM or BIZ-STF) and locations
+    platformAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Platform Admin token issued after a second factor
+    webhookSignature:
+      type: apiKey
+      in: header
+      name: Provider-Signature
+      description: HMAC signature and timestamp from the card payment provider
+  parameters:
+    AcceptLanguage:
+      name: Accept-Language
+      in: header
+      schema: { type: string, enum: [de-AT, en], default: de-AT }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: { type: string, format: uuid }
+    Cursor:
+      name: cursor
+      in: query
+      schema: { type: string }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
+    LocationId:
+      name: locationId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    BookingId:
+      name: bookingId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    ItemId:
+      name: itemId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+  responses:
+    ValidationFailed:
+      description: VALIDATION_FAILED with field errors
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Unauthenticated:
+      description: UNAUTHENTICATED
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Forbidden:
+      description: FORBIDDEN_FOR_ROLE (for example Staff calling a Business Admin operation)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    NotFound:
+      description: NOT_FOUND (also returned for another business's resources)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+  schemas:
+    Problem:
+      type: object
+      description: RFC 9457 problem details with a stable code and a localized detail
+      required: [type, title, status, code]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        code: { type: string, examples: [SLOT_FULL_AT_AUTHORISATION] }
+        detail: { type: string, description: Localised message per Accept-Language }
+        instance: { type: string }
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string }
+              code: { type: string }
+              message: { type: string }
+        alternatives:
+          type: array
+          description: Alternative slots or start times offered with SLOT_FULL_AT_AUTHORISATION or TIME_NO_LONGER_FREE
+          items:
+            type: object
+            properties:
+              start: { type: string, format: date-time }
+              holdId: { type: string }
+        attemptsLeft: { type: integer }
+        businessPhone: { type: string }
+    AllergenCode:
+      type: string
+      description: Austrian letter codes for the 14 allergens of Regulation (EU) No 1169/2011 Annex II (BR-010)
+      enum: [A, B, C, D, E, F, G, H, L, M, N, O, P, R]
+    TaxCategory:
+      type: string
+      enum: [REDUCED_10, STANDARD_20, EXEMPT_0]
+    OrderStatus:
+      type: string
+      enum: [Placed, Accepted, Preparing, Ready, Completed, Rejected, Canceled, NotCollected]
+    AppointmentStatus:
+      type: string
+      enum: [Confirmed, CheckedIn, Completed, Canceled, NoShow]
+    SignUpRequest:
+      type: object
+      required: [firstName, lastName, email, mobile, password, age14Declared, acceptedTermsVersion, acceptedPrivacyVersion]
+      properties:
+        firstName: { type: string, minLength: 2, maxLength: 50 }
+        lastName: { type: string, minLength: 2, maxLength: 50 }
+        email: { type: string, format: email, maxLength: 254 }
+        mobile: { type: string, description: E.164, examples: ['+436641234567'] }
+        password: { type: string, minLength: 8, maxLength: 128 }
+        age14Declared: { type: boolean, const: true }
+        marketingEmail: { type: boolean, default: false }
+        acceptedTermsVersion: { type: string }
+        acceptedPrivacyVersion: { type: string }
+    SignInRequest:
+      type: object
+      required: [method]
+      properties:
+        method: { type: string, enum: [password, google, apple] }
+        email: { type: string, format: email }
+        password: { type: string }
+        idToken: { type: string, description: OpenID Connect ID token for google or apple }
+    Session:
+      type: object
+      required: [accessToken, refreshToken, expiresIn]
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        expiresIn: { type: integer, examples: [900] }
+    Customer:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string, format: email }
+        mobile: { type: string }
+        locale: { type: string, enum: [de-AT, en] }
+        pushEnabled: { type: boolean }
+        consents:
+          type: object
+          properties:
+            marketingEmail: { type: boolean }
+            marketingPush: { type: boolean }
+            analytics: { type: boolean }
+    CustomerUpdate:
+      type: object
+      properties:
+        firstName: { type: string, minLength: 2, maxLength: 50 }
+        lastName: { type: string, minLength: 2, maxLength: 50 }
+        mobile: { type: string }
+        locale: { type: string, enum: [de-AT, en] }
+        pushEnabled: { type: boolean }
+        consents:
+          type: object
+          properties:
+            marketingEmail: { type: boolean }
+            marketingPush: { type: boolean }
+            analytics: { type: boolean }
+    OpenState:
+      type: object
+      required: [state, label]
+      properties:
+        state: { type: string, enum: [open, opens_later, closed_today] }
+        label: { type: string, examples: ['Geöffnet bis 18:00'] }
+    LocationCard:
+      type: object
+      required: [locationId, name, businessType, openState]
+      properties:
+        locationId: { type: string, format: uuid }
+        name: { type: string }
+        businessType: { type: string }
+        logoUrl: { type: [string, 'null'], format: uri }
+        initials: { type: string }
+        distanceKm: { type: [number, 'null'], examples: [2.4] }
+        openState: { $ref: '#/components/schemas/OpenState' }
+        saved: { type: boolean }
+    LocationDetail:
+      allOf:
+        - $ref: '#/components/schemas/LocationCard'
+        - type: object
+          properties:
+            coverUrl: { type: [string, 'null'], format: uri }
+            brandColourHex: { type: string, pattern: '^#[0-9A-Fa-f]{6}$' }
+            address: { type: string }
+            phone: { type: string }
+            todayHours: { type: string }
+            otherLocations:
+              type: array
+              items: { $ref: '#/components/schemas/LocationCard' }
+            legal:
+              type: object
+              description: Business identity shown under About (ECG section 5)
+              properties:
+                legalName: { type: string }
+                registeredAddress: { type: string }
+                registerNumber: { type: string }
+                uidNumber: { type: [string, 'null'] }
+                vatExempt: { type: boolean }
+                email: { type: string }
+                phone: { type: string }
+    SearchResults:
+      type: object
+      properties:
+        businesses:
+          type: array
+          maxItems: 20
+          items: { $ref: '#/components/schemas/LocationCard' }
+        dishes:
+          type: array
+          maxItems: 20
+          items:
+            type: object
+            properties:
+              itemId: { type: string, format: uuid }
+              name: { type: string }
+              locationId: { type: string, format: uuid }
+              locationName: { type: string }
+        services:
+          type: array
+          maxItems: 20
+          items:
+            type: object
+            properties:
+              serviceId: { type: string, format: uuid }
+              name: { type: string }
+              locationId: { type: string, format: uuid }
+              locationName: { type: string }
+    AllergenInfo:
+      type: object
+      required: [declarationVersion, codes, containsNone]
+      properties:
+        declarationVersion: { type: integer, minimum: 1 }
+        codes:
+          type: array
+          items: { $ref: '#/components/schemas/AllergenCode' }
+        containsNone: { type: boolean }
+    OptionChoice:
+      type: object
+      required: [choiceId, name, priceDeltaCents, allergens]
+      properties:
+        choiceId: { type: string, format: uuid }
+        name: { type: string }
+        priceDeltaCents: { type: integer }
+        allergens: { $ref: '#/components/schemas/AllergenInfo' }
+    OptionGroup:
+      type: object
+      required: [groupId, name, required, minChoices, maxChoices, choices]
+      properties:
+        groupId: { type: string, format: uuid }
+        name: { type: string }
+        required: { type: boolean }
+        minChoices: { type: integer, minimum: 0 }
+        maxChoices: { type: integer, minimum: 1 }
+        choices:
+          type: array
+          items: { $ref: '#/components/schemas/OptionChoice' }
+    Item:
+      type: object
+      required: [itemId, name, priceCents, taxCategory, allergens]
+      properties:
+        itemId: { type: string, format: uuid }
+        name: { type: string }
+        description: { type: string }
+        ingredients: { type: [string, 'null'] }
+        priceCents: { type: integer, minimum: 10, maximum: 99999 }
+        taxCategory: { $ref: '#/components/schemas/TaxCategory' }
+        imageUrl: { type: [string, 'null'], format: uri }
+        leadTimeHours: { type: integer, minimum: 0, maximum: 72 }
+        soldOut: { type: boolean }
+        allergens: { $ref: '#/components/schemas/AllergenInfo' }
+        choiceAddsAllergens: { type: boolean, description: True when any available choice adds an allergen (BR-012) }
+        optionGroups:
+          type: array
+          items: { $ref: '#/components/schemas/OptionGroup' }
+    Service:
+      type: object
+      required: [name, durationMin, bufferAfterMin, priceCents, taxCategory]
+      properties:
+        serviceId: { type: string, format: uuid }
+        name: { type: string, minLength: 2, maxLength: 80 }
+        description: { type: string, maxLength: 500 }
+        durationMin: { type: integer, minimum: 15, maximum: 480, multipleOf: 5 }
+        bufferAfterMin: { type: integer, minimum: 0, maximum: 60 }
+        priceCents: { type: integer, minimum: 0 }
+        priceFrom: { type: boolean, default: false }
+        taxCategory: { $ref: '#/components/schemas/TaxCategory' }
+        onlineBookable: { type: boolean, default: true }
+        staffIds:
+          type: array
+          items: { type: string, format: uuid }
+    Catalog:
+      type: object
+      required: [locationId, kind]
+      properties:
+        locationId: { type: string, format: uuid }
+        kind: { type: string, enum: [menu, services] }
+        categories:
+          type: array
+          items:
+            type: object
+            properties:
+              categoryId: { type: string, format: uuid }
+              name: { type: string }
+              items:
+                type: array
+                items: { $ref: '#/components/schemas/Item' }
+        services:
+          type: array
+          items: { $ref: '#/components/schemas/Service' }
+    PickupSlot:
+      type: object
+      required: [start, end, status]
+      properties:
+        start: { type: string, format: date-time }
+        end: { type: string, format: date-time }
+        status: { type: string, enum: [available, full] }
+    SlotHoldRequest:
+      type: object
+      required: [kind, locationId, start]
+      properties:
+        kind: { type: string, enum: [pickup, staff] }
+        locationId: { type: string, format: uuid }
+        start: { type: string, format: date-time }
+        serviceId: { type: string, format: uuid, description: Required for staff holds }
+        staffId: { type: string, format: uuid, description: Omit for Beliebig }
+    SlotHold:
+      type: object
+      required: [holdId, expiresAt]
+      properties:
+        holdId: { type: string }
+        expiresAt: { type: string, format: date-time }
+        staffId: { type: string, format: uuid }
+    CartLine:
+      type: object
+      required: [itemId, quantity, declarationVersion, unitPriceCents]
+      properties:
+        itemId: { type: string, format: uuid }
+        quantity: { type: integer, minimum: 1, maximum: 20 }
+        choiceIds:
+          type: array
+          items: { type: string, format: uuid }
+        choiceDeclarationVersions:
+          type: object
+          additionalProperties: { type: integer }
+        declarationVersion: { type: integer, description: Version the customer saw (BR-013) }
+        unitPriceCents: { type: integer, description: Price the customer saw }
+        note: { type: string, maxLength: 200 }
+    QuoteRequest:
+      type: object
+      required: [locationId, lines]
+      properties:
+        locationId: { type: string, format: uuid }
+        lines:
+          type: array
+          minItems: 1
+          items: { $ref: '#/components/schemas/CartLine' }
+        voucherCode: { type: string, maxLength: 30 }
+        paymentMode: { type: string, enum: [in_app, pay_at_pickup], default: in_app }
+    VatGroup:
+      type: object
+      required: [ratePercent, grossCents, discountCents, vatCents, netCents]
+      properties:
+        ratePercent: { type: number, examples: [10] }
+        grossCents: { type: integer, description: After discount, examples: [1150] }
+        discountCents: { type: integer, examples: [220] }
+        vatCents: { type: integer, examples: [105] }
+        netCents: { type: integer, examples: [1045] }
+    LineChange:
+      type: object
+      required: [lineIndex, kind]
+      properties:
+        lineIndex: { type: integer }
+        kind: { type: string, enum: [allergens_added, allergens_changed, price_changed, sold_out, unavailable] }
+        newDeclarationVersion: { type: integer }
+        addedAllergens:
+          type: array
+          items: { $ref: '#/components/schemas/AllergenCode' }
+        newUnitPriceCents: { type: integer }
+    Quote:
+      type: object
+      required: [grossBeforeDiscountCents, discountCents, totalCents, vatGroups, changes]
+      properties:
+        grossBeforeDiscountCents: { type: integer, examples: [1870] }
+        discountCents: { type: integer, examples: [300] }
+        totalCents: { type: integer, examples: [1570] }
+        vatGroups:
+          type: array
+          items: { $ref: '#/components/schemas/VatGroup' }
+        voucher:
+          type: [object, 'null']
+          properties:
+            code: { type: string, examples: [MOHN3] }
+            fundedBy: { type: string, enum: [business, quartier] }
+        changes:
+          type: array
+          items: { $ref: '#/components/schemas/LineChange' }
+        inAppPaymentAllowed: { type: boolean, description: False above EUR 400.00 (BR-038) }
+    PlaceOrderRequest:
+      type: object
+      required: [locationId, lines, holdId, paymentMode]
+      properties:
+        locationId: { type: string, format: uuid }
+        lines:
+          type: array
+          minItems: 1
+          items: { $ref: '#/components/schemas/CartLine' }
+        holdId: { type: string }
+        voucherCode: { type: string }
+        note: { type: string, maxLength: 200 }
+        paymentMode: { type: string, enum: [in_app, pay_at_pickup] }
+        paymentMethod: { type: string, enum: [card, apple_pay, google_pay] }
+        paymentRef: { type: string, description: Existing authorization, when completing with an alternative slot }
+        confirmedChanges: { type: boolean, description: The customer confirmed the changes reported by the last quote }
+    PaymentSummary:
+      type: object
+      properties:
+        mode: { type: string, enum: [in_app, pay_at_pickup] }
+        state: { type: string, enum: [Authorised, Captured, Voided, PartiallyRefunded, Refunded, Failed, DueAtPickup, PaidAtCounter] }
+        methodLabel: { type: string, examples: ['Karte •••• 3155'] }
+        refundedCents: { type: integer }
+    Order:
+      type: object
+      required: [kind, orderId, orderRef, status, slotStart, totalCents]
+      properties:
+        kind: { type: string, const: order }
+        orderId: { type: string, format: uuid }
+        orderRef: { type: string, examples: [QO-2026-004218] }
+        locationId: { type: string, format: uuid }
+        businessName: { type: string }
+        status: { $ref: '#/components/schemas/OrderStatus' }
+        statusHistory:
+          type: array
+          items:
+            type: object
+            properties:
+              status: { $ref: '#/components/schemas/OrderStatus' }
+              at: { type: string, format: date-time }
+        slotStart: { type: string, format: date-time }
+        readyEstimate: { type: [string, 'null'], format: date-time }
+        pickupCode: { type: string, pattern: '^[A-HJKMNP-Z2-9]{4}$' }
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              quantity: { type: integer }
+              choices:
+                type: array
+                items: { type: string }
+              note: { type: string }
+              lineGrossCents: { type: integer }
+              allergens:
+                type: array
+                items: { $ref: '#/components/schemas/AllergenCode' }
+        grossBeforeDiscountCents: { type: integer }
+        discountCents: { type: integer }
+        totalCents: { type: integer }
+        vatGroups:
+          type: array
+          items: { $ref: '#/components/schemas/VatGroup' }
+        payment: { $ref: '#/components/schemas/PaymentSummary' }
+        receiptUrl: { type: [string, 'null'], format: uri }
+        rejectReason: { type: [string, 'null'] }
+        canCancel: { type: boolean }
+    Appointment:
+      type: object
+      required: [kind, appointmentId, status, start, serviceName]
+      properties:
+        kind: { type: string, const: appointment }
+        appointmentId: { type: string, format: uuid }
+        appointmentRef: { type: string }
+        locationId: { type: string, format: uuid }
+        businessName: { type: string }
+        serviceName: { type: string }
+        staffName: { type: string }
+        start: { type: string, format: date-time }
+        end: { type: string, format: date-time }
+        priceCents: { type: integer }
+        priceFrom: { type: boolean }
+        payAtVenue: { type: boolean, const: true }
+        status: { $ref: '#/components/schemas/AppointmentStatus' }
+        note: { type: [string, 'null'], maxLength: 300 }
+        canChangeUntil: { type: string, format: date-time }
+    BookingCard:
+      type: object
+      required: [bookingId, kind, businessName, statusLabel, start]
+      properties:
+        bookingId: { type: string, format: uuid }
+        kind: { type: string, enum: [order, appointment] }
+        businessName: { type: string }
+        logoUrl: { type: [string, 'null'], format: uri }
+        statusLabel: { type: string, examples: [Fertig zur Abholung] }
+        summary: { type: string, examples: ['4 Artikel'] }
+        start: { type: string, format: date-time }
+        totalCents: { type: [integer, 'null'] }
+        canRebook: { type: boolean }
+    Availability:
+      type: object
+      required: [date, startTimes]
+      properties:
+        date: { type: string, format: date }
+        startTimes:
+          type: array
+          items:
+            type: object
+            properties:
+              start: { type: string, format: date-time }
+              staffIds:
+                type: array
+                items: { type: string, format: uuid }
+        nextFreeDate: { type: [string, 'null'], format: date }
+    BookAppointmentRequest:
+      type: object
+      required: [holdId, serviceId]
+      properties:
+        holdId: { type: string }
+        serviceId: { type: string, format: uuid }
+        note: { type: string, maxLength: 300 }
+        replacesAppointmentId: { type: string, format: uuid, description: Set for a reschedule; the old appointment is canceled in the same transaction }
+    PaymentProviderEvent:
+      type: object
+      required: [id, type, created, data]
+      properties:
+        id: { type: string, examples: [evt_8812] }
+        type:
+          type: string
+          enum: [payment.challenge_started, payment.authorized, payment.captured, payment.voided, payment.failed, refund.succeeded, payout.paid, account.verification_updated]
+        created: { type: integer, description: Unix time }
+        data: { type: object }
+    BoardTicket:
+      type: object
+      required: [orderId, orderRef, status, slotStart, customerFirstName, lines]
+      properties:
+        orderId: { type: string, format: uuid }
+        orderRef: { type: string }
+        status: { $ref: '#/components/schemas/OrderStatus' }
+        slotStart: { type: string, format: date-time }
+        acceptDeadline: { type: [string, 'null'], format: date-time }
+        customerFirstName: { type: string }
+        paymentMode: { type: string, enum: [in_app, pay_at_pickup] }
+        totalCents: { type: integer }
+        note: { type: [string, 'null'] }
+        delayMinTotal: { type: integer }
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              quantity: { type: integer }
+              choices:
+                type: array
+                items: { type: string }
+              note: { type: string }
+              allergens:
+                type: array
+                items: { $ref: '#/components/schemas/AllergenCode' }
+    OrderTransitionRequest:
+      type: object
+      required: [action]
+      properties:
+        action: { type: string, enum: [accept, reject, start, ready, delay, complete, not_collected] }
+        reasonCode: { type: string, enum: [sold_out, too_busy, closing_early, other] }
+        reasonText: { type: string, maxLength: 200 }
+        delayMinutes: { type: integer, enum: [10, 15, 30] }
+        pickupCode: { type: string, minLength: 4, maxLength: 4 }
+        paidAtCounter: { type: boolean }
+    LocationSettings:
+      type: object
+      properties:
+        phone: { type: string }
+        openingHours:
+          type: array
+          items: { $ref: '#/components/schemas/WeeklyInterval' }
+        orderingHours:
+          type: array
+          items: { $ref: '#/components/schemas/WeeklyInterval' }
+        closures:
+          type: array
+          items:
+            type: object
+            properties:
+              date: { type: string, format: date }
+              reason: { type: string }
+        slotCapacity: { type: integer, minimum: 1, maximum: 30 }
+        leadTimeMin: { type: integer, minimum: 5, maximum: 120 }
+        cancelCutoffMin: { type: integer, minimum: 0, maximum: 120 }
+        payAtPickup: { type: boolean }
+        minNoticeMin: { type: integer, minimum: 0, maximum: 2880 }
+        horizonWeeks: { type: integer, minimum: 1, maximum: 12 }
+        freeCancelHours: { type: integer, minimum: 2, maximum: 48 }
+    WeeklyInterval:
+      type: object
+      required: [weekday, start, end]
+      properties:
+        weekday: { type: integer, minimum: 1, maximum: 7 }
+        start: { type: string, pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$' }
+        end: { type: string, pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$' }
+    ItemUpsert:
+      type: object
+      required: [categoryId, nameDe, priceCents, taxCategory]
+      properties:
+        categoryId: { type: string, format: uuid }
+        nameDe: { type: string, minLength: 2, maxLength: 80 }
+        nameEn: { type: string, maxLength: 80 }
+        description: { type: string, maxLength: 300 }
+        ingredients: { type: string, maxLength: 500 }
+        priceCents: { type: integer, minimum: 10, maximum: 99999 }
+        taxCategory: { $ref: '#/components/schemas/TaxCategory' }
+        leadTimeHours: { type: integer, minimum: 0, maximum: 72 }
+        visibleInApp: { type: boolean }
+        optionGroups:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              required: { type: boolean }
+              minChoices: { type: integer }
+              maxChoices: { type: integer }
+              choices:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    choiceId: { type: string, format: uuid }
+                    name: { type: string }
+                    priceDeltaCents: { type: integer }
+    AllergenDeclarationRequest:
+      type: object
+      required: [codes, containsNone, confirmed]
+      properties:
+        choiceId: { type: [string, 'null'], format: uuid, description: Null declares the item itself }
+        codes:
+          type: array
+          uniqueItems: true
+          items: { $ref: '#/components/schemas/AllergenCode' }
+        containsNone: { type: boolean, description: Must be true when codes is empty }
+        confirmed: { type: boolean, const: true, description: 'Ich bestätige, dass die Allergenangaben der aktuellen Rezeptur entsprechen.' }
+    AllergenDeclaration:
+      type: object
+      properties:
+        itemId: { type: string, format: uuid }
+        choiceId: { type: [string, 'null'], format: uuid }
+        version: { type: integer }
+        codes:
+          type: array
+          items: { $ref: '#/components/schemas/AllergenCode' }
+        containsNone: { type: boolean }
+        confirmedAt: { type: string, format: date-time }
+        liveBy: { type: string, format: date-time, description: Confirmed time plus 60 seconds at most }
+        openPreordersNotified: { type: integer }
+    WorkingHoursRequest:
+      type: object
+      required: [intervals]
+      properties:
+        validFrom: { type: string, format: date }
+        intervals:
+          type: array
+          items: { $ref: '#/components/schemas/WeeklyInterval' }
+        absences:
+          type: array
+          items:
+            type: object
+            properties:
+              start: { type: string, format: date-time }
+              end: { type: string, format: date-time }
+        conflictResolutions:
+          type: array
+          description: Required for every appointment reported in APPOINTMENTS_IN_CONFLICT
+          items:
+            type: object
+            required: [appointmentId, resolution]
+            properties:
+              appointmentId: { type: string, format: uuid }
+              resolution: { type: string, enum: [reassign, cancel] }
+              newStaffId: { type: string, format: uuid }
+              reason: { type: string }
+    Refund:
+      type: object
+      properties:
+        refundId: { type: string, format: uuid }
+        amountCents: { type: integer }
+        vatReversal:
+          type: array
+          items: { $ref: '#/components/schemas/VatGroup' }
+        commissionReversalCents: { type: integer }
+        createdAt: { type: string, format: date-time }
+    Statement:
+      type: object
+      properties:
+        statementId: { type: string, format: uuid }
+        kind: { type: string, enum: [payout, commission_invoice] }
+        periodStart: { type: string, format: date }
+        periodEnd: { type: string, format: date }
+        grossCapturedCents: { type: integer }
+        refundsCents: { type: integer }
+        commissionCents: { type: integer }
+        commissionVatCents: { type: integer }
+        quartierVoucherReimbursementCents: { type: integer }
+        payoutCents: { type: integer }
+        documentUrl: { type: string, format: uri }
+    BusinessApplication:
+      type: object
+      required: [legalName, legalForm, category, businessTypes, registeredAddress, firstLocationAddress, contactName, contactPhone, email, acceptedTermsVersion]
+      properties:
+        applicationId: { type: string, format: uuid, readOnly: true }
+        legalName: { type: string, minLength: 2, maxLength: 120 }
+        legalForm: { type: string, enum: [Einzelunternehmen, eU, OG, KG, GmbH, FlexCo, Verein, Sonstige] }
+        firmenbuchNumber: { type: string, pattern: '^FN ?[0-9]{1,6}[a-z]$' }
+        gisaNumber: { type: string, pattern: '^[0-9]{1,12}$' }
+        uidNumber: { type: string, pattern: '^ATU[0-9]{8}$' }
+        smallBusinessWithoutUid: { type: boolean }
+        category: { type: string, enum: [FOOD, SALON, SPA] }
+        businessTypes:
+          type: array
+          minItems: 1
+          items: { type: string }
+        registeredAddress: { type: string }
+        firstLocationAddress: { type: string }
+        contactName: { type: string }
+        contactPhone: { type: string }
+        email: { type: string, format: email }
+        acceptedTermsVersion: { type: string }
+        uidCheck: { type: string, enum: [valid, invalid, pending, not_applicable], readOnly: true }
+        status: { type: string, enum: [Applied, InReview, InfoRequested, Approved, Rejected], readOnly: true }
+        submittedAt: { type: string, format: date-time, readOnly: true }

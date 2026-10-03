@@ -1,0 +1,19 @@
+row_id,row_type,location_id,business,category,name,option_group,price_eur_incl_vat,tax_category,allergen_codes,contains_none_confirmed,declaration_version,lead_time_h,visible_in_app,notes
+IT-1001,item,L-1001,Café Mohnblume,Mehlspeisen,Topfengolatsche,,3.40,REDUCED_10,A C G,false,2,0,true,Canonical basket line 1 (2 x)
+IT-1002,item,L-1001,Café Mohnblume,Frühstück,Schinken-Käse-Sandwich,,6.90,REDUCED_10,A G M,false,1,0,true,Canonical basket line 2
+IT-1003,item,L-1001,Café Mohnblume,Getränke,Hausgemachte Limonade,,3.90,STANDARD_20,,true,1,0,true,Canonical basket line 3 with CH-1003-2
+CH-1003-1,choice,L-1001,Café Mohnblume,Getränke,"0,3 l","Größe (required, 1)",0.00,STANDARD_20,,true,1,,,
+CH-1003-2,choice,L-1001,Café Mohnblume,Getränke,"0,5 l","Größe (required, 1)",1.10,STANDARD_20,,true,1,,,Line price 5.00
+CH-1003-3,choice,L-1001,Café Mohnblume,Getränke,Holunder,"Sorte (required, 1)",0.00,STANDARD_20,,true,1,,,
+CH-1003-4,choice,L-1001,Café Mohnblume,Getränke,Zitrone-Minze,"Sorte (required, 1)",0.00,STANDARD_20,,true,1,,,
+IT-1004,item,L-1001,Café Mohnblume,Mehlspeisen,Mohnkuchen,,3.80,REDUCED_10,A C G,false,1,0,true,Sold-out tests
+IT-1005,item,L-1001,Café Mohnblume,Beliebt,Linsen-Bowl,,9.80,REDUCED_10,L,false,1,0,true,Price 10.20 in rebook and R1.1 price-change tests
+CH-1005-1,choice,L-1001,Café Mohnblume,Beliebt,Sesam-Topping,"Topping (optional, max 1)",0.50,REDUCED_10,N,false,1,,,
+CH-1005-2,choice,L-1001,Café Mohnblume,Beliebt,Cashew-Topping,"Topping (optional, max 1)",0.90,REDUCED_10,H,false,1,,,Configured line allergens L H
+IT-1006,item,L-1001,Café Mohnblume,Mehlspeisen,Nussschnecke,,3.20,REDUCED_10,A C G H,false,2,0,true,Version 3 adds F in TC-CAT-003
+IT-1007,item,L-1001,Café Mohnblume,Frühstück,Mitarbeiter-Frühstück,,5.50,REDUCED_10,A C G,false,1,0,false,Hidden from the app
+IT-1008,item,L-1001,Café Mohnblume,Zum Mitnehmen,Marillenmarmelade 200 g,,11.59,REDUCED_10,,true,1,0,true,With IT-1001 gives 14.99 for the voucher boundary
+IT-1101,item,L-1002,Konditorei Pomeranze,Torten,Topfentorte (Stück),,4.60,REDUCED_10,A C G H,false,4,0,true,Version 3 was A C G until 2026-08-14 08:52 (INC-2026-006)
+IT-1102,item,L-1002,Konditorei Pomeranze,Torten,"Schokoladentorte, ganz (16 cm)",,38.00,REDUCED_10,A C F G,false,1,48,true,Pre-order item (CR-001)
+IT-1301,item,L-1004,Nudelbar Sesam,Suppen,Pho Bo,,13.90,REDUCED_10,D,false,1,0,true,Second-location cart test
+IT-1501,item,L-1005,Kaffeebar Zimtstern,Kaffee,Espresso,,2.60,EXEMPT_0,,true,1,0,true,Small-business exemption

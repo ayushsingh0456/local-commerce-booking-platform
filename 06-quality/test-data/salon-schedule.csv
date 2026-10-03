@@ -1,0 +1,13 @@
+row_id,location_id,record_type,staff,date,start,end,service,duration_min,buffer_after_min,status,notes
+SS-01,L-2001,shift,Lena Auer,2026-10-13,09:00,13:00,,,,,Canonical shift
+SS-02,L-2001,shift,Aylin Demir,2026-10-13,13:00,18:00,,,,,
+SS-03,L-2001,appointment,Lena Auer,2026-10-13,10:30,11:15,Herrenhaarschnitt,30,15,Confirmed,Occupied 10:30 to 11:15
+SS-04,L-2001,service,Lena Auer; Aylin Demir,,,,Herrenhaarschnitt,30,15,,"EUR 32.00, STANDARD_20"
+SS-05,L-2001,service,Lena Auer; Aylin Demir,,,,"Damenhaarschnitt (Waschen, Schneiden, Föhnen)",45,15,,"EUR 52.00, STANDARD_20; canonical service"
+SS-06,L-2001,service,Aylin Demir,,,,Ansatzfarbe,60,15,,"From EUR 65.00, STANDARD_20"
+SS-07,L-2001,setting,,,,,,,,,Minimum notice 120 min; horizon 8 weeks; free cancellation 24 h
+SS-08,L-2001,expected,Lena Auer,2026-10-13,,,"Damenhaarschnitt (Waschen, Schneiden, Föhnen)",45,15,,Viewed 2026-10-12 18:00: 09:00 09:15 09:30 11:15 11:30 11:45 12:00
+SS-09,L-2001,shift,Lena Auer,2026-10-14,09:00,17:00,,,,,
+SS-10,L-2001,shift,Aylin Demir,2026-10-14,09:00,17:00,,,,,
+SS-11,L-2001,appointment,Lena Auer,2026-10-14,09:00,11:00,"Damenhaarschnitt (Waschen, Schneiden, Föhnen) x 2",45,15,Confirmed,"Two appointments, 120 booked minutes"
+SS-12,L-2001,appointment,Aylin Demir,2026-10-14,09:00,10:00,"Damenhaarschnitt (Waschen, Schneiden, Föhnen)",45,15,Confirmed,60 booked minutes
