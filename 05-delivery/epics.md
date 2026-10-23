@@ -1,10 +1,10 @@
-# Epics: Platform release 1
+# Epics: Release 1
 
 ## Document control
 
 | Field | Value |
 |---|---|
-| Document ID | QT-DEL-EP |
+| Document ID | LC-DEL-EP |
 | Version | 1.3 |
 | Status | Baselined |
 | Owner | Business Analyst |

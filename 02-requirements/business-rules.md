@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-REQ-BR |
+| Document ID | LC-REQ-BR |
 | Version | 1.3 (aligned with SRS v1.3) |
 | Status | Approved (baselined) |
 | Owner | Business Analyst |

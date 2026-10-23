@@ -4,7 +4,7 @@ info:
   version: 1.3.0
   summary: One API for the Customer Mobile App, the Business Web Portal (with POS view) and the Platform Admin portal.
   description: |
-    Fictional case study. the operator, its businesses and all data are invented.
+    Case study of a real project (names and data changed). The operator, its businesses and all data are invented.
 
     Conventions (see api-guidelines.md):
     - JSON with camelCase; money in integer cents (`...Cents`), always VAT-inclusive unless the field says net.

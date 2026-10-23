@@ -1,17 +1,17 @@
-# Project Charter: Platform release 1
+# Project Charter: Release 1
 
 ## Document control
 
 | Field | Value |
 |---|---|
-| Document ID | QT-DIS-CH |
+| Document ID | LC-DIS-CH |
 | Version | 1.1 |
 | Status | Approved |
 | Owner | Product Owner (prepared by the Business Analyst) |
 | Last updated | 2026-03-02 |
 | Reviewers | Managing Director (sponsor); Engineering Lead; Partner Operations Lead; Compliance Lead; Finance Lead |
 
-**Purpose and scope.** Authorises the Platform release 1 project. It states why the project exists, what it must deliver, by when, with whom and within which limits. Detailed requirements are in the [BRD](../02-requirements/BRD.md) and the [SRS](../02-requirements/SRS.md).
+**Purpose and scope.** Authorises the Release 1 project. It states why the project exists, what it must deliver, by when, with whom and within which limits. Detailed requirements are in the [BRD](../02-requirements/BRD.md) and the [SRS](../02-requirements/SRS.md).
 
 ## 1. Vision
 

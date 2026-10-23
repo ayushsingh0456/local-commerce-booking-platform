@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-UX-01 |
+| Document ID | LC-UX-01 |
 | Version | 1.3 |
 | Status | Approved |
 | Owner | Business Analyst (with the UX Designer) |
@@ -30,7 +30,7 @@ They are grayscale by design, so that reviewers judge structure and rules rather
 
 Each wireframe has numbered callouts that match the annotation table under it (callout, element, behavior, FR/BR reference). Visual design and final copy are owned by the UX Designer. UI text is German, as in the product; English is a full translation (NFR-I18N-01).
 
-Sample data comes from the shared [synthetic test data](../../06-quality/test-data/README.md). The canonical worked examples appear on m-02 (VAT basket) and m-03 (salon start times). All names and data are fictional.
+Sample data comes from the shared [synthetic test data](../../06-quality/test-data/README.md). The canonical worked examples appear on m-02 (VAT basket) and m-03 (salon start times). All names and data are changed.
 
 | Wireframe | App and frame | Persona | Business | Stories |
 |---|---|---|---|---|

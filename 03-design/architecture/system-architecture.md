@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-DES-ARC |
+| Document ID | LC-DES-ARC |
 | Version | 1.3 |
 | Status | Approved |
 | Owner | Engineering Lead (co-authored with the Business Analyst) |

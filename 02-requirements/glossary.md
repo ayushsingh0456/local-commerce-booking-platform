@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-REQ-GLO |
+| Document ID | LC-REQ-GLO |
 | Version | 1.3 |
 | Status | Approved |
 | Owner | Business Analyst |

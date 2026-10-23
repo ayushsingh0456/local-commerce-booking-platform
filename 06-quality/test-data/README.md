@@ -4,14 +4,14 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-QA-04 |
+| Document ID | LC-QA-04 |
 | Version | 1.3 |
 | Status | Approved |
 | Owner | QA Lead (with the Business Analyst) |
 | Last updated | 2026-09-25 |
 | Reviewers | Engineering Lead; Compliance Lead |
 
-**Purpose and scope.** The synthetic data used by the test cases, the stories, the wireframes and UAT, so that every artifact describes the same businesses, items and appointments. All names, addresses, register numbers, UID numbers and phone numbers are invented. Addresses use real Vienna postcodes with fictional street names and numbers. Nothing here comes from a real business or customer.
+**Purpose and scope.** The synthetic data used by the test cases, the stories, the wireframes and UAT, so that every artifact describes the same businesses, items and appointments. All names, addresses, register numbers, UID numbers and phone numbers are invented. Addresses use real Vienna postcodes with synthetic street names and numbers. Nothing here comes from a real business or customer.
 
 ## 1. Files
 

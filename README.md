@@ -4,7 +4,7 @@
 
 > **Case study of a real project.** Client details are withheld, and names, figures and records in this repository are changed or synthetic. Compliance content is written to show how requirements support regulations; it is not legal or tax advice.
 
-> **Read it in the browser.** The [case study page](https://ayushsingh0456.github.io/case-studies/quartier.html) walks through the work, and the [document library](https://ayushsingh0456.github.io/library.html?project=commerce) opens every file here with diagrams rendered. Formatted PDFs: [BRD](https://ayushsingh0456.github.io/assets/docs/quartier-BRD.pdf) · [SRS](https://ayushsingh0456.github.io/assets/docs/quartier-SRS.pdf).
+> **Read it in the browser.** The [case study page](https://ayushsingh0456.github.io/case-studies/local-commerce.html) walks through the work, and the [document library](https://ayushsingh0456.github.io/library.html?project=commerce) opens every file here with diagrams rendered. Formatted PDFs: [BRD](https://ayushsingh0456.github.io/assets/docs/local-commerce-BRD.pdf) · [SRS](https://ayushsingh0456.github.io/assets/docs/local-commerce-SRS.pdf).
 
 ---
 

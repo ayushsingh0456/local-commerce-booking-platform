@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-DIS-STK |
+| Document ID | LC-DIS-STK |
 | Version | 1.2 |
 | Status | Active |
 | Owner | Business Analyst |
@@ -17,14 +17,14 @@
 
 | ID | Stakeholder | Group | Interest | Influence | Attitude at start | Engagement | Main concerns |
 |---|---|---|---|---|---|---|---|
-| SH-01 | Managing Director | the operator | High | High | Champion | Steering fortnightly | Pilot evidence for funding |
-| SH-02 | Product Owner | the operator | High | High | Champion | Daily | Scope, priorities, objectives |
-| SH-03 | Engineering Lead and team | the operator | High | High | Supportive | Daily | Feasibility, operability |
-| SH-04 | Partner Operations Lead | the operator | High | Medium | Supportive | Weekly refinement | Verification workload, OBJ-05 |
-| SH-05 | Partner Success Lead | the operator | High | Medium | Supportive | Weekly; sprint reviews | Pilot adoption and training |
-| SH-06 | Compliance Lead, external data protection officer, legal counsel | the operator and advisers | Medium | High (veto) | Cautious | Rule clinics; document review | Allergen information, GDPR, consumer and platform rules |
-| SH-07 | Finance Lead | the operator | Medium | High | Neutral | Rule clinics | VAT, commission, payouts |
-| SH-08 | Marketing Lead | the operator | Medium | Medium | Supportive, wants ratings | Monthly | Growth after launch (CR-007) |
+| SH-01 | Managing Director | The operator | High | High | Champion | Steering fortnightly | Pilot evidence for funding |
+| SH-02 | Product Owner | The operator | High | High | Champion | Daily | Scope, priorities, objectives |
+| SH-03 | Engineering Lead and team | The operator | High | High | Supportive | Daily | Feasibility, operability |
+| SH-04 | Partner Operations Lead | The operator | High | Medium | Supportive | Weekly refinement | Verification workload, OBJ-05 |
+| SH-05 | Partner Success Lead | The operator | High | Medium | Supportive | Weekly; sprint reviews | Pilot adoption and training |
+| SH-06 | Compliance Lead, external data protection officer, legal counsel | The operator and advisers | Medium | High (veto) | Cautious | Rule clinics; document review | Allergen information, GDPR, consumer and platform rules |
+| SH-07 | Finance Lead | The operator | Medium | High | Neutral | Rule clinics | VAT, commission, payouts |
+| SH-08 | Marketing Lead | The operator | Medium | Medium | Supportive, wants ratings | Monthly | Growth after launch (CR-007) |
 | SH-09 | Food business owners (Café Mohnblume, Konditorei Pomeranze, Nudelbar Sesam, Kaffeebar Zimtstern) | Pilot businesses | High | High | Interested but wary of fees | Sprint reviews; UAT | Commission, workload, allergen liability |
 | SH-10 | Counter staff | Pilot businesses | High | Medium | Skeptical of "another screen" | Lunch observations; UAT-05 | Noise, speed, no phone |
 | SH-11 | Salon and spa owners (Haarstudio Linde, Massageatelier Ruhepol) | Pilot businesses | High | High | Enthusiastic about reminders | Sprint reviews; UAT | No-shows, accurate diary |

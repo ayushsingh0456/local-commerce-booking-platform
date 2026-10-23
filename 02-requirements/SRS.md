@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-REQ-SRS |
+| Document ID | LC-REQ-SRS |
 | Version | 1.3 |
 | Status | Approved (baselined) |
 | Owner | Business Analyst |
@@ -174,7 +174,7 @@ The two chains run through the modules:
 | CUS | Customer | Person with a the platform account, using the app on a personal phone. Orders, books, saves locations and manages the profile. | Customer Mobile App | Not required in R1; password or Google or Apple | Own profile, consents, cart, orders, appointments |
 | BIZ-ADM | Business Admin | Runs a business, typically as owner. Manages everything for that business: profile, locations, catalog, allergens, team, orders, appointments, refunds and statements. | Business Web Portal | Mandatory (TOTP) | Own business, all its locations |
 | BIZ-STF | Staff | Works at a business. Uses an individual login to the same portal, which shows only the POS view: order board, sold-out toggles, pause, today's appointments. | Business Web Portal (POS view) | Optional on shared POS tablets | POS view of assigned locations only |
-| PLT-ADM | Platform Admin | the operator partner-operations staff. Verifies, publishes, suspends and reinstates businesses; maintains VAT rates and platform vouchers; reads private feedback and the audit trail. | Platform Admin portal | Mandatory (TOTP) | All businesses for verification and lifecycle; customer data only through audited export |
+| PLT-ADM | Platform Admin | The operator partner-operations staff. Verifies, publishes, suspends and reinstates businesses; maintains VAT rates and platform vouchers; reads private feedback and the audit trail. | Platform Admin portal | Mandatory (TOTP) | All businesses for verification and lifecycle; customer data only through audited export |
 | SYS | System | Timeouts, hold expiry, reminders, webhook processing, payouts reconciliation. | Background jobs and event handlers | n/a (service identity) | Business context set per job; row-level security still applies |
 
 What the user classes are like, and what that means for design:

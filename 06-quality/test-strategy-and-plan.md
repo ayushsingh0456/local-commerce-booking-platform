@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-QA-01 |
+| Document ID | LC-QA-01 |
 | Version | 1.4 |
 | Status | Approved |
 | Owner | QA Lead (co-authored with the Business Analyst) |

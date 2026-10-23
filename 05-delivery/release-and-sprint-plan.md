@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-DEL-PLAN |
+| Document ID | LC-DEL-PLAN |
 | Version | 1.4 |
 | Status | Active |
 | Owner | Product Owner (maintained with the Business Analyst) |

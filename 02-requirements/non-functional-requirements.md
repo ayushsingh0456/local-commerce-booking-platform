@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-REQ-NFR |
+| Document ID | LC-REQ-NFR |
 | Version | 1.3 (aligned with SRS v1.3) |
 | Status | Approved (baselined) |
 | Owner | Business Analyst |
@@ -77,7 +77,7 @@ The targets come from discovery and the pilot, not from generic benchmarks.
 
 **Usability, accessibility and localization.**
 - NFR-USE-01 keeps the discovery principle that any business is at most two taps from launch.
-- NFR-ACC-01 targets WCAG 2.2 AA. the operator is currently a micro-enterprise and exempt from the Austrian accessibility act for services, but it will not stay exempt, and retrofitting is more expensive than building it in (TBD-10).
+- NFR-ACC-01 targets WCAG 2.2 AA. The operator is currently a micro-enterprise and exempt from the Austrian accessibility act for services, but it will not stay exempt, and retrofitting is more expensive than building it in (TBD-10).
 - NFR-I18N-01 fixes formats that are easy to get wrong, such as "€ 15,70" and "2,4 km", and fixes the "du" and "Sie" register per app.
 
 **Data correctness.**

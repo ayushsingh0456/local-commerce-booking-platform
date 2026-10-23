@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-REQ-CMP |
+| Document ID | LC-REQ-CMP |
 | Version | 1.3 |
 | Status | Approved |
 | Owner | Business Analyst (reviewed by the Compliance Lead and external legal counsel) |

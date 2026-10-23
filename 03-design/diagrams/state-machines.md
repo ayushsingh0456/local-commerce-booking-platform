@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-DES-SM |
+| Document ID | LC-DES-SM |
 | Version | 1.3 |
 | Status | Approved |
 | Owner | Business Analyst |

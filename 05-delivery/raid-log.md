@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-DEL-RAID |
+| Document ID | LC-DEL-RAID |
 | Version | 1.6 |
 | Status | Active |
 | Owner | Business Analyst (maintained with the Product Owner) |

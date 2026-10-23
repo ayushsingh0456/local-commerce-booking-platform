@@ -1,10 +1,10 @@
-# Business Requirements Document (BRD): Platform release 1
+# Business Requirements Document (BRD): Release 1
 
 ## Document control
 
 | Field | Value |
 |---|---|
-| Document ID | QT-REQ-BRD |
+| Document ID | LC-REQ-BRD |
 | Version | 1.2 |
 | Status | Approved |
 | Owner | Business Analyst |
@@ -18,7 +18,7 @@
 | 1.1 | 2026-04-24 | CR-001 (pre-orders with item lead time, BN-03) and CR-002 (spa classes and events moved to Release 2, BN-04). |
 | 1.2 | 2026-09-25 | Post-pilot update. CR-005 and CR-006 sharpen BN-02 and BN-03 after INC-2026-006 and INC-2026-011. CR-003, CR-004 and CR-007 recorded as rejected in section 5.3. |
 
-**Purpose.** This document states why Platform release 1 (R1) exists, which business outcomes it must achieve and which business needs the solution must meet. In ISO/IEC/IEEE 29148:2018 terms it is the business requirements specification. It says little about *how*; the [SRS](SRS.md) specifies the system behavior that satisfies each need.
+**Purpose.** This document states why Release 1 (R1) exists, which business outcomes it must achieve and which business needs the solution must meet. In ISO/IEC/IEEE 29148:2018 terms it is the business requirements specification. It says little about *how*; the [SRS](SRS.md) specifies the system behavior that satisfies each need.
 
 **Scope of this document.** The R1 product for the Vienna pilot (Neubau and Mariahilf) and the Vienna launch, plus the boundary to Release 2 (R2). Audience: Managing Director, Product Owner, delivery team, pilot businesses, Compliance Lead and Finance Lead.
 
@@ -53,7 +53,7 @@ Five scope decisions shape the solution:
 
 ## 2. Business context
 
-the operator is a Vienna start-up. It runs the platform as a two-sided platform for independent local businesses in three categories:
+The operator is a Vienna start-up. It runs the platform as a two-sided platform for independent local businesses in three categories:
 
 | Category | Business types | What the customer does in R1 |
 |---|---|---|
@@ -237,7 +237,7 @@ These are tracked, with owners and review dates, in the [RAID log](../05-deliver
 
 ## 11. Business model and benefits
 
-All figures are fictional and illustrative. They show the logic of the business case, not a forecast.
+All figures are changed and illustrative. They show the logic of the business case, not a forecast.
 
 **Revenue model.** the platform earns an 8% commission on the paid gross of in-app food orders, plus 20% VAT on the commission (BR-037). The commission is deducted at capture, and the platform bears the card processing fee. Appointments carry no commission in R1. A salon subscription is an R2 decision, to be taken on pilot evidence.
 

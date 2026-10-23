@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-SPEC-001 |
+| Document ID | LC-SPEC-001 |
 | Version | 1.2 |
 | Status | Approved |
 | Owner | Business Analyst |

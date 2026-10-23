@@ -1,10 +1,10 @@
-# UAT Plan and Scripts: Platform release 1
+# UAT Plan and Scripts: Release 1
 
 ## Document control
 
 | Field | Value |
 |---|---|
-| Document ID | QT-QA-03 |
+| Document ID | LC-QA-03 |
 | Version | 1.2 |
 | Status | Signed off |
 | Owner | Business Analyst (UAT facilitator) |
@@ -165,7 +165,7 @@ Result: Passed.
 | Haarstudio Linde (Martina Leitner) | Pilot salon | Accepted | 2026-06-26 |
 | Massageatelier Ruhepol | Pilot spa | Accepted | 2026-06-26 |
 | Customer panel representative | Customers | Accepted | 2026-06-26 |
-| Product Owner | the operator | Accepted for pilot go-live | 2026-06-26 |
+| Product Owner | The operator | Accepted for pilot go-live | 2026-06-26 |
 
 ## Related documents
 

@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-QA-02 |
+| Document ID | LC-QA-02 |
 | Version | 1.4 |
 | Status | Baselined |
 | Owner | Business Analyst (co-authored with the QA Lead) |

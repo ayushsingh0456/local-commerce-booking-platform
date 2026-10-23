@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-DES-SEQ |
+| Document ID | LC-DES-SEQ |
 | Version | 1.3 |
 | Status | Approved |
 | Owner | Business Analyst (co-authored with the Engineering Lead) |

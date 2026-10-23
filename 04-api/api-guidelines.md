@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document ID | QT-API-GL |
+| Document ID | LC-API-GL |
 | Version | 1.3 |
 | Status | Approved |
 | Owner | Engineering Lead (co-authored with the Business Analyst) |
