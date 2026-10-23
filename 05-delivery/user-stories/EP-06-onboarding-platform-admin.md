@@ -33,7 +33,7 @@ User stories for EP-06: the public application, verification by Platform Admins,
 
 | Story | Title | Persona | Priority | Points | Sprint | Release |
 |---|---|---|---|---|---|---|
-| US-033 | Apply to join Quartier | PER-03 Elif Aydin (BIZ-ADM) | Must | 5 | S1 | R1 |
+| US-033 | Apply to join the platform | PER-03 Elif Aydin (BIZ-ADM) | Must | 5 | S1 | R1 |
 | US-034 | Verify a business application | PER-06 Paul Haider (PLT-ADM) | Must | 5 | S2 | R1 |
 | US-035 | Complete payment onboarding | PER-03 Elif Aydin (BIZ-ADM) | Must | 5 | S3 | R1 |
 | US-036 | Set up the business page and go live | PER-03 Elif Aydin (BIZ-ADM) | Must | 5 | S6 | R1 |
@@ -45,7 +45,7 @@ Shared test data: applicant Elif Aydin for "Mohnblume Kaffeehaus e.U." (FN 51237
 
 ## Stories
 
-### US-033 · Apply to join Quartier
+### US-033 · Apply to join Local Commerce & Booking Platform
 
 | Field | Value |
 |---|---|
@@ -88,7 +88,7 @@ Scenario: US-033-AC3 Small business without a UID number
 
 Scenario: US-033-AC4 Outside the service area
   When an applicant enters a first location in Graz
-  Then the application is not submitted and the applicant sees "Quartier ist derzeit nur in Wien verfügbar. Wir setzen Sie gerne auf die Warteliste."
+  Then the application is not submitted and the applicant sees "Die Plattform ist derzeit nur in Wien verfügbar. Wir setzen Sie gerne auf die Warteliste."
 ```
 
 ### US-034 · Verify a business application
@@ -284,7 +284,7 @@ Scenario: US-037-AC4 Private feedback is not public
 | Test cases | TC-ONB-006, TC-ONB-007, TC-ONB-009 |
 
 **Story**
-As a Platform Admin, I want to change VAT rates as dated reference data, create Quartier-funded vouchers and search the audit trail, so that legal changes need no release and every sensitive change can be traced.
+As a Platform Admin, I want to change VAT rates as dated reference data, create platform-funded vouchers and search the audit trail, so that legal changes need no release and every sensitive change can be traced.
 
 **Acceptance criteria**
 
@@ -295,8 +295,8 @@ Scenario: US-038-AC1 A future VAT rate applies by order date
   Then an order placed on 2026-12-31 at 23:59 uses 10 %
   And an order placed on 2027-01-01 at 00:00 uses 8 %
 
-Scenario: US-038-AC2 Quartier-funded voucher
-  Given Paul created "WILLKOMMEN3", € 3,00 off from € 15,00, funded by Quartier
+Scenario: US-038-AC2 platform-funded voucher
+  Given Paul created "WILLKOMMEN3", € 3,00 off from € 15,00, funded by the platform
   When Sophie uses it on the canonical basket of € 18,70
   Then she pays € 15,70
   And the commission base is € 18,70 and Café Mohnblume is reimbursed € 3,00 in the weekly payout

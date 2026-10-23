@@ -1,4 +1,4 @@
-# Release and Sprint Plan: Quartier
+# Release and Sprint Plan: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -28,7 +28,7 @@
 
 ```mermaid
 gantt
-  title Quartier R1 and R1.1
+  title the platform R1 and R1.1
   dateFormat YYYY-MM-DD
   axisFormat %d.%m.
   section Discovery

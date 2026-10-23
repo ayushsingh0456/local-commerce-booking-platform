@@ -1,4 +1,4 @@
-# System Architecture: Quartier
+# System Architecture: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-09-25 |
 | Reviewers | Product Owner; Business Analyst; QA Lead; Compliance Lead |
 
-**Purpose and scope.** This document describes Quartier's architecture at C4 levels 1 (system context) and 2 (containers), the chosen technology stack, and the quality tactics that meet the [non-functional requirements](../../02-requirements/non-functional-requirements.md). Significant decisions are recorded as ADRs. It is written so that a Business Analyst can trace each requirement to the container that implements it.
+**Purpose and scope.** This document describes the platform's architecture at C4 levels 1 (system context) and 2 (containers), the chosen technology stack, and the quality tactics that meet the [non-functional requirements](../../02-requirements/non-functional-requirements.md). Significant decisions are recorded as ADRs. It is written so that a Business Analyst can trace each requirement to the container that implements it.
 
 ## 1. Architecture drivers
 
@@ -19,7 +19,7 @@
 |---|---|---|
 | Three apps, one data set | BRD section 1 | One API and one database; role-scoped route groups ([ADR-001](adr/ADR-001-one-backend-modular-monolith.md)) |
 | Capacity must be a promise | BR-018, BR-020, BR-026, BR-028 | Short holds in Redis; final decision guarded by PostgreSQL constraints ([ADR-002](adr/ADR-002-slot-holds-redis-database-guard.md)) |
-| Quartier must not hold customer funds | Compliance mapping P3 | Marketplace payments with connected accounts; authorize at placement, capture at acceptance ([ADR-003](adr/ADR-003-marketplace-payments-authorize-capture.md)) |
+| The platform must not hold customer funds | Compliance mapping P3 | Marketplace payments with connected accounts; authorize at placement, capture at acceptance ([ADR-003](adr/ADR-003-marketplace-payments-authorize-capture.md)) |
 | Orders reach the counter in 3 seconds | NFR-PERF-04 | WebSocket gateway with polling fallback (NFR-AVL-03) |
 | Allergen data must be fresh | BR-013, NFR-DAT-02 | Menu data is not cached by shared caches for more than 60 seconds; images are |
 | Business isolation | NFR-SEC-05 | `business_id` on every business-scoped row; PostgreSQL row-level security |
@@ -32,8 +32,8 @@
 flowchart TB
   CUS["Customer or guest<br/>[Person]<br/>Orders and books on a phone"]
   BIZ["Business Admin and Staff<br/>[Person]<br/>Run a café, bakery, restaurant,<br/>salon or studio"]
-  PLT["Platform Admin<br/>[Person]<br/>Quartier partner operations"]
-  QT["Quartier<br/>[Software system]<br/>Discovery, pickup orders, appointments,<br/>catalog, POS view, onboarding"]
+  PLT["Platform Admin<br/>[Person]<br/>the platform partner operations"]
+  QT["the platform<br/>[Software system]<br/>Discovery, pickup orders, appointments,<br/>catalog, POS view, onboarding"]
   PSP["Card payment provider<br/>[External system]<br/>Cards, wallets, 3-D Secure,<br/>connected accounts, payouts"]
   MAP["Maps and geocoding provider<br/>[External system]"]
   PUSH["Firebase Cloud Messaging<br/>[External system]"]
@@ -51,10 +51,10 @@ flowchart TB
   QT -->|"Confirmations, receipts, codes"| MAIL
   CUS -->|"Signs in"| IDP
   QT -->|"Checks UID numbers"| VIES
-  BIZ -.->|"Pay-at-pickup payments,<br/>outside Quartier"| REG
+  BIZ -.->|"Pay-at-pickup payments,<br/>outside the platform"| REG
 ```
 
-The dotted line is deliberate. Counter payments stay on the business's certified cash register, and Quartier only records the status "Bezahlt an der Kassa" (CR-003, BR-024).
+The dotted line is deliberate. Counter payments stay on the business's certified cash register, and the platform only records the status "Bezahlt an der Kassa" (CR-003, BR-024).
 
 ## 3. Containers (C4 level 2)
 
@@ -69,7 +69,7 @@ flowchart TB
     CDN["CDN<br/>[images only]"]
     LB["Load balancer and WAF<br/>[TLS termination]"]
   end
-  subgraph BACKEND["Quartier backend (EU region)"]
+  subgraph BACKEND["the platform backend (EU region)"]
     API["API<br/>[Node.js, NestJS modular monolith]<br/>/v1, /v1/business, /v1/platform"]
     WS["Realtime gateway<br/>[NestJS, Socket.IO]<br/>order board, live status"]
     WRK["Worker<br/>[NestJS, Redis-backed job queue]<br/>timeouts, reminders, reconciliation"]
@@ -131,7 +131,7 @@ flowchart TB
 | Push | Firebase Cloud Messaging (APNs for iOS) | One push interface for both platforms |
 | Email | Transactional email provider (EU region) | Delivery and bounce tracking for receipts and codes |
 | Images | Object storage with CDN | Cheap, cacheable; never used for menu data |
-| Payments | Card payment provider (PSP) supporting SCA (3-D Secure 2), Apple Pay, Google Pay, connected accounts and hosted onboarding | Keeps card data and payouts out of Quartier (NFR-SEC-02, ADR-003) |
+| Payments | Card payment provider (PSP) supporting SCA (3-D Secure 2), Apple Pay, Google Pay, connected accounts and hosted onboarding | Keeps card data and payouts out of the platform (NFR-SEC-02, ADR-003) |
 | Maps | Maps and geocoding provider | Address geocoding; the customer's own maps app for directions |
 | Sign-in | Email and password (Argon2id); Google and Apple via OpenID Connect | Low-friction sign-up (FR-ACC-03) |
 | Observability | Error monitoring for apps and services; metrics with business anomaly alerts | NFR-OBS-01, NFR-OBS-02 |

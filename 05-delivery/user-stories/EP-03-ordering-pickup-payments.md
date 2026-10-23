@@ -202,10 +202,10 @@ Scenario: US-013-AC2 Rejection voids the authorization
   Then the authorization is voided and nothing is captured
   And Sophie sees "Reservierung aufgehoben, es wurde nichts abgebucht"
 
-Scenario: US-013-AC3 Card data never reaches Quartier
+Scenario: US-013-AC3 Card data never reaches the platform
   When Sophie enters her card in checkout
   Then the card number is entered in the card payment provider's hosted field
-  And no Quartier API request, log line or error event contains the card number
+  And no the platform API request, log line or error event contains the card number
 
 Scenario Outline: US-013-AC4 Pay at pickup only where the business offers it
   Given <business> has pay at pickup <setting>
@@ -502,7 +502,7 @@ Scenario: US-019-AC1 Receipt content for the canonical order
   And it states seller "Mohnblume Kaffeehaus e.U.", "Kornblumengasse 9, 1070 Wien", UID "ATU71234567"
   And it lists the 3 lines, the voucher − € 3,00, total € 15,70
   And for 10 %: gross € 11,50, net € 10,45, VAT € 1,05; for 20 %: gross € 4,20, net € 3,50, VAT € 0,70
-  And it carries "Vermittelt über Quartier"
+  And it carries "Vermittelt über die Plattform"
 
 Scenario Outline: US-019-AC2 In-app payment is limited to € 400,00
   Given a catering order totals <total>

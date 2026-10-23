@@ -1,16 +1,16 @@
-# Quartier: Business Analysis Case Study for a Local Commerce Platform
+# Local Commerce & Booking Platform: Business Analysis Case Study for a Local Commerce Platform
 
 **An end-to-end, traceable Business Analysis portfolio for a multi-business local commerce platform in Vienna.** It runs from discovery to production incident reviews.
 
-> **Fictional case study.** Quartier, Quartier GmbH (fictional), the pilot businesses, every person, figure and record in this repository are invented for portfolio purposes. All data is synthetic. The case study is modeled on real-world delivery experience and contains no client material. Compliance content shows how requirements support Austrian and EU rules; it is not legal or tax advice.
+> **Case study of a real project.** Client details are withheld, and names, figures and records in this repository are changed or synthetic. Compliance content is written to show how requirements support regulations; it is not legal or tax advice.
 
-> **Read it in the browser.** The [case study page](https://ayushsingh0456.github.io/case-studies/quartier.html) walks through the work, and the [document library](https://ayushsingh0456.github.io/library.html?project=quartier) opens every file here with diagrams rendered. Formatted PDFs: [BRD](https://ayushsingh0456.github.io/assets/docs/quartier-BRD.pdf) · [SRS](https://ayushsingh0456.github.io/assets/docs/quartier-SRS.pdf).
+> **Read it in the browser.** The [case study page](https://ayushsingh0456.github.io/case-studies/quartier.html) walks through the work, and the [document library](https://ayushsingh0456.github.io/library.html?project=commerce) opens every file here with diagrams rendered. Formatted PDFs: [BRD](https://ayushsingh0456.github.io/assets/docs/quartier-BRD.pdf) · [SRS](https://ayushsingh0456.github.io/assets/docs/quartier-SRS.pdf).
 
 ---
 
 ## The product in one paragraph
 
-Quartier lets independent local businesses in Vienna run their day on one platform, and lets their neighbors order and book through one mobile app. The businesses are restaurants, cafés and bakeries; hair, beauty and nail salons; and massage, wellness and spa studios. Customers order food for **pickup in a slot the kitchen can handle**, paid in the app with bank confirmation (3-D Secure), or book **salon and spa appointments around the clock** at times that really fit a stylist's day. Businesses work from a portal with a staff **POS view**. Quartier's partner operations team onboards and verifies businesses in a **Platform Admin portal**. The product is German-first, prices include VAT, and allergens follow the 14 EU allergens with Austrian letter codes. The hard parts are where a BA earns their keep:
+The platform lets independent local businesses in Vienna run their day on one platform, and lets their neighbors order and book through one mobile app. The businesses are restaurants, cafés and bakeries; hair, beauty and nail salons; and massage, wellness and spa studios. Customers order food for **pickup in a slot the kitchen can handle**, paid in the app with bank confirmation (3-D Secure), or book **salon and spa appointments around the clock** at times that really fit a stylist's day. Businesses work from a portal with a staff **POS view**. The platform's partner operations team onboards and verifies businesses in a **Platform Admin portal**. The product is German-first, prices include VAT, and allergens follow the 14 EU allergens with Austrian letter codes. The hard parts are where a BA earns their keep:
 - allergen information must be complete and current before anything can be bought;
 - capacity must hold while a bank takes minutes to confirm a payment;
 - one basket can carry two VAT rates and a voucher, and every cent must reconcile;
@@ -34,7 +34,7 @@ flowchart LR
 
 | Artifact | Count | Where |
 |---|---|---|
-| Business objectives with baseline, target and pilot reading | 6 | [BRD](02-requirements/BRD.md) |
+| Business objectives with baseline and target | 6 | [BRD](02-requirements/BRD.md) |
 | Functional requirements (ISO/IEC/IEEE 29148 SRS, field-level validation in German and English) | 76 | [SRS](02-requirements/SRS.md) |
 | Business rules, with 9 decision-table sections | 45 | [Business rules](02-requirements/business-rules.md) |
 | Non-functional requirements (ISO/IEC 25010) | 27 | [NFRs](02-requirements/non-functional-requirements.md) |
@@ -54,7 +54,7 @@ Every FR traces to an objective, business rules, stories and acceptance criteria
 
 ## Start here: a 10-minute tour
 
-1. **[BRD: executive summary and objectives](02-requirements/BRD.md).** The problem in numbers, six objectives with pilot readings, and what was left out and why.
+1. **[BRD: executive summary and objectives](02-requirements/BRD.md).** The problem in numbers, six objectives with baselines and targets, and what was left out and why.
 2. **[SRS: checkout validation and the worked examples](02-requirements/SRS.md).** Section 3.2.3 has field-level rules with German and English messages. Appendix B works through a VAT basket (10% food, 20% drinks, one voucher) and a salon's start times with buffers.
 3. **[Business rules: decision tables](02-requirements/business-rules.md).** Allergen display and filter (3.1), the re-check at payment authorization (3.3), VAT and discount allocation (3.4), appointment start times (3.5).
 4. **[User stories: EP-03 ordering, pickup and payments](05-delivery/user-stories/EP-03-ordering-pickup-payments.md).** US-014 carries the VAT example; US-020 is the change two incidents produced.
@@ -113,7 +113,7 @@ Every FR traces to an objective, business rules, stories and acceptance criteria
 ## Judgment calls worth discussing
 
 - **Allergens are a publishing gate, not a disclaimer.** Discovery suggested showing "information not available, ask the business". Instead, no food item can be ordered without a complete, confirmed declaration, and each change creates a new version (BR-011, BR-013, DEC-03).
-- **The POS view is not a cash register.** Taking counter payments would have made Quartier subject to Austrian cash register rules, and every pilot business already had a certified register. CR-003 was rejected; staff only confirm "Bezahlt an der Kassa" (BR-024).
+- **The POS view is not a cash register.** Taking counter payments would have made the platform subject to Austrian cash register rules, and every pilot business already had a certified register. CR-003 was rejected; staff only confirm "Bezahlt an der Kassa" (BR-024).
 - **Capture at acceptance.** Payments are authorized when the customer orders and captured only when the business accepts, so a rejected order costs nobody anything ([ADR-003](03-design/architecture/adr/ADR-003-marketplace-payments-authorize-capture.md)).
 - **A hold is a courtesy; the database decides.** After slow bank challenges let a pickup slot take 10 orders against a capacity of 6, capacity is re-checked when payment is authorized, and the customer is offered the next free slots (INC-2026-011, CR-006, BR-020).
 - **No fees for no-shows, yet.** Automatic no-show fees (CR-004) were rejected for R1. Reminders and free self-service cancellation cut no-shows from 9.5% to 4.6% in the pilot.
@@ -146,4 +146,4 @@ ISO/IEC/IEEE 29148 (requirements) · ISO/IEC 25010 (quality model) · ISO/IEC/IE
 
 LinkedIn: [linkedin.com/in/ayush-singh-914495189](https://www.linkedin.com/in/ayush-singh-914495189/)
 
-This case study is self-directed. It models the kind of work I do on live products, using a fictional product so that no employer or client information is disclosed.
+This case study is based on a project I worked on as Business Analyst. Client and employer details are withheld to protect confidentiality.

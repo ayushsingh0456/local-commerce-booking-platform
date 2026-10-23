@@ -1,4 +1,4 @@
-# Software Requirements Specification (SRS): Quartier
+# Software Requirements Specification (SRS): Local Commerce & Booking Platform
 
 ## Document control
 
@@ -12,7 +12,7 @@
 | Reviewers | Product Owner; Engineering Lead; QA Lead; UX Designer; Compliance Lead; Finance Lead; Partner Operations Lead |
 | Change control | After a baseline, this document changes only through the [change request log](../05-delivery/change-request-log.md). Each approved CR updates this SRS, the [traceability matrix](requirements-traceability-matrix.md) and the affected user stories in the same pull request. |
 
-**Purpose and scope.** This SRS specifies what Quartier does, how it interfaces with people and other systems, and the quality and constraints it must meet for Release 1 (R1) and R1.1. It is the contract between the Product Owner and the delivery team and the basis for test design. Every requirement is meant to be verifiable, and section 4 says how.
+**Purpose and scope.** This SRS specifies what the platform does, how it interfaces with people and other systems, and the quality and constraints it must meet for Release 1 (R1) and R1.1. It is the contract between the Product Owner and the delivery team and the basis for test design. Every requirement is meant to be verifiable, and section 4 says how.
 
 ## 1. Introduction
 
@@ -28,7 +28,7 @@ The layout follows the SRS information item in ISO/IEC/IEEE 29148:2018, with the
 
 ### 1.2 Scope
 
-Quartier is a multi-business local commerce platform for Vienna. Independent restaurants, cafés and bakeries; hair, beauty and nail salons; and massage, wellness and spa studios run their daily operation on it. Customers discover them and order or book through one mobile app.
+The platform is a multi-business local commerce platform for Vienna. Independent restaurants, cafés and bakeries; hair, beauty and nail salons; and massage, wellness and spa studios run their daily operation on it. Customers discover them and order or book through one mobile app.
 
 This version specifies 76 functional requirements in 8 modules, 45 business rules (detailed in [business-rules.md](business-rules.md)) and 27 non-functional requirements (detailed in [non-functional-requirements.md](non-functional-requirements.md)).
 
@@ -40,7 +40,7 @@ Out of scope:
 - counter payments in the POS view (CR-003);
 - public ratings (CR-007).
 
-The reasons are in [BRD section 5.3](BRD.md#53-out-of-scope). The business outcomes Quartier must move are OBJ-01 to OBJ-06 ([BRD section 4](BRD.md#4-business-objectives)).
+The reasons are in [BRD section 5.3](BRD.md#53-out-of-scope). The business outcomes the platform must move are OBJ-01 to OBJ-06 ([BRD section 4](BRD.md#4-business-objectives)).
 
 ### 1.3 Product overview
 
@@ -98,7 +98,7 @@ Terms and acronyms are defined in the [glossary](glossary.md). Conventions used 
 
 ### 2.1 Product perspective
 
-Quartier is a new product. For the businesses it replaces the phone order pad, the paper diary and the printed allergen sheet described in [current-vs-future-state.md](../01-discovery/current-vs-future-state.md). It owns the order and appointment record and the published catalog. It does not own:
+The platform is a new product. For the businesses it replaces the phone order pad, the paper diary and the printed allergen sheet described in [current-vs-future-state.md](../01-discovery/current-vs-future-state.md). It owns the order and appointment record and the published catalog. It does not own:
 - card processing and payouts, which belong to the card payment provider;
 - counter sales, which go through each business's certified cash register;
 - the business's bookkeeping.
@@ -108,13 +108,13 @@ flowchart LR
   subgraph PEOPLE["People"]
     GU["Guest and Customer<br/>GST, CUS"]
     BU["Business Admin and Staff<br/>BIZ-ADM, BIZ-STF"]
-    PU["Quartier partner operations<br/>PLT-ADM"]
+    PU["the platform partner operations<br/>PLT-ADM"]
   end
-  subgraph QT["Quartier system boundary"]
+  subgraph QT["the platform system boundary"]
     APP["Customer Mobile App<br/>(Flutter)"]
     BWP["Business Web Portal<br/>and POS view"]
     PAP["Platform Admin portal"]
-    API["Quartier API /v1,<br/>WebSocket gateway, jobs"]
+    API["the platform API /v1,<br/>WebSocket gateway, jobs"]
   end
   subgraph EXT["External services"]
     E01["IF-01 Card payment provider"]
@@ -171,10 +171,10 @@ The two chains run through the modules:
 | Code | Role | Description | Primary interface | Second factor | Data scope |
 |---|---|---|---|---|---|
 | GST | Guest | Visitor without an account. Browses Home, Search, listings, business pages, menus with prices and allergens. | Customer Mobile App | n/a | Public catalog only; nothing stored server-side |
-| CUS | Customer | Person with a Quartier account, using the app on a personal phone. Orders, books, saves locations and manages the profile. | Customer Mobile App | Not required in R1; password or Google or Apple | Own profile, consents, cart, orders, appointments |
+| CUS | Customer | Person with a the platform account, using the app on a personal phone. Orders, books, saves locations and manages the profile. | Customer Mobile App | Not required in R1; password or Google or Apple | Own profile, consents, cart, orders, appointments |
 | BIZ-ADM | Business Admin | Runs a business, typically as owner. Manages everything for that business: profile, locations, catalog, allergens, team, orders, appointments, refunds and statements. | Business Web Portal | Mandatory (TOTP) | Own business, all its locations |
 | BIZ-STF | Staff | Works at a business. Uses an individual login to the same portal, which shows only the POS view: order board, sold-out toggles, pause, today's appointments. | Business Web Portal (POS view) | Optional on shared POS tablets | POS view of assigned locations only |
-| PLT-ADM | Platform Admin | Quartier GmbH partner-operations staff. Verifies, publishes, suspends and reinstates businesses; maintains VAT rates and platform vouchers; reads private feedback and the audit trail. | Platform Admin portal | Mandatory (TOTP) | All businesses for verification and lifecycle; customer data only through audited export |
+| PLT-ADM | Platform Admin | the operator partner-operations staff. Verifies, publishes, suspends and reinstates businesses; maintains VAT rates and platform vouchers; reads private feedback and the audit trail. | Platform Admin portal | Mandatory (TOTP) | All businesses for verification and lifecycle; customer data only through audited export |
 | SYS | System | Timeouts, hold expiry, reminders, webhook processing, payouts reconciliation. | Background jobs and event handlers | n/a (service identity) | Business context set per job; row-level security still applies |
 
 What the user classes are like, and what that means for design:
@@ -201,7 +201,7 @@ What the user classes are like, and what that means for design:
 |---|---|
 | One API and one modular monolith serve all three apps; role-scoped route groups `/v1`, `/v1/business`, `/v1/platform`. | [ADR-001](../03-design/architecture/adr/ADR-001-one-backend-modular-monolith.md) |
 | Holds live in Redis with a time-to-live; the database decides. Appointments are protected by an exclusion constraint per staff member; pickup capacity by a locked counter row per slot. | [ADR-002](../03-design/architecture/adr/ADR-002-slot-holds-redis-database-guard.md) |
-| Marketplace payments through the card payment provider's connected accounts; Quartier never holds customer funds; authorize at placement, capture at acceptance. | [ADR-003](../03-design/architecture/adr/ADR-003-marketplace-payments-authorize-capture.md) |
+| Marketplace payments through the card payment provider's connected accounts; the platform never holds customer funds; authorize at placement, capture at acceptance. | [ADR-003](../03-design/architecture/adr/ADR-003-marketplace-payments-authorize-capture.md) |
 | Business-scoped tables carry `business_id` and are protected by row-level security (NFR-SEC-05). | ADR-001 |
 | REST under `/v1`, JSON with camelCase, cursor pagination, RFC 9457 problem details, `Idempotency-Key` on unsafe POSTs. | [API guidelines](../04-api/api-guidelines.md) |
 | Menu and allergen responses are never cached by shared caches for more than 60 seconds (NFR-DAT-02, CR-005). | [INC-2026-006](../07-operations/incidents/INC-2026-006-stale-allergen-information.md) |
@@ -210,8 +210,8 @@ What the user classes are like, and what that means for design:
 ### 2.6 Assumptions and dependencies
 
 These are tracked with owners in the [RAID log](../05-delivery/raid-log.md). The ones that change the meaning of a requirement if they turn out false:
-- The business is the seller of every order and appointment; Quartier acts as an intermediary. If a tax authority treated Quartier as the seller, receipts (BR-038) and VAT handling would change (TBD-01).
-- Business owners declare allergens correctly for their own recipes. Quartier enforces completeness and change control, not recipe accuracy.
+- The business is the seller of every order and appointment; the platform acts as an intermediary. If a tax authority treated the platform as the seller, receipts (BR-038) and VAT handling would change (TBD-01).
+- Business owners declare allergens correctly for their own recipes. The platform enforces completeness and change control, not recipe accuracy.
 - The card payment provider performs identity and bank checks on businesses and holds the payout relationship (IF-01).
 - Straight-line distance is a sufficient sort key in a dense city. Walking distance is an R2 candidate.
 
@@ -293,7 +293,7 @@ Screen designs are in the [wireframes](../03-design/wireframes/README.md). These
 
 | ID | Interface | Direction | Data exchanged | Personal data | Failure behavior |
 |---|---|---|---|---|---|
-| IF-01 | Card payment provider (PSP) | Both | Hosted card fields and wallet sheets; payment authorization, capture, void, refund; connected accounts for businesses; hosted business onboarding (KYC); payouts; signed webhooks | Customer email for receipts at the PSP; no card data at Quartier | Placement fails with "Die Zahlung konnte nicht gestartet werden" and no order is created; webhooks are retried by the provider and reconciled hourly (FR-PAY-09) |
+| IF-01 | Card payment provider (PSP) | Both | Hosted card fields and wallet sheets; payment authorization, capture, void, refund; connected accounts for businesses; hosted business onboarding (KYC); payouts; signed webhooks | Customer email for receipts at the PSP; no card data at the platform | Placement fails with "Die Zahlung konnte nicht gestartet werden" and no order is created; webhooks are retried by the provider and reconciled hourly (FR-PAY-09) |
 | IF-02 | Maps and geocoding provider | Out | Business and location addresses for geocoding; the customer's device opens its own maps app for directions | No customer data sent | Address saved unverified and flagged for the Platform Admin; distance hidden until geocoded |
 | IF-03 | Firebase Cloud Messaging (with APNs for iOS) | Out | Push tokens; push title and body; deep link | Device token only; no allergen or health data (BR-041) | Email is always sent for transactional messages, so push failure loses no information |
 | IF-04 | Transactional email provider | Out | Confirmations, receipts, reminders, password reset codes, statements of reasons | Name and email address | Retried 3 times; failures listed for support |
@@ -357,7 +357,7 @@ Below the button: "Mit der Registrierung akzeptierst du unsere Nutzungsbedingung
 | Unknown email or wrong password | Stay on screen; password cleared | E-Mail-Adresse oder Passwort ist falsch. | Incorrect email address or password. |
 | Fifth consecutive failure | Password sign-in locked for 15 min; Google and Apple still work | Zu viele Versuche. Bitte versuche es in 15 Minuten erneut oder setze dein Passwort zurück. | Password sign-in is paused for 15 minutes. Reset your password or continue with Google or Apple. |
 | Account created with Google or Apple only | Offer the right button | Du hast dich mit Google angemeldet. Bitte nutze „Weiter mit Google“. | You signed up with Google. Please use "Continue with Google". |
-| Account deactivated | Refused | Dieses Konto ist deaktiviert. Bitte kontaktiere den Quartier-Support. | This account is no longer active. Contact Quartier support for help. |
+| Account deactivated | Refused | Dieses Konto ist deaktiviert. Bitte kontaktiere den Platform-Support. | This account is no longer active. Contact the platform support for help. |
 | Success after a blocked action | Return to the blocked screen with the action available (BR-001) | n/a | n/a |
 
 **Forgot Password: three steps (FR-ACC-04, BR-004).** Step 1 answers the same way for known and unknown addresses.
@@ -455,14 +455,14 @@ The order button reads "Zahlungspflichtig bestellen · € {Gesamt}" ("Place ord
 
 | ID | Requirement | Priority | Release | Roles | Business rules | Stories |
 |---|---|---|---|---|---|---|
-| FR-PAY-01 | The system shall take in-app payments by Visa or Mastercard and by Apple Pay or Google Pay through the card payment provider's hosted components, with strong customer authentication by 3-D Secure 2, without card data reaching Quartier systems. | Must | R1 | CUS | BR-032 | US-013 |
+| FR-PAY-01 | The system shall take in-app payments by Visa or Mastercard and by Apple Pay or Google Pay through the card payment provider's hosted components, with strong customer authentication by 3-D Secure 2, without card data reaching the platform systems. | Must | R1 | CUS | BR-032 | US-013 |
 | FR-PAY-02 | The system shall authorize the payment when the order is placed, capture it when the business accepts, and void it when the order is rejected, auto-rejected or canceled before acceptance. | Must | R1 | SYS | BR-033 | US-013 |
 | FR-PAY-03 | The system shall offer "Bezahlung bei Abholung" (pay at pickup) where the business enables it, mark such orders as due at the business, and require staff to confirm payment at the counter before completing them. | Should | R1 | CUS, BIZ-ADM | BR-032, BR-024 | US-013 |
 | FR-PAY-04 | The system shall let a Business Admin refund a captured order in full or in part with a reason, refund automatically when a customer cancels an accepted order within the cutoff, and never refund more than the captured amount. | Must | R1 | BIZ-ADM, SYS | BR-034, BR-023 | US-016, US-032 |
 | FR-PAY-05 | The system shall compute order totals from VAT-inclusive prices, allocate discounts to VAT-rate groups and compute the VAT contained per rate as defined in BR-035, identically in the quote, the order, the receipt and refunds. | Must | R1 | SYS | BR-035, BR-015 | US-014 |
 | FR-PAY-06 | The system shall validate a voucher code at checkout (exists, active, within validity, redemptions left, minimum order value reached, valid for the business), allow one code per order, and show its effect before the order is placed. | Must | R1 | CUS | BR-036 | US-014 |
 | FR-PAY-07 | The system shall issue an itemized receipt in the business's name after capture, email it and show it in Booking Details, and refuse in-app payment for orders above EUR 400.00 gross. | Must | R1 | CUS, SYS | BR-038 | US-019 |
-| FR-PAY-08 | The system shall deduct Quartier's commission at capture, have the card payment provider pay out the balance to the business weekly, and show the Business Admin payout statements and a monthly commission invoice. | Must | R1 | BIZ-ADM, SYS | BR-037 | US-032 |
+| FR-PAY-08 | The system shall deduct the platform's commission at capture, have the card payment provider pay out the balance to the business weekly, and show the Business Admin payout statements and a monthly commission invoice. | Must | R1 | BIZ-ADM, SYS | BR-037 | US-032 |
 | FR-PAY-09 | The system shall verify the signature of every card payment provider webhook, process each event ID exactly once, and reconcile payment state hourly against the provider for orders older than 15 minutes in a non-final state. | Must | R1 | SYS | BR-033 | US-013 |
 
 **Payment outcomes shown to the customer (FR-PAY-01 to FR-PAY-04, BR-033).**
@@ -476,7 +476,7 @@ The order button reads "Zahlungspflichtig bestellen · € {Gesamt}" ("Place ord
 | Pay at pickup | Bezahlung bei Abholung | Pay at pickup |
 | Paid at the counter | Bezahlt an der Kassa | Paid at the counter |
 
-**Receipt content (FR-PAY-07, BR-038).** Seller name, address and UID number (or "Umsatzsteuerbefreit, Kleinunternehmer"); receipt number; date; each line with quantity, description, choices and gross amount; discount; total; for each VAT rate the gross, net and VAT amounts; the payment method; "Vermittelt über Quartier" (arranged through Quartier).
+**Receipt content (FR-PAY-07, BR-038).** Seller name, address and UID number (or "Umsatzsteuerbefreit, Kleinunternehmer"); receipt number; date; each line with quantity, description, choices and gross amount; discount; total; for each VAT rate the gross, net and VAT amounts; the payment method; "Vermittelt über die Plattform" (arranged through the platform).
 
 #### 3.2.5 APT: Appointment Booking
 
@@ -580,7 +580,7 @@ A wrong pickup code shows "Code stimmt nicht. Bitte noch einmal prüfen." and ch
 | FR-ONB-06 | The system shall let a Platform Admin maintain tax categories and their VAT rates as effective-dated reference data, applied by order date without a software release. | Must | R1 | PLT-ADM | BR-015, BR-035 | US-038 |
 | FR-ONB-07 | The system shall keep an append-only audit trail of allergen declarations, price changes, refunds, verification decisions, role changes and suspensions, searchable by business, actor and date. | Must | R1 | PLT-ADM, SYS | BR-045 | US-038 |
 | FR-ONB-08 | The system shall let a customer send private feedback (score 1 to 5 and optional text) on a completed order or appointment, visible only to Platform Admins and never shown publicly. | Should | R1 | CUS, PLT-ADM | BR-008 | US-037 |
-| FR-ONB-09 | The system shall let a Platform Admin create Quartier-funded voucher codes (for example a welcome voucher) with the same parameters as business vouchers. | Should | R1 | PLT-ADM | BR-036 | US-038 |
+| FR-ONB-09 | The system shall let a Platform Admin create platform-funded voucher codes (for example a welcome voucher) with the same parameters as business vouchers. | Should | R1 | PLT-ADM | BR-036 | US-038 |
 
 **Business application form: validation (FR-ONB-01, BR-042).**
 
@@ -595,7 +595,7 @@ A wrong pickup code shows "Code stimmt nicht. Bitte noch einmal prüfen." and ch
 | UID service unavailable | n/a | Application accepted with "UID check pending" | Wir prüfen die UID-Nummer später und melden uns bei Problemen. |
 | Firmensitz (registered address) | Yes | Street, number, 4-digit postcode, city; country Austria | Bitte geben Sie eine österreichische Postleitzahl (4 Ziffern) ein. |
 | Kategorie und Betriebsarten | Yes | One category and at least one business type | Bitte wählen Sie mindestens eine Betriebsart. |
-| Erster Standort (first location) | Yes | Geocoded; inside the Vienna service area | Quartier ist derzeit nur in Wien verfügbar. Wir setzen Sie gerne auf die Warteliste. |
+| Erster Standort (first location) | Yes | Geocoded; inside the Vienna service area | Die Plattform ist derzeit nur in Wien verfügbar. Wir setzen Sie gerne auf die Warteliste. |
 | Kontaktperson, Telefon | Yes | Name 2 to 80 characters; valid phone number | Bitte geben Sie eine gültige Telefonnummer ein. |
 | E-Mail-Adresse | Yes | Verified by a link valid for 24 hours before the application is submitted | Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link, den wir Ihnen geschickt haben. |
 | Partner-Geschäftsbedingungen | Yes | Tick box; version stored | Bitte akzeptieren Sie die Geschäftsbedingungen für Partner. |
@@ -653,7 +653,7 @@ A requirement is **Verified** when every linked test case passes on the release 
 
 | ID | Issue | R1 behavior | Owner | Target | Status |
 |---|---|---|---|---|---|
-| TBD-01 | For prepaid app orders, must the business also issue a register receipt from its own cash register, in addition to the Quartier receipt in its name? | Quartier issues the receipt in the business's name (BR-038). Pilot businesses follow their tax advisers; a written opinion has been requested. | Compliance Lead | 2026-11-30 | Open |
+| TBD-01 | For prepaid app orders, must the business also issue a register receipt from its own cash register, in addition to the platform receipt in its name? | The platform issues the receipt in the business's name (BR-038). Pilot businesses follow their tax advisers; a written opinion has been requested. | Compliance Lead | 2026-11-30 | Open |
 | TBD-02 | Should precautionary "may contain traces" statements be structured data? | Not structured. The allergen sheet tells customers with severe allergies to speak to the business. | Compliance Lead | R2 planning | Open |
 | TBD-03 | Does "Beliebig" assignment by fewest booked minutes overload junior staff? | Fewest minutes, ties by display order (BR-027). Pilot salons have raised no complaint. | Product Owner | 2026-12-15 | Open |
 | TBD-04 | Should traces be shown in the allergen filter? | No; the filter evaluates declared allergens only and never says "safe" ([spec 001](../08-ai-assisted-ba/specs/001-allergen-filter-on-menus/spec.md)). | Compliance Lead | R2 planning | Open |
@@ -662,7 +662,7 @@ A requirement is **Verified** when every linked test case passes on the release 
 | TBD-07 | May customers save their allergen filter to their account across devices? | Device only. Saving to the account would process health data and need explicit consent (GDPR Article 9(2)(a)). | Compliance Lead | R2 planning | Open |
 | TBD-08 | What happens to future appointments when a business ends its contract with notice? | Appointments within the 30-day notice period stay valid; later ones are canceled with notification (BR-044). | Partner Operations Lead | 2026-10-31 | Open |
 | TBD-09 | Shared POS tablets: individual PINs instead of individual accounts? | Individual accounts; Staff sessions last 12 hours (NFR-SEC-04). | Engineering Lead | R2 planning | Open |
-| TBD-10 | When Quartier outgrows the micro-enterprise exemptions, which obligations apply first (accessibility act, DSA trader traceability)? | WCAG 2.2 AA is already the target (NFR-ACC-01). The onboarding data set already covers DSA Article 30 except an identity document copy, which the card payment provider holds. | Compliance Lead | 2027-03-31 | Open |
+| TBD-10 | When the platform outgrows the micro-enterprise exemptions, which obligations apply first (accessibility act, DSA trader traceability)? | WCAG 2.2 AA is already the target (NFR-ACC-01). The onboarding data set already covers DSA Article 30 except an identity document copy, which the card payment provider holds. | Compliance Lead | 2027-03-31 | Open |
 | TBD-11 | Pickup slots on the daylight-saving change day (2026-10-25). | Slots computed in local time; no business opens before 03:00; test case TC-NFR-011 covers both changes. | Engineering Lead | 2026-10-20 | Closed 2026-09-25 |
 | TBD-12 | Should a customer be told when allergens change on an open pre-order? | Yes, added by CR-005: the customer is emailed and may cancel free of charge until preparation starts. | Product Owner | R1.1 | Closed 2026-09-25 |
 

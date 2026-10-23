@@ -202,7 +202,7 @@ TC-ORD-013,"Status timeline updates live; push on Accepted, Ready and delay; app
 2. ""Neue Abholzeit ca. 12:30"" and push.
 3. 403 FORBIDDEN_FOR_ROLE.
 4. Ready order under Upcoming with ""Fertig zur Abholung"".",FR-ORD-06; FR-ORD-09,BR-021; BR-041,US-015,Automated,Pass
-TC-PAY-001,Card payment with 3-D Secure challenge through hosted fields; no card data at Quartier,PAY,Security,Use case,P1,Sandbox card ending 3155; log capture on API and error monitoring,L-1001,"1. Enter the card in checkout and complete the challenge.
+TC-PAY-001,Card payment with 3-D Secure challenge through hosted fields; no card data at the platform,PAY,Security,Use case,P1,Sandbox card ending 3155; log capture on API and error monitoring,L-1001,"1. Enter the card in checkout and complete the challenge.
 2. Search API logs, database and error events for the card number.","1. Order Placed; payment Authorised.
 2. No occurrence of the card number or CVC anywhere.",FR-PAY-01,BR-032,US-013,Automated,Pass
 TC-PAY-002,"Authorise at placement, capture at acceptance, void at rejection",PAY,Integration,State transition,P1,Two canonical orders Placed,L-1001,"1. Accept order 1.
@@ -235,7 +235,7 @@ TC-PAY-005,"Partial and full refunds, VAT allocation and the captured-amount cap
 4. Automatic full refund.",FR-PAY-04,BR-034,US-016; US-032,Automated,Pass
 TC-PAY-006,"Receipt content and the € 400,00 in-app limit",PAY,Boundary,Boundary value analysis,P1,Canonical order captured; catering test items,Order QO-2026-004218,"1. Open the receipt.
 2. Quote a cart of € 400,00.
-3. Quote a cart of € 400,01.","1. Seller Mohnblume Kaffeehaus e.U., address, ATU71234567, lines, voucher, total, per-rate gross, net and VAT, ""Vermittelt über Quartier"".
+3. Quote a cart of € 400,01.","1. Seller Mohnblume Kaffeehaus e.U., address, ATU71234567, lines, voucher, total, per-rate gross, net and VAT, ""Vermittelt über die Plattform"".
 2. In-app payment allowed.
 3. ORDER_LIMIT_EXCEEDED; in-app payment unavailable.",FR-PAY-07,BR-038,US-019,Automated,Pass
 TC-PAY-007,"Webhooks: signature verified, duplicates ignored, hourly reconciliation",PAY,Integration,Error guessing,P1,Provider sandbox; webhook replay tool,Order in Authorised,"1. Send payment.authorized with a bad signature.
@@ -245,7 +245,7 @@ TC-PAY-007,"Webhooks: signature verified, duplicates ignored, hourly reconciliat
 3. Reconciliation sets Captured from the provider record.",FR-PAY-09,BR-033,US-013,Automated,Pass
 TC-PAY-008,"Commission, VAT on commission and payout for the canonical order",PAY,Functional,Use case,P1,Week of 2026-09-14 contains only the canonical order,Order QO-2026-004218,"1. Open the payout statement for the week.
 2. Open the September commission invoice.","1. Captured € 15,70; commission € 1,26; VAT € 0,25; payout € 14,19.
-2. Commission € 1,26 plus 20% VAT € 0,25 from Quartier GmbH (fictional).",FR-PAY-08,BR-037,US-032,Automated,Pass
+2. Commission € 1,26 plus 20% VAT € 0,25 from the operator.",FR-PAY-08,BR-037,US-032,Automated,Pass
 TC-PAY-009,Pay at pickup offered only where enabled and labeled correctly,PAY,Functional,Equivalence partitioning,P2,Café Mohnblume enabled; Nudelbar Sesam disabled,"L-1001, L-1004","1. Open payment methods at Café Mohnblume.
 2. Open payment methods at Nudelbar Sesam.
 3. Place a pay-at-pickup order at Café Mohnblume.","1. ""Bezahlung bei Abholung"" shown.
@@ -444,7 +444,7 @@ TC-ONB-007,Audit trail search; events cannot be changed,ONB,Security,Error guess
 TC-ONB-008,Private feedback visible only to Platform Admins,ONB,Security,Equivalence partitioning,P2,Completed order,Order QO-2026-004218,"1. Send feedback 3 ""Lange gewartet"".
 2. Look for it in the app, the Business Web Portal and the Platform Admin portal.","1. Stored.
 2. Visible only in the Platform Admin portal.",FR-ONB-08,BR-008,US-037,Automated,Pass
-TC-ONB-009,Quartier-funded voucher: commission base before discount and reimbursement in payout,ONB,Functional,Use case,P2,"WILLKOMMEN3 (€ 3,00 off from € 15,00, Quartier-funded)","menu-items.csv: IT-1001, IT-1002, IT-1003","1. Apply WILLKOMMEN3 to the canonical basket and pay.
+TC-ONB-009,platform-funded voucher: commission base before discount and reimbursement in payout,ONB,Functional,Use case,P2,"WILLKOMMEN3 (€ 3,00 off from € 15,00, platform-funded)","menu-items.csv: IT-1001, IT-1002, IT-1003","1. Apply WILLKOMMEN3 to the canonical basket and pay.
 2. Open the payout statement.","1. Total € 15,70; VAT as TC-PAY-003.
 2. Commission base € 18,70 (commission € 1,50, VAT € 0,30); reimbursement € 3,00.",FR-ONB-09,BR-036; BR-037,US-038,Automated,Pass
 TC-NFR-001,API read latency and Vienna capacity under lunch-peak load,NFR,Performance,Load test,P1,"Production-sized staging data: 1,500 locations",Staging data set,"1. Run 150 requests per second of mixed reads for 30 minutes.

@@ -1,4 +1,4 @@
-# Realtime Events: Quartier
+# Realtime Events: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -27,7 +27,7 @@ sequenceDiagram
   autonumber
   participant POS as POS view
   participant WS as Realtime gateway
-  participant API as Quartier API
+  participant API as the platform API
   POS->>WS: connect (portal token)
   WS-->>POS: connected
   POS->>WS: join location:L-1001:board

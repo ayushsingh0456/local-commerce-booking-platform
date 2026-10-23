@@ -1,4 +1,4 @@
-# Synthetic Test Data: Quartier
+# Synthetic Test Data: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -50,7 +50,7 @@
 | MOHN3 | Café Mohnblume | EUR 3.00 | EUR 15.00 | 2026-09-01 to 2026-12-31 | Once per customer; 200 total |
 | SOMMER25 | Café Mohnblume | 25% | none | 2026-07-01 to 2026-08-31 | Expired (row G2) |
 | SESAM5 | Nudelbar Sesam | EUR 5.00 | EUR 20.00 | 2026-09-01 to 2026-12-31 | Other business (row G4) |
-| WILLKOMMEN3 | Quartier | EUR 3.00 | EUR 15.00 | 2026-09-01 to 2026-12-31 | Once per customer |
+| WILLKOMMEN3 | The platform | EUR 3.00 | EUR 15.00 | 2026-09-01 to 2026-12-31 | Once per customer |
 
 ## 5. Expected results for the worked examples
 

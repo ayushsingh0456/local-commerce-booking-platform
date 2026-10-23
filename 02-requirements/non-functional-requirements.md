@@ -1,4 +1,4 @@
-# Non-Functional Requirements: Quartier
+# Non-Functional Requirements: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-09-25 |
 | Reviewers | Engineering Lead; QA Lead; UX Designer; Compliance Lead |
 
-**Purpose and scope.** This document specifies the 27 quality requirements for Quartier R1 and R1.1, classified by the ISO/IEC 25010 product quality model. Every NFR has a measurable target and a verification method. The functional requirements are in the [SRS](SRS.md).
+**Purpose and scope.** This document specifies the 27 quality requirements for the platform R1 and R1.1, classified by the ISO/IEC 25010 product quality model. Every NFR has a measurable target and a verification method. The functional requirements are in the [SRS](SRS.md).
 
 ## 1. How to read this document
 
@@ -45,7 +45,7 @@ The targets come from discovery and the pilot, not from generic benchmarks.
 | NFR-AVL-02 | Reliability - recoverability | Data can be restored after a failure. | RPO 15 minutes, RTO 4 hours; restore rehearsed quarterly | Restore drill record | TC-NFR-014 |
 | NFR-AVL-03 | Reliability - fault tolerance | The order board keeps working when the live connection drops. | Falls back to polling every 15 s within 10 s of disconnect and shows "Live-Verbindung unterbrochen"; no order lost | Chaos test: drop WebSocket during lunch simulation | TC-NFR-007 |
 | NFR-SEC-01 | Security - integrity | The application is free of serious known weaknesses at each release. | OWASP ASVS 4.0.3 Level 2 controls in scope; no open Critical or High finding from the release penetration test | External penetration test; SAST and dependency scan in CI | TC-NFR-005 |
-| NFR-SEC-02 | Security - confidentiality | Card data never reaches Quartier systems. | Payment entry only through the provider's hosted fields or wallet sheets; PCI DSS self-assessment SAQ A scope | Architecture review; annual SAQ A attestation | TC-NFR-015 |
+| NFR-SEC-02 | Security - confidentiality | Card data never reaches the platform systems. | Payment entry only through the provider's hosted fields or wallet sheets; PCI DSS self-assessment SAQ A scope | Architecture review; annual SAQ A attestation | TC-NFR-015 |
 | NFR-SEC-03 | Security - authenticity | Credentials and sessions are protected. | Passwords hashed with Argon2id; access tokens 15 minutes; refresh tokens 30 days, rotated on use and revoked on password change | Code review; security test cases | TC-NFR-005 |
 | NFR-SEC-04 | Security - authenticity | Portal accounts use a second factor. | TOTP second factor mandatory for Business Admin and Platform Admin; optional for Staff on shared POS tablets with a 12-hour session | Security test cases | TC-NFR-005 |
 | NFR-SEC-05 | Security - accountability | Business data is isolated per business. | Every business-scoped table carries business_id, enforced by PostgreSQL row-level security; cross-business access attempts return 404 and are logged | Automated isolation test suite | TC-NFR-006 |
@@ -71,13 +71,13 @@ The targets come from discovery and the pilot, not from generic benchmarks.
 **Reliability.** Availability is measured only during trading hours (06:00 to 23:00). Maintenance happens outside them. NFR-AVL-03 exists because the order board is the business's only order channel during lunch. A board that silently stops updating is worse than one that says it is offline.
 
 **Security and privacy.**
-- NFR-SEC-02 keeps Quartier in the lightest PCI DSS scope: card data is entered only in the card payment provider's hosted fields or wallet sheets.
+- NFR-SEC-02 keeps the platform in the lightest PCI DSS scope: card data is entered only in the card payment provider's hosted fields or wallet sheets.
 - NFR-SEC-05 enforces business isolation in PostgreSQL row-level security, so a missing filter in application code cannot leak another business's orders.
 - NFR-PRIV-01 and the allergen filter design ([spec 001](../08-ai-assisted-ba/specs/001-allergen-filter-on-menus/spec.md)) keep health-related preferences off the server.
 
 **Usability, accessibility and localization.**
 - NFR-USE-01 keeps the discovery principle that any business is at most two taps from launch.
-- NFR-ACC-01 targets WCAG 2.2 AA. Quartier GmbH is currently a micro-enterprise and exempt from the Austrian accessibility act for services, but it will not stay exempt, and retrofitting is more expensive than building it in (TBD-10).
+- NFR-ACC-01 targets WCAG 2.2 AA. the operator is currently a micro-enterprise and exempt from the Austrian accessibility act for services, but it will not stay exempt, and retrofitting is more expensive than building it in (TBD-10).
 - NFR-I18N-01 fixes formats that are easy to get wrong, such as "€ 15,70" and "2,4 km", and fixes the "du" and "Sie" register per app.
 
 **Data correctness.**

@@ -1,4 +1,4 @@
-# Epics: Quartier Release 1
+# Epics: Platform release 1
 
 ## Document control
 

@@ -1,4 +1,4 @@
-# Market and Competitor Scan: Quartier
+# Market and Competitor Scan: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-02-20 |
 | Reviewers | Product Owner; Managing Director; Marketing Lead |
 
-**Purpose and scope.** The alternatives that Vienna's independent businesses and their customers use today, grouped by archetype, and where Quartier positions itself. Competitors are described as archetypes rather than named products. The comparison is about patterns that matter for requirements, and individual products change too often for a named comparison to stay accurate. Fee ranges are indicative public price ranges collected in January 2026 and rounded.
+**Purpose and scope.** The alternatives that Vienna's independent businesses and their customers use today, grouped by archetype, and where the platform positions itself. Competitors are described as archetypes rather than named products. The comparison is about patterns that matter for requirements, and individual products change too often for a named comparison to stay accurate. Fee ranges are indicative public price ranges collected in January 2026 and rounded.
 
 ## 1. Alternatives by archetype
 
@@ -32,11 +32,11 @@ From the survey of 410 residents of Neubau and Mariahilf (January 2026):
 
 ## 3. Positioning
 
-| Dimension | Quartier R1 | Rationale |
+| Dimension | The platform R1 | Rationale |
 |---|---|---|
 | Categories | Food, salon and spa in one app | Local life in a district does not divide into apps; discovery across categories |
 | Ranking | Distance or name only; no promoted placement, no public ratings | Fairness for small businesses; transparency under P2B rules (BR-006, BR-008) |
-| Fees | 8% on in-app paid food orders; appointments free in R1 | Clearly below archetype A; no fee where Quartier does not handle money |
+| Fees | 8% on in-app paid food orders; appointments free in R1 | Clearly below archetype A; no fee where the platform does not handle money |
 | Fulfillment | Pickup only | Avoids courier logistics; matches the lunch use case |
 | Allergens | Mandatory, versioned, current | A differentiator for 18% of households, and a legal requirement for distance sales |
 | Business identity | Logo, cover and brand color on the business page | Owners want their own identity, not a uniform listing |

@@ -1,4 +1,4 @@
-# Stakeholder Register and RACI: Quartier
+# Stakeholder Register and RACI: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,20 +11,20 @@
 | Last updated | 2026-09-25 |
 | Reviewers | Product Owner; Partner Success Lead |
 
-**Purpose and scope.** Who has a stake in Quartier R1, how much influence and interest they have, how the team engages them, and who is responsible, accountable, consulted and informed for the main deliverables and decisions.
+**Purpose and scope.** Who has a stake in the platform R1, how much influence and interest they have, how the team engages them, and who is responsible, accountable, consulted and informed for the main deliverables and decisions.
 
 ## 1. Stakeholder register
 
 | ID | Stakeholder | Group | Interest | Influence | Attitude at start | Engagement | Main concerns |
 |---|---|---|---|---|---|---|---|
-| SH-01 | Managing Director | Quartier GmbH | High | High | Champion | Steering fortnightly | Pilot evidence for funding |
-| SH-02 | Product Owner | Quartier GmbH | High | High | Champion | Daily | Scope, priorities, objectives |
-| SH-03 | Engineering Lead and team | Quartier GmbH | High | High | Supportive | Daily | Feasibility, operability |
-| SH-04 | Partner Operations Lead | Quartier GmbH | High | Medium | Supportive | Weekly refinement | Verification workload, OBJ-05 |
-| SH-05 | Partner Success Lead | Quartier GmbH | High | Medium | Supportive | Weekly; sprint reviews | Pilot adoption and training |
-| SH-06 | Compliance Lead, external data protection officer, legal counsel | Quartier GmbH and advisers | Medium | High (veto) | Cautious | Rule clinics; document review | Allergen information, GDPR, consumer and platform rules |
-| SH-07 | Finance Lead | Quartier GmbH | Medium | High | Neutral | Rule clinics | VAT, commission, payouts |
-| SH-08 | Marketing Lead | Quartier GmbH | Medium | Medium | Supportive, wants ratings | Monthly | Growth after launch (CR-007) |
+| SH-01 | Managing Director | the operator | High | High | Champion | Steering fortnightly | Pilot evidence for funding |
+| SH-02 | Product Owner | the operator | High | High | Champion | Daily | Scope, priorities, objectives |
+| SH-03 | Engineering Lead and team | the operator | High | High | Supportive | Daily | Feasibility, operability |
+| SH-04 | Partner Operations Lead | the operator | High | Medium | Supportive | Weekly refinement | Verification workload, OBJ-05 |
+| SH-05 | Partner Success Lead | the operator | High | Medium | Supportive | Weekly; sprint reviews | Pilot adoption and training |
+| SH-06 | Compliance Lead, external data protection officer, legal counsel | the operator and advisers | Medium | High (veto) | Cautious | Rule clinics; document review | Allergen information, GDPR, consumer and platform rules |
+| SH-07 | Finance Lead | the operator | Medium | High | Neutral | Rule clinics | VAT, commission, payouts |
+| SH-08 | Marketing Lead | the operator | Medium | Medium | Supportive, wants ratings | Monthly | Growth after launch (CR-007) |
 | SH-09 | Food business owners (Café Mohnblume, Konditorei Pomeranze, Nudelbar Sesam, Kaffeebar Zimtstern) | Pilot businesses | High | High | Interested but wary of fees | Sprint reviews; UAT | Commission, workload, allergen liability |
 | SH-10 | Counter staff | Pilot businesses | High | Medium | Skeptical of "another screen" | Lunch observations; UAT-05 | Noise, speed, no phone |
 | SH-11 | Salon and spa owners (Haarstudio Linde, Massageatelier Ruhepol) | Pilot businesses | High | High | Enthusiastic about reminders | Sprint reviews; UAT | No-shows, accurate diary |

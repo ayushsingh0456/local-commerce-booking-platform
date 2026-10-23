@@ -1,4 +1,4 @@
-# Sequence Diagrams: Quartier
+# Sequence Diagrams: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -21,7 +21,7 @@ Implements BR-019, BR-020, BR-033, FR-ORD-03, FR-ORD-12 and FR-PAY-01. The timin
 sequenceDiagram
   autonumber
   participant App as Customer App
-  participant API as Quartier API
+  participant API as the platform API
   participant R as Redis
   participant DB as PostgreSQL
   participant PSP as Card payment provider
@@ -60,7 +60,7 @@ Implements BR-021, BR-022, BR-033, FR-POS-01, FR-POS-02 and FR-ORD-06.
 ```mermaid
 sequenceDiagram
   autonumber
-  participant API as Quartier API
+  participant API as the platform API
   participant WS as Realtime gateway
   participant POS as POS view (tablet)
   participant PSP as Card payment provider
@@ -92,7 +92,7 @@ sequenceDiagram
   autonumber
   participant A as Customer A (Sophie)
   participant B as Customer B
-  participant API as Quartier API
+  participant API as the platform API
   participant R as Redis
   participant DB as PostgreSQL
   A->>API: GET /locations/L-2001/availability (service, Lena, 2026-10-13)
@@ -123,7 +123,7 @@ Implements BR-033, FR-PAY-09 and FR-ONB-03.
 sequenceDiagram
   autonumber
   participant PSP as Card payment provider
-  participant API as Quartier API
+  participant API as the platform API
   participant DB as PostgreSQL
   participant W as Worker
   PSP->>API: POST /webhooks/payment-provider (event evt_8812, signature)
@@ -149,7 +149,7 @@ Implements BR-011, BR-013, FR-CAT-04, FR-ORD-12 and NFR-DAT-02.
 sequenceDiagram
   autonumber
   participant Adm as Business Admin (portal)
-  participant API as Quartier API
+  participant API as the platform API
   participant DB as PostgreSQL
   participant App as Customer App
   Adm->>API: POST /business/items/{id}/allergen-declarations {A,C,G,H, confirmed}
@@ -174,7 +174,7 @@ sequenceDiagram
   autonumber
   participant Adm as Business Admin
   participant BWP as Business Web Portal
-  participant API as Quartier API
+  participant API as the platform API
   participant PSP as Card payment provider
   participant PA as Platform Admin
   Adm->>BWP: Start payment onboarding

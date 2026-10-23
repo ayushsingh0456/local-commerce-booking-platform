@@ -1,4 +1,4 @@
-# Test Cases: Quartier
+# Test Cases: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -21,7 +21,7 @@
 
 ## Purpose and scope
 
-[test-cases.csv](test-cases.csv) is the test case specification for Quartier R1 and R1.1: 98 cases that cover every functional requirement, business rule, user story and non-functional requirement. This guide explains how to read the file, summarizes coverage, and writes out the cases where the arithmetic or the timing is the point. A reviewer should be able to check those expected results by hand.
+[test-cases.csv](test-cases.csv) is the test case specification for the platform R1 and R1.1: 98 cases that cover every functional requirement, business rule, user story and non-functional requirement. This guide explains how to read the file, summarizes coverage, and writes out the cases where the arithmetic or the timing is the point. A reviewer should be able to check those expected results by hand.
 
 ## How to read the CSV
 

@@ -13,7 +13,7 @@
 
 ## Context and problem statement
 
-Quartier has three front ends: the Customer Mobile App, the Business Web Portal with its POS view, and the Platform Admin portal. They all read and write the same orders, appointments, catalog and businesses. A customer's order must appear on the order board within 3 seconds (NFR-PERF-04). An allergen change confirmed in the portal must reach the app within 60 seconds (NFR-DAT-02). The team is one cross-functional squad with 2 backend developers.
+The platform has three front ends: the Customer Mobile App, the Business Web Portal with its POS view, and the Platform Admin portal. They all read and write the same orders, appointments, catalog and businesses. A customer's order must appear on the order board within 3 seconds (NFR-PERF-04). An allergen change confirmed in the portal must reach the app within 60 seconds (NFR-DAT-02). The team is one cross-functional squad with 2 backend developers.
 
 How do we structure the backend so that the three apps share one truth? It also has to keep the roles apart and stay small enough to run.
 

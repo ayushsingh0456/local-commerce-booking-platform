@@ -1,4 +1,4 @@
-# Definition of Ready and Definition of Done: Quartier
+# Definition of Ready and Definition of Done: Local Commerce & Booking Platform
 
 ## Document control
 

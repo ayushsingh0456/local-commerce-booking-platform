@@ -1,4 +1,4 @@
-# Data Dictionary: Quartier
+# Data Dictionary: Local Commerce & Booking Platform
 
 ## Document control
 

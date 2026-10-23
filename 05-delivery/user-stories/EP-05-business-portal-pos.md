@@ -150,7 +150,7 @@ Scenario Outline: US-027-AC4 Not collected from 60 minutes after the slot ends
 ```
 
 **Notes**
-- Quartier records only that the counter payment happened; amount and method stay in the business's certified register (CR-003 rejected, compliance mapping T6).
+- The platform records only that the counter payment happened; amount and method stay in the business's certified register (CR-003 rejected, compliance mapping T6).
 
 ### US-028 · Mark items sold out and pause orders
 

@@ -1,4 +1,4 @@
-# API Guidelines and Error Catalog: Quartier
+# API Guidelines and Error Catalog: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-09-25 |
 | Reviewers | Backend developers; mobile developers; web developer; QA Lead |
 
-**Purpose and scope.** The conventions every Quartier endpoint follows, the error catalog with the user-facing messages, and the configuration endpoints that the [OpenAPI specification](openapi.yaml) does not list. The OpenAPI file is the contract. This document explains the choices behind it so that new endpoints stay consistent.
+**Purpose and scope.** The conventions every the platform endpoint follows, the error catalog with the user-facing messages, and the configuration endpoints that the [OpenAPI specification](openapi.yaml) does not list. The OpenAPI file is the contract. This document explains the choices behind it so that new endpoints stay consistent.
 
 ## 1. Surfaces and authentication
 
@@ -95,7 +95,7 @@ Errors use RFC 9457 problem details (`application/problem+json`) with a stable `
 | CLOSURE_HAS_PREORDERS | 409 | Closure overlaps accepted pre-orders | {n} Vorbestellungen sind betroffen. | FR-CAT-02 |
 | GO_LIVE_GATE_FAILED | 409 | Publish while table 3.8 fails; failing rows listed | Noch nicht alle Voraussetzungen erfüllt. | BR-043 |
 | UID_CHECK_PENDING | 409 | Approve before the UID number is confirmed | Die UID-Prüfung ist noch offen. | BR-042 |
-| OUTSIDE_SERVICE_AREA | 422 | Location outside Vienna | Quartier ist derzeit nur in Wien verfügbar. | FR-ONB-01 |
+| OUTSIDE_SERVICE_AREA | 422 | Location outside Vienna | Die Plattform ist derzeit nur in Wien verfügbar. | FR-ONB-01 |
 | IDEMPOTENCY_KEY_REUSED | 422 | Same key, different body | n/a (developer error) | Section 3 |
 | RATE_LIMITED | 429 | Too many requests | Bitte versuche es gleich noch einmal. | NFR-SEC-01 |
 
@@ -124,7 +124,7 @@ These portal endpoints follow the same conventions. They are documented in the i
 | `GET/PUT /v1/platform/tax-rates` | Platform Admin: effective-dated VAT rates per tax category | FR-ONB-06 |
 | `GET /v1/platform/audit-events` | Platform Admin: search by business, actor and date | FR-ONB-07 |
 | `GET /v1/platform/feedback`; `POST /v1/me/bookings/{bookingId}/feedback` | Platform Admin reads; customer sends private feedback | FR-ONB-08 |
-| `GET/POST/PUT /v1/platform/vouchers` | Platform Admin: Quartier-funded vouchers | FR-ONB-09 |
+| `GET/POST/PUT /v1/platform/vouchers` | Platform Admin: platform-funded vouchers | FR-ONB-09 |
 | `GET /v1/platform/customers/{customerId}/export` | Platform Admin: JSON export for an access request | FR-ACC-09 |
 
 ## 10. Webhooks from the card payment provider

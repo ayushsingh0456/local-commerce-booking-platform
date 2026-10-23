@@ -1,4 +1,4 @@
-# Current vs Future State: Quartier
+# Current vs Future State: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-02-27 |
 | Reviewers | Product Owner; Partner Success Lead; pilot business owners |
 
-**Purpose and scope.** How pilot businesses take orders and bookings today (AS-IS), with measured pain points, and how Quartier changes it (TO-BE). Evidence comes from discovery between 2026-01-12 and 2026-02-20:
+**Purpose and scope.** How pilot businesses take orders and bookings today (AS-IS), with measured pain points, and how the platform changes it (TO-BE). Evidence comes from discovery between 2026-01-12 and 2026-02-20:
 - interviews with 14 business owners and 22 customers;
 - observation of 12 lunch services at 3 cafés;
 - a 6-week audit of 4 salon diaries;

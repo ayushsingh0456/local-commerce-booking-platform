@@ -52,7 +52,7 @@ The team raised the hold time to 20 minutes by configuration 25 minutes after de
 | Late hand-over | 15 orders handed over more than 15 minutes after their slot |
 | Customers who left | 6; refunded by the businesses, EUR 87.60 in total |
 | Holds expired during a challenge | 63 (of which 41 still completed payment and created an order; 23 of those in a full slot) |
-| Money | No double charges. Quartier waived its commission on the 23 orders and the 6 refunded orders. |
+| Money | No double charges. The platform waived its commission on the 23 orders and the 6 refunded orders. |
 | Businesses | Nudelbar Sesam paused ordering for 30 minutes; two cafés reported staff stress at peak |
 
 ## 3. Timeline
@@ -85,7 +85,7 @@ All times CEST on 2026-09-08.
 sequenceDiagram
   autonumber
   participant A as Customer A (slow bank)
-  participant API as Quartier API
+  participant API as the platform API
   participant R as Redis
   participant B as Customer B
   participant DB as PostgreSQL

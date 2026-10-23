@@ -1,4 +1,4 @@
-# Change Request Log: Quartier
+# Change Request Log: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -72,9 +72,9 @@ Emergency CRs that follow a SEV-1 or SEV-2 incident are decided by the Product O
 |---|---|
 | Requested by | Two pilot cafés through the Partner Success Lead |
 | Need | One screen at the counter for app orders and walk-in sales. |
-| Impact analysis | Recording counter sales would make Quartier a cash register under the Austrian cash register obligation (BAO section 131b) and the cash register security regulation. That brings: a signature creation unit per business through a certified provider; the data collection protocol and its export; registration of each register with the tax authority; start, monthly and annual receipts; receipt QR codes; outage procedures. Also card terminal integration. Estimate 89 points or more plus certification, and permanent liability for the businesses' tax compliance. Every pilot business already has a certified register. |
+| Impact analysis | Recording counter sales would make the platform a cash register under the Austrian cash register obligation (BAO section 131b) and the cash register security regulation. That brings: a signature creation unit per business through a certified provider; the data collection protocol and its export; registration of each register with the tax authority; start, monthly and annual receipts; receipt QR codes; outage procedures. Also card terminal integration. Estimate 89 points or more plus certification, and permanent liability for the businesses' tax compliance. Every pilot business already has a certified register. |
 | Alternatives considered | (a) Integration with existing certified registers: later phase, per vendor. (b) Status-only confirmation "Bezahlt an der Kassa" for pay-at-pickup orders, already in R1 (BR-024). |
-| Decision | **Rejected** 2026-05-13. Rationale: high cost and regulatory risk for little gain; it would turn Quartier into a product the team cannot support in R1. Decision DEC-11. |
+| Decision | **Rejected** 2026-05-13. Rationale: high cost and regulatory risk for little gain; it would turn the platform into a product the team cannot support in R1. Decision DEC-11. |
 | Follow-up | Partner Success explained the decision to both cafés in person; neither left the pilot. |
 
 ### CR-004 Charge an automatic no-show fee to a saved card (rejected for R1)
@@ -115,8 +115,8 @@ Emergency CRs that follow a SEV-1 or SEV-2 incident are decided by the Product O
 |---|---|
 | Requested by | Marketing Lead, for growth after the Vienna launch |
 | Need | Ratings help new customers choose. |
-| Impact analysis | Contradicts the neutral-ranking principle agreed in discovery (BR-008, DEC-05). Publishing reviews would oblige Quartier to say whether and how it verifies that reviews come from real customers (Omnibus Directive). It would need moderation and an abuse process, and businesses would contest reviews through the P2B complaint channel. Pilot businesses were strongly against it in the discovery survey (11 of 14). Estimate 21 points plus ongoing moderation. |
-| Alternatives considered | Private feedback remains (FR-ONB-08) and is used by Partner Operations to coach businesses. Editorial "neu bei Quartier" collections were proposed and also declined, to keep ranking neutral. |
+| Impact analysis | Contradicts the neutral-ranking principle agreed in discovery (BR-008, DEC-05). Publishing reviews would oblige the platform to say whether and how it verifies that reviews come from real customers (Omnibus Directive). It would need moderation and an abuse process, and businesses would contest reviews through the P2B complaint channel. Pilot businesses were strongly against it in the discovery survey (11 of 14). Estimate 21 points plus ongoing moderation. |
+| Alternatives considered | Private feedback remains (FR-ONB-08) and is used by Partner Operations to coach businesses. Editorial "neu bei the platform" collections were proposed and also declined, to keep ranking neutral. |
 | Decision | **Rejected** 2026-09-23. Rationale: product principle and compliance cost; no evidence that ratings are needed to meet OBJ-01 to OBJ-06. |
 
 ## Related documents

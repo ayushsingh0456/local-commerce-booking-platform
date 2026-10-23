@@ -1,4 +1,4 @@
-# Business Requirements Document (BRD): Quartier Release 1
+# Business Requirements Document (BRD): Platform release 1
 
 ## Document control
 
@@ -16,9 +16,9 @@
 |---|---|---|
 | 1.0 | 2026-02-27 | Baseline at the end of discovery. |
 | 1.1 | 2026-04-24 | CR-001 (pre-orders with item lead time, BN-03) and CR-002 (spa classes and events moved to Release 2, BN-04). |
-| 1.2 | 2026-09-25 | Post-pilot update. Pilot readings added to section 4. CR-005 and CR-006 sharpen BN-02 and BN-03 after INC-2026-006 and INC-2026-011. CR-003, CR-004 and CR-007 recorded as rejected in section 5.3. |
+| 1.2 | 2026-09-25 | Post-pilot update. CR-005 and CR-006 sharpen BN-02 and BN-03 after INC-2026-006 and INC-2026-011. CR-003, CR-004 and CR-007 recorded as rejected in section 5.3. |
 
-**Purpose.** This document states why Quartier Release 1 (R1) exists, which business outcomes it must achieve and which business needs the solution must meet. In ISO/IEC/IEEE 29148:2018 terms it is the business requirements specification. It says little about *how*; the [SRS](SRS.md) specifies the system behavior that satisfies each need.
+**Purpose.** This document states why Platform release 1 (R1) exists, which business outcomes it must achieve and which business needs the solution must meet. In ISO/IEC/IEEE 29148:2018 terms it is the business requirements specification. It says little about *how*; the [SRS](SRS.md) specifies the system behavior that satisfies each need.
 
 **Scope of this document.** The R1 product for the Vienna pilot (Neubau and Mariahilf) and the Vienna launch, plus the boundary to Release 2 (R2). Audience: Managing Director, Product Owner, delivery team, pilot businesses, Compliance Lead and Finance Lead.
 
@@ -37,7 +37,7 @@ Discovery with 14 businesses and 22 customers in Wien-Neubau and Mariahilf put n
 | Business days to get a business set up on a booking or ordering tool | 11 |
 | Counter staff minutes spent on phone orders per lunch service | 38 |
 
-Quartier R1 gives these businesses one platform and their customers one app. Food businesses take **pickup orders paid in the app** into slots their kitchen can handle. Salons and spas take **appointments around the clock** that fit each stylist's day. All three apps run on one backend:
+The platform R1 gives these businesses one platform and their customers one app. Food businesses take **pickup orders paid in the app** into slots their kitchen can handle. Salons and spas take **appointments around the clock** that fit each stylist's day. All three apps run on one backend:
 - the Customer Mobile App;
 - the Business Web Portal with a staff POS view;
 - the Platform Admin portal.
@@ -53,7 +53,7 @@ Five scope decisions shape the solution:
 
 ## 2. Business context
 
-Quartier GmbH (fictional) is a Vienna start-up. It runs Quartier as a two-sided platform for independent local businesses in three categories:
+the operator is a Vienna start-up. It runs the platform as a two-sided platform for independent local businesses in three categories:
 
 | Category | Business types | What the customer does in R1 |
 |---|---|---|
@@ -91,16 +91,16 @@ The current and future state, with discovery evidence, is in [current-vs-future-
 
 ## 4. Business objectives
 
-Objectives map one-to-one, in order, to the discovery pain points. Targets are measured over the first full calendar quarter after the Vienna launch, Q4 2026 (2026-10-01 to 2026-12-31). The pilot reading (2026-07-01 to 2026-09-30) is reported for information and is not the acceptance measure.
+Objectives map one-to-one, in order, to the discovery pain points. Targets are measured over the first full calendar quarter after the Vienna launch, Q4 2026 (2026-10-01 to 2026-12-31).
 
-| ID | Objective | KPI | Baseline | Target | Pilot reading | Measurement method | Owner role |
-|---|---|---|---|---|---|---|---|
-| OBJ-01 | Cut uncollected pickup orders | Ready orders marked Not collected | 6.8% | 2.0% or less | 1.1% | Not collected divided by (Completed plus Not collected) for Quartier orders. Source: order status history (FR-POS-08). | Product Owner |
-| OBJ-02 | Cut appointment no-shows | No-show rate of app-booked appointments | 9.5% | 5.0% or less | 4.6% | No-show divided by (Completed plus No-show). Source: appointment status history (FR-APT-07). | Partner Success Lead |
-| OBJ-03 | Take bookings when the phone cannot | Share of app appointments created outside the location's opening hours | 0% (phone only) | 30% or more | 41% | Appointment `created_at` outside the location's opening intervals for that day, divided by all app appointments. | Product Owner |
-| OBJ-04 | Complete and current allergen information | (a) Orderable food items with a complete allergen declaration; (b) orders placed on outdated allergen information | (a) 58%; (b) not measured | (a) 100%; (b) 0 | (a) 100%; (b) 11 orders before the INC-2026-006 fix, 0 since 2026-08-14 | (a) Nightly count of published food items and choices without a confirmed declaration (BR-011 makes the target structural). (b) Orders containing a line whose declaration version differs from the version current at payment (FR-ORD-12). | Compliance Lead |
-| OBJ-05 | Onboard businesses quickly | Median business days from application to Live | 11 | 5 or fewer | 6 (July to September); 4 in September | Application `submitted_at` to business `live_at`, Austrian public holidays excluded. Source: onboarding records (FR-ONB-04). | Partner Operations Lead |
-| OBJ-06 | Free counter staff at lunch | Staff minutes on phone orders per lunch service (11:30 to 13:30) | 38 | 15 or fewer | 21 (September observation) | Repeat structured observation at the same 3 cafés (12 services) in November 2026, cross-checked with the businesses' call logs. | Partner Success Lead |
+| ID | Objective | KPI | Baseline | Target | Measurement method | Owner role |
+|---|---|---|---|---|---|---|
+| OBJ-01 | Cut uncollected pickup orders | Ready orders marked Not collected | 6.8% | 2.0% or less | Not collected divided by (Completed plus Not collected) for the platform orders. Source: order status history (FR-POS-08). | Product Owner |
+| OBJ-02 | Cut appointment no-shows | No-show rate of app-booked appointments | 9.5% | 5.0% or less | No-show divided by (Completed plus No-show). Source: appointment status history (FR-APT-07). | Partner Success Lead |
+| OBJ-03 | Take bookings when the phone cannot | Share of app appointments created outside the location's opening hours | 0% (phone only) | 30% or more | Appointment `created_at` outside the location's opening intervals for that day, divided by all app appointments. | Product Owner |
+| OBJ-04 | Complete and current allergen information | (a) Orderable food items with a complete allergen declaration; (b) orders placed on outdated allergen information | (a) 58%; (b) not measured | (a) 100%; (b) 0 | (a) Nightly count of published food items and choices without a confirmed declaration (BR-011 makes the target structural). (b) Orders containing a line whose declaration version differs from the version current at payment (FR-ORD-12). | Compliance Lead |
+| OBJ-05 | Onboard businesses quickly | Median business days from application to Live | 11 | 5 or fewer | Application `submitted_at` to business `live_at`, Austrian public holidays excluded. Source: onboarding records (FR-ONB-04). | Partner Operations Lead |
+| OBJ-06 | Free counter staff at lunch | Staff minutes on phone orders per lunch service (11:30 to 13:30) | 38 | 15 or fewer | Repeat structured observation at the same 3 cafés (12 services) in November 2026, cross-checked with the businesses' call logs. | Partner Success Lead |
 
 Leading indicators tracked weekly but not objectives:
 - share of orders accepted within 2 minutes;
@@ -140,8 +140,8 @@ Leading indicators tracked weekly but not objectives:
 | Table reservations for restaurants | R2 | Different capacity model (tables and seatings); low demand in discovery compared with lunch pickup | Restaurants list their phone number |
 | Spa classes and events | R2 (CR-002) | Group capacity, waitlists and cancellation rules need their own design; only 2 of 14 businesses run classes | Treatments are bookable like salon services |
 | Online payment, deposits and no-show fees for appointments | Rejected for R1 (CR-004) | A fee charged to a saved card is a merchant-initiated transaction. It needs a stored mandate and a cancellation policy that customers have accepted in advance. Since July, pilot data has shown that reminders and free cancellation alone halved no-shows. | Pay at the venue (FR-APT-09); free cancellation until the cutoff (BR-029) |
-| Taking cash or card payments at the counter in the POS view | Rejected (CR-003) | Recording counter sales would make Quartier a cash register under the Austrian cash register rules (BAO section 131b and the cash register security regulation): signed receipts, a signature unit and data export. Every pilot business already has a certified register. | Pay-at-pickup orders are paid on the business's own register; staff confirm "Bezahlt an der Kassa" (BR-024) |
-| Public star ratings and reviews | Rejected (CR-007) | Product principle of neutral ranking. Publishing reviews would also oblige Quartier to state whether and how it checks they come from real customers (Omnibus Directive). | Private feedback to Quartier only (FR-ONB-08) |
+| Taking cash or card payments at the counter in the POS view | Rejected (CR-003) | Recording counter sales would make the platform a cash register under the Austrian cash register rules (BAO section 131b and the cash register security regulation): signed receipts, a signature unit and data export. Every pilot business already has a certified register. | Pay-at-pickup orders are paid on the business's own register; staff confirm "Bezahlt an der Kassa" (BR-024) |
+| Public star ratings and reviews | Rejected (CR-007) | Product principle of neutral ranking. Publishing reviews would also oblige the platform to state whether and how it checks they come from real customers (Omnibus Directive). | Private feedback to the platform only (FR-ONB-08) |
 | Gift cards and stored value | R2 | Stored value raises payment-regulation questions that need legal review | Promo vouchers only (BR-036) |
 | Loyalty programs and stamp cards | R2 | Not needed to reach the R1 objectives | None |
 | Multi-business baskets | Not planned | Each business is the seller; one basket per business keeps receipts, VAT and refunds simple | One cart per location (BR-016) |
@@ -159,8 +159,8 @@ The full register, with RACI, is in [stakeholder-register-raci.md](../01-discove
 | Food business owners | PER-03 Elif Aydin (BIZ-ADM) | Fewer phone calls; only orders the kitchen can handle; money paid out reliably | High: supply side of the platform | Slot capacity; pause; allergen editor that prevents mistakes; weekly payout |
 | Counter staff | PER-04 Tobias Gruber (BIZ-STF) | One screen at the counter; no surprises at lunch | Medium: daily users who drive adoption | Order board with clear alerts; pickup code; sold-out toggle |
 | Salon and spa owners | PER-05 Martina Leitner (BIZ-ADM) | Full diary without answering the phone; fewer no-shows | High | Accurate availability with buffers; reminders; working hours that cannot orphan appointments |
-| Quartier partner operations | PER-06 Paul Haider (PLT-ADM) | Verify businesses fast and safely | Medium | One queue; register and UID checks; go-live checklist |
-| Quartier management | Managing Director (sponsor) | Pilot evidence for the Vienna launch and funding | Decisive | Objectives with baselines and a measurement method |
+| The platform partner operations | PER-06 Paul Haider (PLT-ADM) | Verify businesses fast and safely | Medium | One queue; register and UID checks; go-live checklist |
+| The platform management | Managing Director (sponsor) | Pilot evidence for the Vienna launch and funding | Decisive | Objectives with baselines and a measurement method |
 | Compliance Lead and external data protection officer | Compliance Lead | Food information, GDPR, consumer and platform rules | Veto on compliance | Allergen gate, data minimization, statements of reasons |
 | Finance Lead | Finance Lead | Correct VAT, commission invoices, reconciled payouts | High on payment rules | BR-035 and BR-037 implemented exactly; daily reconciliation |
 | Card payment provider | External | Compliant marketplace set-up | High (contractual) | Connected accounts; KYC before payouts; webhooks handled once |
@@ -176,7 +176,7 @@ Each business need maps to one epic (BN-01 to EP-01, and so on). The functional 
 | BN-03 | Customers need to order food for a pickup time the kitchen can handle, pay securely, see the VAT they paid and collect without queueing; businesses need to receive only orders they accept. | Prepaid orders are collected; lunch rush is smoothed; correct VAT and receipts | EP-03 Ordering, Pickup & Payments | OBJ-01, OBJ-06 |
 | BN-04 | Customers need to book salon and spa appointments at any hour, with only times that really fit, and change them without calling; businesses need fewer no-shows. | Fuller diaries; no missed calls; fewer empty slots | EP-04 Appointment Booking | OBJ-02, OBJ-03 |
 | BN-05 | Businesses need to maintain their catalog, allergens, services and staff hours themselves, and run pickup orders and the appointment day from one POS view. | Owners keep information current without help; staff stop answering the phone at peak | EP-05 Business Portal & POS | OBJ-04, OBJ-06 |
-| BN-06 | Quartier needs to verify each business's identity, onboard it with the card payment provider and publish it quickly, and to suspend it with reasons when needed. | Time to Live in days; trustworthy supply; platform-to-business rules met | EP-06 Business Onboarding & Platform Administration | OBJ-05 |
+| BN-06 | The platform needs to verify each business's identity, onboard it with the card payment provider and publish it quickly, and to suspend it with reasons when needed. | Time to Live in days; trustworthy supply; platform-to-business rules met | EP-06 Business Onboarding & Platform Administration | OBJ-05 |
 
 ## 8. Business process overview
 
@@ -203,7 +203,7 @@ Design consequences the business has agreed to:
 - **The business decides.** An order is not confirmed until the business accepts it, and an order not accepted within 5 minutes is auto-rejected and the payment voided (BR-022). Capturing only at acceptance means a rejected order never needs a refund.
 - **Capacity is a promise.** A slot or an appointment time is offered only if it can be honored. Holds protect a choice during payment. The database, not the hold, makes the final decision (ADR-002, BR-020, BR-028).
 - **Allergen information is part of the product, not decoration.** It is mandatory to publish, versioned when it changes and re-confirmed at checkout when it changed under the customer (BR-011, BR-013).
-- **The business is the seller.** Receipts are issued in the business's name and payouts go directly from the card payment provider. Quartier never holds customer funds (ADR-003).
+- **The business is the seller.** Receipts are issued in the business's name and payouts go directly from the card payment provider. The platform never holds customer funds (ADR-003).
 
 ## 9. Constraints
 
@@ -223,7 +223,7 @@ These are tracked, with owners and review dates, in the [RAID log](../05-deliver
 
 **Assumptions**
 - Customers in the pilot districts carry a smartphone and a card enabled for 3-D Secure, or Apple Pay or Google Pay.
-- Food business owners can name the allergens in their own recipes. Quartier provides the list and the gate; it does not check recipes.
+- Food business owners can name the allergens in their own recipes. The platform provides the list and the gate; it does not check recipes.
 - The right of withdrawal does not apply to perishable food prepared to order, or to appointments for a specific date, under the FAGG exceptions. External legal counsel confirmed this for the pilot.
 - Each pilot business keeps its own certified cash register for counter sales.
 - Austrian VAT rates for food (10%) and drinks and services (20%) apply at launch; any change is a data change (NFR-MNT-02).
@@ -239,7 +239,7 @@ These are tracked, with owners and review dates, in the [RAID log](../05-deliver
 
 All figures are fictional and illustrative. They show the logic of the business case, not a forecast.
 
-**Revenue model.** Quartier earns an 8% commission on the paid gross of in-app food orders, plus 20% VAT on the commission (BR-037). The commission is deducted at capture, and Quartier bears the card processing fee. Appointments carry no commission in R1. A salon subscription is an R2 decision, to be taken on pilot evidence.
+**Revenue model.** the platform earns an 8% commission on the paid gross of in-app food orders, plus 20% VAT on the commission (BR-037). The commission is deducted at capture, and the platform bears the card processing fee. Appointments carry no commission in R1. A salon subscription is an R2 decision, to be taken on pilot evidence.
 
 **Per-order example.** This is the canonical basket from [SRS Appendix B](SRS.md#appendix-b-worked-examples). Café Mohnblume, 2 x Topfengolatsche, 1 x Schinken-Käse-Sandwich and 1 x Hausgemachte Limonade 0,5 l, with the business-funded voucher MOHN3:
 

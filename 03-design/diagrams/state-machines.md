@@ -1,4 +1,4 @@
-# State Machines: Quartier
+# State Machines: Local Commerce & Booking Platform
 
 ## Document control
 

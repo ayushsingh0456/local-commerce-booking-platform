@@ -1,4 +1,4 @@
-# Project Charter: Quartier Release 1
+# Project Charter: Platform release 1
 
 ## Document control
 
@@ -11,11 +11,11 @@
 | Last updated | 2026-03-02 |
 | Reviewers | Managing Director (sponsor); Engineering Lead; Partner Operations Lead; Compliance Lead; Finance Lead |
 
-**Purpose and scope.** Authorises the Quartier Release 1 project. It states why the project exists, what it must deliver, by when, with whom and within which limits. Detailed requirements are in the [BRD](../02-requirements/BRD.md) and the [SRS](../02-requirements/SRS.md).
+**Purpose and scope.** Authorises the Platform release 1 project. It states why the project exists, what it must deliver, by when, with whom and within which limits. Detailed requirements are in the [BRD](../02-requirements/BRD.md) and the [SRS](../02-requirements/SRS.md).
 
 ## 1. Vision
 
-> For independent local businesses in Vienna, and the neighbors who use them, Quartier is one app and one portal to order, book and run the day. It replaces the phone, the paper diary and the printed allergen sheet. It shows every business with its own look, ranks them neutrally and gives complete allergen information.
+> For independent local businesses in Vienna, and the neighbors who use them, the platform is one app and one portal to order, book and run the day. It replaces the phone, the paper diary and the printed allergen sheet. It shows every business with its own look, ranks them neutrally and gives complete allergen information.
 
 ## 2. Business case in brief
 
@@ -26,7 +26,7 @@ Discovery (2026-01-12 to 2026-02-20) with 14 businesses, 22 customer interviews 
 - incomplete allergen information (58% of items complete);
 - slow set-up on existing tools (11 business days).
 
-Quartier earns an 8% commission on in-app paid food orders. The [BRD section 11](../02-requirements/BRD.md#11-business-model-and-benefits) gives the illustrative economics.
+The platform earns an 8% commission on in-app paid food orders. The [BRD section 11](../02-requirements/BRD.md#11-business-model-and-benefits) gives the illustrative economics.
 
 ## 3. Objectives
 

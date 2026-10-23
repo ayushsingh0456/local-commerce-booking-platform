@@ -1,4 +1,4 @@
-# RAID Log: Quartier
+# RAID Log: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -31,7 +31,7 @@
 
 | ID | Assumption | Validated by | Status |
 |---|---|---|---|
-| A-01 | The business is the seller; Quartier is an intermediary for VAT and consumer law | External legal counsel, 2026-02-20 | Confirmed |
+| A-01 | The business is the seller; the platform is an intermediary for VAT and consumer law | External legal counsel, 2026-02-20 | Confirmed |
 | A-02 | The right of withdrawal does not apply to perishable food prepared to order or to dated appointments | External legal counsel, 2026-02-20 | Confirmed |
 | A-03 | Customers in the pilot districts have smartphones with cards enabled for 3-D Secure or wallets | Discovery survey: 96% of 410 respondents | Confirmed |
 | A-04 | Pilot businesses keep their certified cash registers | Pilot agreements | Confirmed |

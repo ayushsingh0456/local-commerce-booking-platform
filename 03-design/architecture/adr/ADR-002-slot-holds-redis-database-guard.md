@@ -18,7 +18,7 @@
 
 ## Context and problem statement
 
-Two kinds of capacity are sold in Quartier:
+Two kinds of capacity are sold in the platform:
 - **Pickup slots.** A count: at most N orders per 15-minute slot per location (BR-018).
 - **Staff time.** An interval: a stylist cannot be in two appointments, buffers included (BR-026).
 

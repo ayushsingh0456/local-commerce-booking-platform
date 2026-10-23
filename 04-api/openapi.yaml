@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Quartier API
+  title: the platform API
   version: 1.3.0
   summary: One API for the Customer Mobile App, the Business Web Portal (with POS view) and the Platform Admin portal.
   description: |
-    Fictional case study. Quartier GmbH, its businesses and all data are invented.
+    Fictional case study. the operator, its businesses and all data are invented.
 
     Conventions (see api-guidelines.md):
     - JSON with camelCase; money in integer cents (`...Cents`), always VAT-inclusive unless the field says net.
@@ -15,12 +15,12 @@ info:
     - Route groups: `/` customer surface, `/business` portal surface, `/platform` Platform Admin surface.
     - `x-requirements` on each operation lists the SRS functional requirements it serves.
   contact:
-    name: Quartier API team (fictional)
-    email: api@quartier.example
+    name: the platform API team
+    email: api@commerce.example
 servers:
-  - url: https://api.quartier.example/v1
+  - url: https://api.commerce.example/v1
     description: Production (EU region)
-  - url: https://api.staging.quartier.example/v1
+  - url: https://api.staging.commerce.example/v1
     description: Staging with virtual clock and payment sandbox
 tags:
   - name: Accounts
@@ -1557,7 +1557,7 @@ components:
           type: [object, 'null']
           properties:
             code: { type: string, examples: [MOHN3] }
-            fundedBy: { type: string, enum: [business, quartier] }
+            fundedBy: { type: string, enum: [business, commerce] }
         changes:
           type: array
           items: { $ref: '#/components/schemas/LineChange' }
@@ -1865,7 +1865,7 @@ components:
         refundsCents: { type: integer }
         commissionCents: { type: integer }
         commissionVatCents: { type: integer }
-        quartierVoucherReimbursementCents: { type: integer }
+        platformVoucherReimbursementCents: { type: integer }
         payoutCents: { type: integer }
         documentUrl: { type: string, format: uri }
     BusinessApplication:

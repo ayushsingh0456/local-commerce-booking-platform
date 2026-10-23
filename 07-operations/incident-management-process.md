@@ -1,4 +1,4 @@
-# Incident Management Process: Quartier
+# Incident Management Process: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -17,7 +17,7 @@
 | 1.1 | 2026-08-24 | After INC-2026-006: customer-safety incidents are SEV-1 even without harm; Compliance Lead joins every SEV-1; customer contact rule for allergen incidents |
 | 1.2 | 2026-09-16 | After INC-2026-011: business anomaly alerts (NFR-OBS-02) as a detection source; Partner Success playbook for over-capacity orders |
 
-**Purpose and scope.** How Quartier detects, responds to, communicates about and learns from production incidents in the three apps and the backend. It covers severity, roles, response targets, communication with businesses and customers, post-incident reviews (PIRs) and how incidents turn into change requests.
+**Purpose and scope.** How the platform detects, responds to, communicates about and learns from production incidents in the three apps and the backend. It covers severity, roles, response targets, communication with businesses and customers, post-incident reviews (PIRs) and how incidents turn into change requests.
 
 ## 1. Severity
 

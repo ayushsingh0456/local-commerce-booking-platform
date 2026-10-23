@@ -1,4 +1,4 @@
-# Glossary: Quartier
+# Glossary: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -27,10 +27,10 @@
 | Bezahlt an der Kassa (paid at the counter) | Status set by staff when a pay-at-pickup order was paid on the business's own register (BR-024). | FR-PAY-03 |
 | Booking | Umbrella term in the customer app for an order or an appointment; the Bookings tab lists both. | FR-ORD-09 |
 | Buffer | Time after a service in which the staff member is not bookable, for cleaning or preparation (BR-026). | FR-CAT-06 |
-| Business | A legal entity on Quartier (B-nnnn) with one or more locations. | All |
+| Business | A legal entity on the platform (B-nnnn) with one or more locations. | All |
 | Capture | Charging an authorized amount; done when the business accepts (BR-033). | FR-PAY-02 |
 | Card payment provider (PSP) | Licensed third party that processes card and wallet payments, onboards businesses and pays them out (IF-01). | ADR-003 |
-| Commission | Quartier's fee: 8% of the paid gross after business-funded discounts, plus 20% VAT (BR-037). | FR-PAY-08 |
+| Commission | The platform's fee: 8% of the paid gross after business-funded discounts, plus 20% VAT (BR-037). | FR-PAY-08 |
 | Connected account | The business's account at the card payment provider, into which customer payments are settled. | ADR-003 |
 | Cutoff | The latest time a customer can cancel in the app: 30 minutes before the pickup slot for orders, 24 hours before the start for appointments (BR-023, BR-029). | FR-ORD-08 |
 | Declaration version | Sequential number of an allergen declaration; a cart line keeps the version the customer saw. | BR-013 |
@@ -53,16 +53,16 @@
 | Pickup slot (Abholzeit) | A 15-minute window in which the customer collects an order (BR-017). | FR-ORD-02 |
 | POS view | The restricted Business Web Portal view for Staff: order board, sold-out toggles, pause and the appointment day view. It is not a cash register. | FR-POS-07 |
 | Pre-order (Vorbestellung) | An order containing an item with a lead time, for a later day, up to 7 days ahead (CR-001). | FR-ORD-11 |
-| RKSV | Registrierkassensicherheitsverordnung, the Austrian cash register security regulation. Quartier is not a cash register (CR-003). | Compliance mapping |
+| RKSV | Registrierkassensicherheitsverordnung, the Austrian cash register security regulation. The platform is not a cash register (CR-003). | Compliance mapping |
 | SCA / 3-D Secure | Strong customer authentication under PSD2; for cards, the 3-D Secure 2 protocol, sometimes with a challenge in the banking app. | FR-PAY-01 |
 | Slot capacity | Maximum number of orders per pickup slot and location (BR-018). | FR-CAT-02 |
 | Sold out (ausverkauft) | Item state set by staff; the item cannot be added (BR-014). | FR-POS-04 |
-| Statement of reasons | Written explanation sent to a business when Quartier suspends it (BR-044). | FR-ONB-05 |
+| Statement of reasons | Written explanation sent to a business when the platform suspends it (BR-044). | FR-ONB-05 |
 | Tax category (Steuerkategorie) | Reduced 10%, Standard 20% or Exempt 0% (BR-015). | FR-CAT-03 |
 | UID-Nummer | Austrian VAT identification number, format "ATU" plus 8 digits. | FR-ONB-01 |
 | Verification | Platform Admin check of a business application against the registers and the UID service. | FR-ONB-02 |
 | VIES | The EU's VAT number validation service (IF-07). | FR-ONB-02 |
-| Voucher (Gutschein) | Promotional code, funded by the business or by Quartier, that reduces an order total (BR-036). It is not a stored-value gift card. | FR-PAY-06 |
+| Voucher (Gutschein) | Promotional code, funded by the business or by the platform, that reduces an order total (BR-036). It is not a stored-value gift card. | FR-PAY-06 |
 
 ## Acronyms
 

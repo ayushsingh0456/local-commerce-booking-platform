@@ -1,4 +1,4 @@
-# UAT Plan and Scripts: Quartier Release 1
+# UAT Plan and Scripts: Platform release 1
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-06-26 |
 | Reviewers | Product Owner; QA Lead; Partner Success Lead |
 
-**Purpose and scope.** How the pilot businesses and a customer panel accepted Quartier R1 before the pilot go-live, the 10 scripts they ran and the sign-off. UAT checks that the product supports the businesses' real work; it is not a second system test, and it assumes the [system test](test-strategy-and-plan.md) exit criteria are met.
+**Purpose and scope.** How the pilot businesses and a customer panel accepted the platform R1 before the pilot go-live, the 10 scripts they ran and the sign-off. UAT checks that the product supports the businesses' real work; it is not a second system test, and it assumes the [system test](test-strategy-and-plan.md) exit criteria are met.
 
 ## 1. Approach
 
@@ -19,7 +19,7 @@
 |---|---|
 | Dates | 2026-06-15 to 2026-06-26 (two weeks), on staging build 1.0.0-rc.4 |
 | Participants | 6 pilot businesses: Café Mohnblume (Elif Aydin, Tobias Gruber), Konditorei Pomeranze, Nudelbar Sesam, Haarstudio Linde (Martina Leitner and two stylists), Kaffeebar Zimtstern, Massageatelier Ruhepol. A customer panel of 12 residents of Neubau and Mariahilf (4 with food allergies, 3 using English). Partner Operations (Paul Haider). |
-| Setting | Scripts 02, 05 and 06 ran in Café Mohnblume during a real lunch service, on the café's own tablet, with test orders from the panel. Others ran at the businesses or in Quartier's office. |
+| Setting | Scripts 02, 05 and 06 ran in Café Mohnblume during a real lunch service, on the café's own tablet, with test orders from the panel. Others ran at the businesses or in the platform's office. |
 | Data | UAT data set based on [test data](test-data/README.md), with voucher validity moved into the UAT window (MOHN3 valid 2026-06-15 to 2026-06-26); panel members used their own phones with sandbox cards |
 | Facilitation | The BA observes and records; participants act. No coaching beyond the script's starting point. |
 | Defects | Logged with the script ID; severity agreed with the participant; Critical or High blocks sign-off |
@@ -165,7 +165,7 @@ Result: Passed.
 | Haarstudio Linde (Martina Leitner) | Pilot salon | Accepted | 2026-06-26 |
 | Massageatelier Ruhepol | Pilot spa | Accepted | 2026-06-26 |
 | Customer panel representative | Customers | Accepted | 2026-06-26 |
-| Product Owner | Quartier GmbH | Accepted for pilot go-live | 2026-06-26 |
+| Product Owner | the operator | Accepted for pilot go-live | 2026-06-26 |
 
 ## Related documents
 

@@ -1,4 +1,4 @@
-# Process Flows: Quartier
+# Process Flows: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -27,7 +27,7 @@ flowchart TB
     C5["Pick alternative slot"]
     C6["Show pickup code<br/>at the counter"]
   end
-  subgraph SYS["Quartier API"]
+  subgraph SYS["the platform API"]
     S1["Create hold 10 min<br/>(BR-019)"]
     S2{"Lines, prices and<br/>allergen versions<br/>unchanged? (BR-013)"}
     S3["Authorise payment"]
@@ -79,7 +79,7 @@ flowchart TB
     A7["Reschedule or cancel<br/>in the app"]
     A8["Call the business"]
   end
-  subgraph SYS["Quartier API"]
+  subgraph SYS["the platform API"]
     P1["Compute start times<br/>(BR-026, table 3.5)"]
     P2["Hold staff time 10 min<br/>(BR-028)"]
     P3{"Database constraint<br/>accepts? (BR-028)"}
@@ -148,7 +148,7 @@ flowchart TB
     K1["Edit ingredients or allergens<br/>of an item or choice"]
     K2["Confirm declaration<br/>(tick box)"]
   end
-  subgraph SYS["Quartier API and jobs"]
+  subgraph SYS["the platform API and jobs"]
     K3["New declaration version<br/>and audit event"]
     K4["Menu ETag changes;<br/>shared cache max 60 s"]
     K5{"Open pre-orders<br/>with this item?"}

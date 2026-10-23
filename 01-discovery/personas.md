@@ -1,4 +1,4 @@
-# Personas: Quartier
+# Personas: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -72,7 +72,7 @@
 
 | Attribute | Detail |
 |---|---|
-| Profile | 29, Quartier GmbH partner operations |
+| Profile | 29, the operator partner operations |
 | Context | Verifies 3 to 8 businesses a day; answers business questions |
 | Goals | Evidence on one screen; clear go-live checklist; defensible suspensions |
 | Frustrations | Chasing documents by email |

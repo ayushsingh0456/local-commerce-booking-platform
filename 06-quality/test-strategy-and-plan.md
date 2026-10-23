@@ -1,4 +1,4 @@
-# Test Strategy and Plan: Quartier
+# Test Strategy and Plan: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-10-02 |
 | Reviewers | Engineering Lead; Product Owner; Compliance Lead; Finance Lead |
 
-**Purpose and scope.** How Quartier R1 and R1.1 are tested: levels, techniques, environments, data, entry and exit criteria, defect handling and the current status. The structure follows the test plan and test strategy items of ISO/IEC/IEEE 29119-3. The test cases themselves are in [test-cases.md](test-cases.md) and [test-cases.csv](test-cases.csv); acceptance by the business is in [uat-plan-and-scripts.md](uat-plan-and-scripts.md).
+**Purpose and scope.** How the platform R1 and R1.1 are tested: levels, techniques, environments, data, entry and exit criteria, defect handling and the current status. The structure follows the test plan and test strategy items of ISO/IEC/IEEE 29119-3. The test cases themselves are in [test-cases.md](test-cases.md) and [test-cases.csv](test-cases.csv); acceptance by the business is in [uat-plan-and-scripts.md](uat-plan-and-scripts.md).
 
 ## 1. Test items and risk-based focus
 

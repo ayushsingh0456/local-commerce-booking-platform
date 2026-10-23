@@ -1,4 +1,4 @@
-# Entity Relationship Diagram: Quartier
+# Entity Relationship Diagram: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-09-25 |
 | Reviewers | Engineering Lead; QA Lead; Compliance Lead; Finance Lead |
 
-**Purpose and scope.** The logical data model of Quartier in PostgreSQL, split into four subject areas so each diagram stays readable. Field-level definitions, classifications and retention are in the [data dictionary](data-dictionary.md). Holds are not tables; they live in Redis with a time-to-live ([ADR-002](../architecture/adr/ADR-002-slot-holds-redis-database-guard.md)).
+**Purpose and scope.** The logical data model of the platform in PostgreSQL, split into four subject areas so each diagram stays readable. Field-level definitions, classifications and retention are in the [data dictionary](data-dictionary.md). Holds are not tables; they live in Redis with a time-to-live ([ADR-002](../architecture/adr/ADR-002-slot-holds-redis-database-guard.md)).
 
 Conventions:
 - Primary keys are UUIDs (`id`). Human-readable keys (`B-1001`, `L-1001`, `QO-2026-004218`) are separate unique columns.
@@ -245,8 +245,8 @@ erDiagram
   VOUCHER {
     uuid id PK
     text code UK
-    text funded_by "business, quartier"
-    uuid business_id FK "null when Quartier-funded"
+    text funded_by "business, commerce"
+    uuid business_id FK "null when platform-funded"
     text kind "fixed, percent"
     int value
     int min_order_cents

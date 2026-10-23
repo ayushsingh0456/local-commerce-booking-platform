@@ -11,7 +11,7 @@
 | Last updated | 2026-09-25 |
 | Reviewers | Engineering Lead; Compliance Lead; Product Owner |
 
-**Purpose and scope.** How AI assistants were used in the Business Analysis work on Quartier, where they were not used, and the guardrails that kept the output trustworthy. It includes one complete spec-driven feature pack in the GitHub Spec Kit style. The BA writes and owns the specification, and AI coding agents implement from it: [001 Allergen filter on menus](specs/001-allergen-filter-on-menus/spec.md).
+**Purpose and scope.** How AI assistants were used in the Business Analysis work on the platform, where they were not used, and the guardrails that kept the output trustworthy. It includes one complete spec-driven feature pack in the GitHub Spec Kit style. The BA writes and owns the specification, and AI coding agents implement from it: [001 Allergen filter on menus](specs/001-allergen-filter-on-menus/spec.md).
 
 ## 1. Where AI helped and where it did not
 
@@ -61,7 +61,7 @@ sources do not answer as [NEEDS CLARIFICATION: question]. Do not make legal or h
 
 | # | AI draft said | Problem | Correction |
 |---|---|---|---|
-| 1 | Label matching items "allergenfrei" (allergen-free) | A safety claim Quartier cannot make; the business declares, traces are unknown | Removed; became C-03 and SPEC-FR-004, with a test for forbidden words |
+| 1 | Label matching items "allergenfrei" (allergen-free) | A safety claim the platform cannot make; the business declares, traces are unknown | Removed; became C-03 and SPEC-FR-004, with a test for forbidden words |
 | 2 | Sync the filter to the account "for convenience" | Health-related data on the server without explicit consent | Rejected; C-01 and DEC-10 |
 | 3 | Track "filter_used" in analytics to measure adoption | Even a flag reveals an allergy | Rejected; C-08 and SPEC-FR-016 |
 | 4 | Hide items that contain the allergen | Hides information and prevents ordering for others | Changed to dim and label; C-05 |

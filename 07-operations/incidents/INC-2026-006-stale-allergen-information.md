@@ -50,7 +50,7 @@ The team purged the cache and limited menu caching to 30 seconds within 42 minut
 | Businesses | 6 businesses had at least one affected order; Konditorei Pomeranze had 4 |
 | Declaration changes in the exposure window | 41 confirmed changes on 29 items at 14 businesses between 2026-07-01 and 2026-08-14 13:22; 17 of them added an allergen |
 | Orders within 24 h after a change | 187 |
-| Money | The near-miss order (EUR 9.20) was refunded by Konditorei Pomeranze; Quartier reversed its commission |
+| Money | The near-miss order (EUR 9.20) was refunded by Konditorei Pomeranze; the platform reversed its commission |
 | Compliance | Compliance Lead assessed on 2026-08-14: no personal data breach. The businesses had provided correct information in their own premises; the platform had displayed an outdated version. Businesses informed in writing. |
 
 ## 3. Timeline

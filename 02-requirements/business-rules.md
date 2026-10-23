@@ -1,4 +1,4 @@
-# Business Rules Catalog and Decision Tables: Quartier
+# Business Rules Catalog and Decision Tables: Local Commerce & Booking Platform
 
 ## Document control
 
@@ -11,7 +11,7 @@
 | Last updated | 2026-09-25 |
 | Reviewers | Product Owner; Engineering Lead; QA Lead; Compliance Lead; Finance Lead; Partner Operations Lead |
 
-**Purpose and scope.** This document holds the full catalog of the 45 business rules that constrain Quartier's behavior, independent of any screen or API. It also gives decision tables for the rules whose combinations are easy to get wrong. The rule wording is canonical. The decision tables are the specification that developers implement and QA tests against. Every business rule needs at least one automated test (NFR-MNT-01).
+**Purpose and scope.** This document holds the full catalog of the 45 business rules that constrain the platform's behavior, independent of any screen or API. It also gives decision tables for the rules whose combinations are easy to get wrong. The rule wording is canonical. The decision tables are the specification that developers implement and QA tests against. Every business rule needs at least one automated test (NFR-MNT-01).
 
 ## 1. Conventions
 
@@ -59,7 +59,7 @@ Rules by area:
 |---|---|---|---|
 | BR-006 | A business appears in lists and search only when it is Live and has an active location. A business with several locations appears once per location. Lists are sorted by straight-line distance ascending (km to one decimal, decimal comma); without location permission they are sorted by name A to Z and the list header states this. | FR-DSC-01, FR-DSC-03, FR-DSC-05 | US-006, US-008, US-009 |
 | BR-007 | Open state is computed per location in Europe/Vienna time from weekly hours and dated closures, and is always shown in words: "Geöffnet bis HH:mm", "Öffnet um HH:mm" or "Heute geschlossen". | FR-DSC-01, FR-DSC-03, FR-DSC-04, FR-CAT-02 | US-006, US-008, US-036 |
-| BR-008 | Lists carry no star ratings, review totals, sponsored markers or paid placement; ranking uses only distance or name, and these parameters are disclosed in the business terms. Customer feedback is private to Quartier and never shown publicly. | FR-DSC-04, FR-ONB-08 | US-006, US-037 |
+| BR-008 | Lists carry no star ratings, review totals, sponsored markers or paid placement; ranking uses only distance or name, and these parameters are disclosed in the business terms. Customer feedback is private to the platform and never shown publicly. | FR-DSC-04, FR-ONB-08 | US-006, US-037 |
 | BR-009 | Search runs from 2 characters, is case- and accent-insensitive ("kaese" finds "Käse"), covers business names and types, item names and service names, and returns at most 20 results per group (Businesses, Dishes, Services). | FR-DSC-02 | US-007 |
 
 ### Catalog and allergens (BR-010 to BR-015)
@@ -103,12 +103,12 @@ Rules by area:
 
 | ID | Rule | Related FRs | User stories |
 |---|---|---|---|
-| BR-032 | In-app payment is by Visa or Mastercard card, Apple Pay or Google Pay through the card payment provider, with 3-D Secure 2 strong customer authentication; Quartier never receives or stores card numbers. Pay at pickup is offered only where the business enables it. Appointments are paid at the venue in R1. | FR-PAY-01, FR-PAY-03, FR-APT-09 | US-013, US-023 |
+| BR-032 | In-app payment is by Visa or Mastercard card, Apple Pay or Google Pay through the card payment provider, with 3-D Secure 2 strong customer authentication; the platform never receives or stores card numbers. Pay at pickup is offered only where the business enables it. Appointments are paid at the venue in R1. | FR-PAY-01, FR-PAY-03, FR-APT-09 | US-013, US-023 |
 | BR-033 | A payment is authorized at placement, captured when the business accepts, voided on rejection, auto-rejection or cancellation before acceptance, and refunded after capture. Provider webhooks are verified and processed once per event ID. | FR-PAY-02, FR-PAY-09, FR-POS-02 | US-013, US-026 |
 | BR-034 | Refunds may be full or partial; the total refunded never exceeds the captured amount. A reason is required. A partial refund is allocated to VAT-rate groups in proportion to the paid gross per group, using the BR-035 rounding. Only a Business Admin, or the system on a customer cancellation, can refund. | FR-PAY-04 | US-016, US-032 |
 | BR-035 | Prices are gross. An order-level discount is allocated to VAT-rate groups in proportion to each group's gross, rounded half up to the cent, with the highest-rate group taking the remainder so the parts add up exactly. VAT per group = gross after discount x rate / (100 + rate), rounded half up to the cent; net = gross - VAT. VAT is computed per rate group, not per line. | FR-ORD-04, FR-PAY-05, FR-ONB-06 | US-014, US-038 |
-| BR-036 | One voucher code per order. A voucher is a fixed amount or a percentage, has a validity window, a total and a per-customer redemption limit and a minimum order value measured on the basket gross before discount. The discount never exceeds the basket gross minus EUR 0.50. A voucher is funded either by the business or by Quartier. | FR-ORD-04, FR-PAY-06, FR-CAT-09, FR-ONB-09 | US-014, US-030, US-038 |
-| BR-037 | Commission is 8% of the paid gross after business-funded discounts (a Quartier-funded discount does not reduce the base and is reimbursed to the business), rounded half up to the cent, plus 20% Austrian VAT on the commission. It is deducted at capture, reversed pro rata on refunds, and the card payment provider pays out the balance weekly. | FR-PAY-08 | US-032 |
+| BR-036 | One voucher code per order. A voucher is a fixed amount or a percentage, has a validity window, a total and a per-customer redemption limit and a minimum order value measured on the basket gross before discount. The discount never exceeds the basket gross minus EUR 0.50. A voucher is funded either by the business or by the platform. | FR-ORD-04, FR-PAY-06, FR-CAT-09, FR-ONB-09 | US-014, US-030, US-038 |
+| BR-037 | Commission is 8% of the paid gross after business-funded discounts (a platform-funded discount does not reduce the base and is reimbursed to the business), rounded half up to the cent, plus 20% Austrian VAT on the commission. It is deducted at capture, reversed pro rata on refunds, and the card payment provider pays out the balance weekly. | FR-PAY-08 | US-032 |
 | BR-038 | The receipt is issued in the business's name with its address, UID number where it has one, date, items and quantities, gross amount per VAT rate, and VAT rate and amount, which is the content of a small-amount invoice under section 11(6) UStG. In-app payment is therefore limited to orders of EUR 400.00 gross or less. | FR-PAY-07 | US-019 |
 
 ### Business portal (BR-039 to BR-041)
@@ -240,7 +240,7 @@ Implements BR-015 and BR-034 to BR-037, and FR-PAY-04 to FR-PAY-06, FR-PAY-08 an
 
 Boundary: the same voucher on a basket of EUR 14.99 is rejected by G5; on exactly EUR 15.00 it is applied.
 
-**Commission and payout (BR-037).** Commission base EUR 15.70 (the business-funded discount reduces the base). Commission 8% = 1.256, so EUR 1.26; VAT 20% on the commission EUR 0.25; total deducted EUR 1.51; payout EUR 14.19. If the voucher had been Quartier-funded, the base would be EUR 18.70 and Quartier would reimburse the EUR 3.00 to the business in the weekly payout.
+**Commission and payout (BR-037).** Commission base EUR 15.70 (the business-funded discount reduces the base). Commission 8% = 1.256, so EUR 1.26; VAT 20% on the commission EUR 0.25; total deducted EUR 1.51; payout EUR 14.19. If the voucher had been platform-funded, the base would be EUR 18.70 and the platform would reimburse the EUR 3.00 to the business in the weekly payout.
 
 **Partial refund (BR-034), illustrative.** After capture, the business refunds EUR 5.00 because the lemonade was made with the wrong flavor and a pastry was missing.
 
@@ -331,7 +331,7 @@ Implements BR-032 to BR-034, FR-PAY-02, FR-PAY-03 and FR-PAY-09. Hit policy Uniq
 | K6 | Customer cancels while Accepted, within the cutoff | Captured | Refund in full | Refunded |
 | K7 | Business refunds part of the amount | Captured or Partially refunded | Refund the amount; total refunded at most the captured amount | Partially refunded, or Refunded when the total is reached |
 | K8 | Capture fails (for example the authorization was canceled by the issuer) | Authorised | Order canceled; customer and staff told "Zahlung fehlgeschlagen"; reconciliation alert | Failed |
-| K9 | Staff hand over a pay-at-pickup order and confirm "Bezahlt an der Kassa" | Due at pickup | None in Quartier; payment taken on the business's own register | Paid at counter |
+| K9 | Staff hand over a pay-at-pickup order and confirm "Bezahlt an der Kassa" | Due at pickup | None in the platform; payment taken on the business's own register | Paid at counter |
 | K10 | Duplicate webhook for an event ID already processed | Any | Ignored; 200 returned to the provider | Unchanged |
 
 ### 3.8 Go-live gate

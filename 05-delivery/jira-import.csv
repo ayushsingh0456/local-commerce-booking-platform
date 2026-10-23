@@ -2,27 +2,27 @@ Issue ID,Issue Type,Summary,Description,Acceptance Criteria,Priority,Story Point
 EP-01,Epic,Customer Account & Privacy,"Goal: Let anyone browse without an account, ask for one only when it is needed, collect the smallest data set a business needs, and give customers full control of consent and deletion.
 Objectives: OBJ-01, OBJ-02
 Business need: BN-01
-Functional requirements: FR-ACC-01 to FR-ACC-09",,High,,,,R1,quartier;ep-01,ACC
+Functional requirements: FR-ACC-01 to FR-ACC-09",,High,,,,R1,commerce;ep-01,ACC
 EP-02,Epic,"Discovery, Menus & Allergens","Goal: Get a customer from app launch to the right business page within two taps, show every business with its own look and with neutral ranking, and show complete allergen information before anything can be added.
 Objectives: OBJ-03, OBJ-04
 Business need: BN-02
-Functional requirements: FR-DSC-01 to FR-DSC-09",,High,,,,R1,quartier;ep-02,DSC
+Functional requirements: FR-DSC-01 to FR-DSC-09",,High,,,,R1,commerce;ep-02,DSC
 EP-03,Epic,"Ordering, Pickup & Payments","Goal: Let a customer order food for pickup in a slot the kitchen can handle, pay securely with bank confirmation, see exactly what VAT they paid, and collect without waiting at the counter.
 Objectives: OBJ-01, OBJ-06
 Business need: BN-03
-Functional requirements: FR-ORD-01 to FR-PAY-09",,High,,,,R1,quartier;ep-03,"ORD, PAY"
+Functional requirements: FR-ORD-01 to FR-PAY-09",,High,,,,R1,commerce;ep-03,"ORD, PAY"
 EP-04,Epic,Appointment Booking,"Goal: Let a customer book a salon or spa appointment around the clock, offering only start times that really fit the staff member's day, with reminders and self-service changes that cut no-shows.
 Objectives: OBJ-02, OBJ-03
 Business need: BN-04
-Functional requirements: FR-APT-01 to FR-APT-10",,High,,,,R1,quartier;ep-04,APT
+Functional requirements: FR-APT-01 to FR-APT-10",,High,,,,R1,commerce;ep-04,APT
 EP-05,Epic,Business Portal & POS,"Goal: Give the business one portal to maintain its catalog, allergens, services and staff hours, and give counter staff a POS view that runs pickup orders and the appointment day without a phone.
 Objectives: OBJ-04, OBJ-06
 Business need: BN-05
-Functional requirements: FR-CAT-01 to FR-POS-09",,High,,,,R1,quartier;ep-05,"CAT, POS"
+Functional requirements: FR-CAT-01 to FR-POS-09",,High,,,,R1,commerce;ep-05,"CAT, POS"
 EP-06,Epic,Business Onboarding & Platform Administration,"Goal: Take a local business from application to Live in five business days or fewer, with verified identity, payment onboarding, a statement of reasons for every suspension, and a complete audit trail.
 Objectives: OBJ-05
 Business need: BN-06
-Functional requirements: FR-ONB-01 to FR-ONB-09",,High,,,,R1,quartier;ep-06,ONB
+Functional requirements: FR-ONB-01 to FR-ONB-09",,High,,,,R1,commerce;ep-06,ONB
 US-001,Story,Browse as a guest and sign in only when needed,"As a first-time visitor, I want to look at businesses, menus, prices and allergens without creating an account, so that I can decide whether the app is worth signing up for.
 
 Requirements: FR-ACC-01, FR-DSC-08
@@ -57,7 +57,7 @@ Scenario: US-001-AC4 Save and unsave a location
   When she taps the heart on Café Mohnblume and then on Nudelbar Sesam, Neubau
   Then both locations are listed under Profile, Gespeichert
   When she taps the heart on Café Mohnblume again
-  Then only Nudelbar Sesam, Neubau remains saved",High,3,EP-01,S1,R1,quartier;ep-01;per-01,"ACC, DSC"
+  Then only Nudelbar Sesam, Neubau remains saved",High,3,EP-01,S1,R1,commerce;ep-01;per-01,"ACC, DSC"
 US-002,Story,Create an account with the minimum details,"As a new customer, I want to create an account with only the details a business needs to serve me, so that I can order without handing over data I do not want to share.
 
 Requirements: FR-ACC-02, FR-ACC-05, FR-ACC-08
@@ -108,7 +108,7 @@ Scenario Outline: US-002-AC4 Refuse identities that are already in use
 Scenario: US-002-AC5 Marketing consent is separate from the terms
   Given Sophie signs up and ticks ""Marketing-E-Mails""
   Then a consent record ""marketing_email, granted, source sign_up"" is stored with the current privacy notice version
-  And accepting the terms does not depend on the marketing tick box",High,5,EP-01,S1,R1,quartier;ep-01;per-01,ACC
+  And accepting the terms does not depend on the marketing tick box",High,5,EP-01,S1,R1,commerce;ep-01;per-01,ACC
 US-003,Story,"Sign in with email, Google or Apple","As a returning customer, I want to sign in with my email and password or with my Google or Apple account, so that I can get to my bookings quickly on any phone.
 
 Requirements: FR-ACC-03
@@ -149,7 +149,7 @@ Scenario: US-003-AC5 Sign in with Apple on iOS, not offered on Android
   Then Sophie sees ""Weiter mit Google"" and ""Weiter mit Apple""
   And Daniela sees ""Continue with Google"" only
   When Sophie signs in with Apple using a verified email that matches no account
-  Then the app asks for her mobile number and the age declaration before the account is created",High,5,EP-01,S1,R1,quartier;ep-01;per-02,ACC
+  Then the app asks for her mobile number and the age declaration before the account is created",High,5,EP-01,S1,R1,commerce;ep-01;per-02,ACC
 US-004,Story,Reset a forgotten password with a code,"As a customer who has forgotten my password, I want a code by email to set a new one, so that I can get back into my account without calling support.
 
 Requirements: FR-ACC-04
@@ -194,7 +194,7 @@ Scenario: US-004-AC5 Saving the new password ends other sessions
   When she completes a reset on the iPhone with the new password ""Golatsche7""
   Then the iPad session ends at its next request
   And Sign In shows ""Dein Passwort wurde geändert. Bitte melde dich an.""
-  And reusing the current password as the new password is refused with ""Bitte wähle ein Passwort, das du derzeit nicht verwendest.""",High,3,EP-01,S2,R1,quartier;ep-01;per-01,ACC
+  And reusing the current password as the new password is refused with ""Bitte wähle ein Passwort, das du derzeit nicht verwendest.""",High,3,EP-01,S2,R1,commerce;ep-01;per-01,ACC
 US-005,Story,"Manage my profile, consents and account deletion","As a customer, I want to change my details, language and notifications, withdraw consents and delete my account myself, so that I stay in control of my data.
 
 Requirements: FR-ACC-06, FR-ACC-07, FR-ACC-08, FR-ACC-09
@@ -234,7 +234,7 @@ Scenario: US-005-AC5 Data export for an access request
   Given Daniela emails support asking for a copy of her data and support verifies her identity
   When Paul Haider runs the export for her account
   Then a JSON file is produced with profile, consents, orders, appointments and saved locations
-  And the export is logged in the audit trail with Paul as actor",High,5,EP-01,S6,R1,quartier;ep-01;per-02,ACC
+  And the export is logged in the audit trail with Paul as actor",High,5,EP-01,S6,R1,commerce;ep-01;per-02,ACC
 US-006,Story,Find businesses near me from Home,"As a customer in a hurry at lunchtime, I want Home to show me what is near me and what I already have going, so that I reach the right business page in two taps.
 
 Requirements: FR-DSC-01, FR-DSC-04
@@ -267,7 +267,7 @@ Scenario Outline: US-006-AC3 Open state is always in words
 Scenario: US-006-AC4 Cards carry no ratings, scores or sponsored markers
   When Sophie looks at any business card in Home, a listing or search
   Then the card shows logo or initials, name, type, distance, open state and the heart only
-  And no element on the card shows stars, a score, a review count or ""Empfohlen""",High,5,EP-02,S2,R1,quartier;ep-02;per-01,DSC
+  And no element on the card shows stars, a score, a review count or ""Empfohlen""",High,5,EP-02,S2,R1,commerce;ep-02;per-01,DSC
 US-007,Story,"Search for a business, dish or service","As a customer who knows what I want, I want to search for it directly, so that I do not have to browse.
 
 Requirements: FR-DSC-02
@@ -295,7 +295,7 @@ Scenario: US-007-AC4 Empty and failed searches
   When Daniela searches for ""sushi""
   Then she sees 'No matches for ""sushi"". Check the spelling or try a broader word.'
   When the search service fails
-  Then she sees ""Search is not responding. Try again in a moment."" with a Retry control",High,3,EP-02,S3,R1,quartier;ep-02;per-02,DSC
+  Then she sees ""Search is not responding. Try again in a moment."" with a Retry control",High,3,EP-02,S3,R1,commerce;ep-02;per-02,DSC
 US-008,Story,Browse a category by business type,"As a customer who wants ""a bakery near me"", I want to filter a category by business type and open status, so that I see only places I can use now.
 
 Requirements: FR-DSC-03
@@ -318,7 +318,7 @@ Scenario: US-008-AC3 A business with two locations appears once per location
 
 Scenario: US-008-AC4 Empty result
   Given Sophie selected ""Restaurant"" and ""Jetzt geöffnet"" at 06:45
-  Then she sees ""Hier gibt es noch nichts. Probiere eine andere Art oder entferne Filter.""",High,3,EP-02,S2,R1,quartier;ep-02;per-01,DSC
+  Then she sees ""Hier gibt es noch nichts. Probiere eine andere Art oder entferne Filter.""",High,3,EP-02,S2,R1,commerce;ep-02;per-01,DSC
 US-009,Story,Explore a business and what it sells,"As a customer, I want each business to look like itself and to show everything it sells with prices including VAT, so that I can choose with confidence and know who I am buying from.
 
 Requirements: FR-DSC-05, FR-DSC-06
@@ -350,7 +350,7 @@ Scenario: US-009-AC4 Location selector for a business with two locations
 Scenario: US-009-AC5 A closed business keeps its menu readable
   Given it is 19:30 and Café Mohnblume is closed
   Then the whole menu is readable and items can be opened
-  And the restriction applies at checkout, not on the page",High,5,EP-02,S2,R1,quartier;ep-02;per-01,DSC
+  And the restriction applies at checkout, not on the page",High,5,EP-02,S2,R1,commerce;ep-02;per-01,DSC
 US-010,Story,Check allergens before adding an item,"As a customer with a tree-nut allergy, I want to see an item's allergens, and those added by each choice, before I can add it, and I want to mark items I must avoid, so that I never order something I cannot eat by accident.
 
 Requirements: FR-DSC-07, FR-DSC-09
@@ -397,7 +397,7 @@ Scenario: US-010-AC5 The filter stays on the phone
 Scenario: US-010-AC6 Allergens that changed are shown as current within 60 seconds
   Given Daniela is viewing Konditorei Pomeranze, where ""Topfentorte (Stück)"" shows ""A C G""
   When the Business Admin of Konditorei Pomeranze confirms version 4 with ""A C G H"" at 08:52:00
-  Then a refreshed menu at 08:53:00 shows ""A C G H""",High,8,EP-02,S3,R1,quartier;ep-02;per-02,DSC
+  Then a refreshed menu at 08:53:00 shows ""A C G H""",High,8,EP-02,S3,R1,commerce;ep-02;per-02,DSC
 US-011,Story,Build a cart for one business,"As a customer, I want a cart that follows me while I browse one business's menu, so that I can collect my order in one place before I pay.
 
 Requirements: FR-ORD-01
@@ -428,7 +428,7 @@ Scenario Outline: US-011-AC4 Cart expires after 24 hours without activity
   Examples:
     | time              | state     |
     | 2026-09-18 11:59  | kept      |
-    | 2026-09-18 12:00  | discarded |",High,3,EP-03,S3,R1,quartier;ep-03;per-01,ORD
+    | 2026-09-18 12:00  | discarded |",High,3,EP-03,S3,R1,commerce;ep-03;per-01,ORD
 US-012,Story,Choose a pickup slot the kitchen can handle,"As a customer, I want to choose a pickup time the café can really meet, and have it kept for me while I pay, so that my food is ready when I arrive.
 
 Requirements: FR-ORD-02, FR-ORD-03
@@ -468,7 +468,7 @@ Scenario: US-012-AC4 Leaving checkout releases the hold
 
 Scenario: US-012-AC5 No slots after the last ordering slot
   When Sophie opens slot selection at 17:00
-  Then she sees ""Heute sind keine Abholzeiten mehr frei."" and the order button is disabled",High,8,EP-03,S3,R1,quartier;ep-03;per-01,ORD
+  Then she sees ""Heute sind keine Abholzeiten mehr frei."" and the order button is disabled",High,8,EP-03,S3,R1,commerce;ep-03;per-01,ORD
 US-013,Story,Pay by card or wallet with bank confirmation,"As a customer, I want to pay in the app with my card, Apple Pay or Google Pay and confirm with my bank, so that the order is paid and I am charged only if the café accepts it.
 
 Requirements: FR-PAY-01, FR-PAY-02, FR-PAY-03, FR-PAY-09
@@ -488,10 +488,10 @@ Scenario: US-013-AC2 Rejection voids the authorization
   Then the authorization is voided and nothing is captured
   And Sophie sees ""Reservierung aufgehoben, es wurde nichts abgebucht""
 
-Scenario: US-013-AC3 Card data never reaches Quartier
+Scenario: US-013-AC3 Card data never reaches the platform
   When Sophie enters her card in checkout
   Then the card number is entered in the card payment provider's hosted field
-  And no Quartier API request, log line or error event contains the card number
+  And no the platform API request, log line or error event contains the card number
 
 Scenario Outline: US-013-AC4 Pay at pickup only where the business offers it
   Given <business> has pay at pickup <setting>
@@ -511,7 +511,7 @@ Scenario: US-013-AC5 A declined payment creates no order
 
 Scenario: US-013-AC6 Webhooks are processed once
   Given the card payment provider sends ""payment.authorized"" for the order twice with the same event ID
-  Then the order is created once and the second delivery is answered 200 and ignored",High,8,EP-03,S4,R1,quartier;ep-03;per-01,PAY
+  Then the order is created once and the second delivery is answered 200 and ignored",High,8,EP-03,S4,R1,commerce;ep-03;per-01,PAY
 US-014,Story,See a VAT-inclusive total with a voucher,"As a customer, I want to see the total I will pay, the effect of my voucher and how much VAT the total includes before I pay, so that there are no surprises on my receipt.
 
 Requirements: FR-ORD-04, FR-PAY-05, FR-PAY-06
@@ -551,7 +551,7 @@ Scenario Outline: US-014-AC4 Voucher rejections
     | SESAM5   | Dieser Gutschein gilt nicht für Café Mohnblume. |
 
 Scenario: US-014-AC5 Seller identity is shown before paying
-  Then above the order button checkout shows ""Verkäufer: Mohnblume Kaffeehaus e.U., Kornblumengasse 9, 1070 Wien""",High,5,EP-03,S4,R1,quartier;ep-03;per-01,"ORD, PAY"
+  Then above the order button checkout shows ""Verkäufer: Mohnblume Kaffeehaus e.U., Kornblumengasse 9, 1070 Wien""",High,5,EP-03,S4,R1,commerce;ep-03;per-01,"ORD, PAY"
 US-015,Story,Follow my order and collect it,"As a customer, I want to see my order move from placed to ready and pick it up with a code, so that I do not wait at the counter or ask whether it is ready.
 
 Requirements: FR-ORD-05, FR-ORD-06, FR-ORD-07, FR-ORD-09
@@ -586,7 +586,7 @@ Scenario: US-015-AC4 A delay is announced
 Scenario: US-015-AC5 Bookings list
   Given Sophie has one Ready order and two Completed orders
   Then Upcoming shows the Ready order with ""Fertig zur Abholung""
-  And Past shows the Completed orders, most recent first, each with ""Erneut bestellen""",High,5,EP-03,S4,R1,quartier;ep-03;per-01,ORD
+  And Past shows the Completed orders, most recent first, each with ""Erneut bestellen""",High,5,EP-03,S4,R1,commerce;ep-03;per-01,ORD
 US-016,Story,Cancel an order and get my money back,"As a customer whose plans changed, I want to cancel my order in the app while it is still possible, so that I am not charged for food I will not collect.
 
 Requirements: FR-ORD-08, FR-PAY-04
@@ -614,7 +614,7 @@ Scenario: US-016-AC3 Never after preparation started
 Scenario: US-016-AC4 The dialog states how the money comes back
   Given the order is Accepted and captured
   When Sophie taps ""Bestellung stornieren""
-  Then the dialog reads ""Du bekommst € 15,70 auf deine Karte zurück. Die Gutschrift dauert 5 bis 10 Werktage.""",High,3,EP-03,S5,R1,quartier;ep-03;per-01,"ORD, PAY"
+  Then the dialog reads ""Du bekommst € 15,70 auf deine Karte zurück. Die Gutschrift dauert 5 bis 10 Werktage.""",High,3,EP-03,S5,R1,commerce;ep-03;per-01,"ORD, PAY"
 US-017,Story,Rebook a past order,"As a regular, I want to order the same lunch again with one tap, so that I do not rebuild it item by item.
 
 Requirements: FR-ORD-10
@@ -638,7 +638,7 @@ Scenario: US-017-AC3 Slot, note, voucher and payment are not copied
 
 Scenario: US-017-AC4 No rebook on an order still in progress
   Given an order is Preparing
-  Then its card shows no ""Erneut bestellen""",Medium,3,EP-03,S5,R1,quartier;ep-03;per-01,ORD
+  Then its card shows no ""Erneut bestellen""",Medium,3,EP-03,S5,R1,commerce;ep-03;per-01,ORD
 US-018,Story,Pre-order a whole cake for a later day,"As a customer planning a birthday, I want to order a whole cake for a later day, so that the bakery can make it in time.
 
 Requirements: FR-ORD-11
@@ -663,7 +663,7 @@ Scenario: US-018-AC2 The largest lead time in the cart governs
 Scenario: US-018-AC3 A pre-order placed while closed is accepted after opening
   Given Daniela places the pre-order on Monday 2026-09-14 at 20:10 and Pomeranze opens on Tuesday at 06:30
   Then the order's acceptance deadline is Tuesday 2026-09-15 07:00
-  And it is not auto-rejected overnight",Medium,5,EP-03,S5,R1,quartier;ep-03;per-02,ORD
+  And it is not auto-rejected overnight",Medium,5,EP-03,S5,R1,commerce;ep-03;per-02,ORD
 US-019,Story,Get a receipt in the business's name,"As a customer, I want an itemized receipt from the business with the VAT shown, so that I can claim business lunches and check what I paid.
 
 Requirements: FR-PAY-07
@@ -675,7 +675,7 @@ Test cases: TC-PAY-006, TC-PAY-010","Scenario: US-019-AC1 Receipt content for th
   And it states seller ""Mohnblume Kaffeehaus e.U."", ""Kornblumengasse 9, 1070 Wien"", UID ""ATU71234567""
   And it lists the 3 lines, the voucher − € 3,00, total € 15,70
   And for 10 %: gross € 11,50, net € 10,45, VAT € 1,05; for 20 %: gross € 4,20, net € 3,50, VAT € 0,70
-  And it carries ""Vermittelt über Quartier""
+  And it carries ""Vermittelt über die Plattform""
 
 Scenario Outline: US-019-AC2 In-app payment is limited to € 400,00
   Given a catering order totals <total>
@@ -691,7 +691,7 @@ Scenario: US-019-AC3 Small-business exemption
   Given Kaffeebar Zimtstern applies the small-business VAT exemption
   When Sophie's order of 2 x Espresso at € 2,60 is captured
   Then the receipt shows total € 5,20 and ""Umsatzsteuerbefreit, Kleinunternehmer""
-  And it shows no VAT amounts",High,3,EP-03,S5,R1,quartier;ep-03;per-01,PAY
+  And it shows no VAT amounts",High,3,EP-03,S5,R1,commerce;ep-03;per-01,PAY
 US-020,Story,Be told what changed before I pay,"As a customer with an allergy, I want checkout to stop me if an item's allergens or price changed after I added it, and to offer me another time if my slot filled while my bank confirmed the payment, so that I never pay for something different from what I chose.
 
 Requirements: FR-ORD-12
@@ -727,7 +727,7 @@ Scenario: US-020-AC4 The slot filled while the bank confirmed
 Scenario: US-020-AC5 No choice within 3 minutes
   Given alternatives were offered at 11:56:20
   When Sophie has not chosen by 11:59:20
-  Then the authorization is voided and she sees ""Reservierung aufgehoben, es wurde nichts abgebucht""",High,5,EP-03,S13,R1.1,quartier;ep-03;per-02,ORD
+  Then the authorization is voided and she sees ""Reservierung aufgehoben, es wurde nichts abgebucht""",High,5,EP-03,S13,R1.1,commerce;ep-03;per-02,ORD
 US-021,Story,Choose a service and a staff member,"As a customer, I want to pick the service I need and either my usual stylist or whoever is free, so that I can book the way I prefer.
 
 Requirements: FR-APT-01, FR-APT-02
@@ -745,7 +745,7 @@ Scenario: US-021-AC2 Only qualified staff can be chosen
 
 Scenario: US-021-AC3 Beliebig shows the union of start times
   When Sophie chooses ""Damenhaarschnitt"" with ""Beliebig"" for 2026-10-13, viewed on 2026-10-12 at 18:00
-  Then the start times are Lena's 09:00, 09:15, 09:30, 11:15, 11:30, 11:45, 12:00 and Aylin's 13:00 to 17:00 every 15 minutes",High,5,EP-04,S4,R1,quartier;ep-04;per-01,APT
+  Then the start times are Lena's 09:00, 09:15, 09:30, 11:15, 11:30, 11:45, 12:00 and Aylin's 13:00 to 17:00 every 15 minutes",High,5,EP-04,S4,R1,commerce;ep-04;per-01,APT
 US-022,Story,See only start times that really fit,"As a customer, I want to see only start times at which my whole service, including the stylist's cleanup time, fits, so that I never book a time the salon has to move.
 
 Requirements: FR-APT-02
@@ -793,7 +793,7 @@ Scenario Outline: US-022-AC5 Booking horizon of 8 weeks
   Examples:
     | date       | state        |
     | 2026-12-07 | bookable     |
-    | 2026-12-08 | not bookable |",High,8,EP-04,S5,R1,quartier;ep-04;per-01,APT
+    | 2026-12-08 | not bookable |",High,8,EP-04,S5,R1,commerce;ep-04;per-01,APT
 US-023,Story,Hold and confirm my appointment,"As a customer, I want my chosen time kept for me while I confirm, and a confirmation I can put in my calendar, so that I know the appointment is mine.
 
 Requirements: FR-APT-03, FR-APT-04, FR-APT-08, FR-APT-09
@@ -834,7 +834,7 @@ Scenario Outline: US-023-AC5 Note length
   Examples:
     | length | result                                         |
     | 300    | accepted                                       |
-    | 301    | Bitte kürze deine Anmerkung auf 300 Zeichen.   |",High,5,EP-04,S5,R1,quartier;ep-04;per-01,APT
+    | 301    | Bitte kürze deine Anmerkung auf 300 Zeichen.   |",High,5,EP-04,S5,R1,commerce;ep-04;per-01,APT
 US-024,Story,Get a reminder and reschedule or cancel,"As a customer, I want a reminder the day before and the option to move or cancel myself, so that I do not forget and do not have to call during opening hours.
 
 Requirements: FR-APT-05, FR-APT-06
@@ -868,7 +868,7 @@ Scenario: US-024-AC4 Reschedule is atomic
 
 Scenario: US-024-AC5 Reminders do not depend on push
   Given Sophie switched push notifications off
-  Then the reminder still arrives by email",High,5,EP-04,S5,R1,quartier;ep-04;per-01,APT
+  Then the reminder still arrives by email",High,5,EP-04,S5,R1,commerce;ep-04;per-01,APT
 US-025,Story,"Check in, complete or mark a no-show","As a salon owner, I want to run the appointment day from the POS view and record who came, so that the diary stays true and no-shows are counted fairly.
 
 Requirements: FR-APT-07, FR-APT-10, FR-POS-06
@@ -897,7 +897,7 @@ Scenario: US-025-AC4 Business cancellation needs a reason and informs the custom
   Given Lena is ill on 2026-10-13
   When Martina cancels Sophie's 09:30 appointment with the reason ""Mitarbeiterin erkrankt""
   Then Sophie receives a push and an email with the reason and a link to book again
-  And canceling without a reason is refused with ""Bitte wählen Sie einen Grund.""",High,3,EP-04,S6,R1,quartier;ep-04;per-05,"APT, POS"
+  And canceling without a reason is refused with ""Bitte wählen Sie einen Grund.""",High,3,EP-04,S6,R1,commerce;ep-04;per-05,"APT, POS"
 US-026,Story,Run the order board at the counter,"As counter staff, I want new orders to appear and alert me on one screen with everything I need to prepare them, so that I can accept them quickly without picking up a phone.
 
 Requirements: FR-POS-01, FR-POS-02, FR-POS-07, FR-POS-09
@@ -926,7 +926,7 @@ Scenario: US-026-AC4 Accept captures, reject needs a reason
 Scenario: US-026-AC5 Staff cannot open Business Admin functions
   Given Tobias is signed in with the Staff role
   Then the portal shows only ""Bestellungen"", ""Ausverkauft"", ""Pause"" and ""Termine heute""
-  And a direct call to PUT /business/items/{itemId} with his token returns 403 FORBIDDEN_FOR_ROLE",High,8,EP-05,S4,R1,quartier;ep-05;per-04,POS
+  And a direct call to PUT /business/items/{itemId} with his token returns 403 FORBIDDEN_FOR_ROLE",High,8,EP-05,S4,R1,commerce;ep-05;per-04,POS
 US-027,Story,Hand over an order with the pickup code,"As counter staff, I want to match the customer's pickup code before I hand over, so that the right person gets the right bag.
 
 Requirements: FR-POS-03, FR-POS-08
@@ -957,7 +957,7 @@ Scenario Outline: US-027-AC4 Not collected from 60 minutes after the slot ends
   Examples:
     | time  | result                   |
     | 13:29 | ""Erst ab 13:30 möglich."" |
-    | 13:30 | Not collected            |",High,3,EP-05,S5,R1,quartier;ep-05;per-04,POS
+    | 13:30 | Not collected            |",High,3,EP-05,S5,R1,commerce;ep-05;per-04,POS
 US-028,Story,Mark items sold out and pause orders,"As counter staff, I want to switch off items that ran out and pause new orders when we are overwhelmed, so that customers cannot order what we cannot deliver.
 
 Requirements: FR-POS-04, FR-POS-05
@@ -993,7 +993,7 @@ Scenario: US-028-AC4 Automatic pause when no board is connected
   Given Café Mohnblume accepts orders and the counter tablet loses power at 10:00:00
   When no order board session is connected by 10:02:00
   Then ordering pauses automatically with the reason ""no_board_connected""
-  And Elif receives an email ""Bestellungen pausiert: keine Bestelltafel verbunden""",High,3,EP-05,S5,R1,quartier;ep-05;per-04,POS
+  And Elif receives an email ""Bestellungen pausiert: keine Bestelltafel verbunden""",High,3,EP-05,S5,R1,commerce;ep-05;per-04,POS
 US-029,Story,Declare allergens for items and choices,"As a café owner, I want the portal to make me declare allergens completely for every item and choice and confirm each change, so that my customers can trust what the app shows.
 
 Requirements: FR-CAT-04, FR-CAT-05
@@ -1024,7 +1024,7 @@ Scenario: US-029-AC4 A change creates a new version, live within 1 minute
 Scenario: US-029-AC5 Open pre-orders are told about the change
   Given a customer pre-ordered 4 x Nussschnecke for Saturday
   When Elif confirms version 3
-  Then that customer is emailed within 5 minutes with the new allergens and a free cancellation link",High,8,EP-05,S3,R1,quartier;ep-05;per-03,CAT
+  Then that customer is emailed within 5 minutes with the new allergens and a free cancellation link",High,8,EP-05,S3,R1,commerce;ep-05;per-03,CAT
 US-030,Story,"Maintain the menu, prices and tax categories","As a café owner, I want to maintain my menu with prices including VAT and the right tax category, and create my own vouchers, so that customers see correct prices and receipts show correct VAT.
 
 Requirements: FR-CAT-03, FR-CAT-09
@@ -1054,7 +1054,7 @@ Scenario: US-030-AC3 Hidden items stay in the catalog
 Scenario: US-030-AC4 Create a business-funded voucher
   When Elif creates ""MOHN3"" as € 3,00 off from € 15,00, valid 01.09.2026 to 31.12.2026, once per customer, 200 redemptions in total
   Then the voucher is active and funded by Café Mohnblume
-  And its discounts reduce the commission base (BR-037)",High,5,EP-05,S2,R1,quartier;ep-05;per-03,CAT
+  And its discounts reduce the commission base (BR-037)",High,5,EP-05,S2,R1,commerce;ep-05;per-03,CAT
 US-031,Story,"Set up services, staff and working hours","As a salon owner, I want to set up services with their buffers, my team and their working hours, without ever leaving a booked customer without a stylist, so that online availability matches reality.
 
 Requirements: FR-CAT-06, FR-CAT-07, FR-CAT-08
@@ -1084,7 +1084,7 @@ Scenario: US-031-AC4 A working-hours change cannot orphan appointments
   When Martina changes Lena's Tuesday hours to start at 11:00
   Then saving is refused with ""1 Termine sind betroffen. Bitte umbuchen oder absagen."" listing Sophie's appointment
   When she cancels it with the reason ""Dienstplanänderung"", or reassigns it to a qualified staff member who is free from 09:30 to 10:30
-  Then the change saves and Sophie is notified of the cancellation or the new stylist",High,8,EP-05,S4,R1,quartier;ep-05;per-05,CAT
+  Then the change saves and Sophie is notified of the cancellation or the new stylist",High,8,EP-05,S4,R1,commerce;ep-05;per-05,CAT
 US-032,Story,Issue a refund and read my payout statement,"As a café owner, I want to refund a customer in full or in part and see what was paid out to me and why, so that I can fix mistakes and reconcile my bank account.
 
 Requirements: FR-PAY-04, FR-PAY-08
@@ -1114,8 +1114,8 @@ Scenario: US-032-AC3 Staff cannot refund
 Scenario: US-032-AC4 Payout statement
   Given in the week of 2026-09-14 the only order was the canonical € 15,70 order
   When Elif opens the payout statement for that week
-  Then it shows captured € 15,70, commission € 1,26, VAT on commission € 0,25 and payout € 14,19",High,5,EP-05,S6,R1,quartier;ep-05;per-03,PAY
-US-033,Story,Apply to join Quartier,"As a business owner, I want to apply online with the details I have at hand, so that I can start without a sales call.
+  Then it shows captured € 15,70, commission € 1,26, VAT on commission € 0,25 and payout € 14,19",High,5,EP-05,S6,R1,commerce;ep-05;per-03,PAY
+US-033,Story,Apply to join the platform,"As a business owner, I want to apply online with the details I have at hand, so that I can start without a sales call.
 
 Requirements: FR-ONB-01
 Business rules: BR-042
@@ -1143,7 +1143,7 @@ Scenario: US-033-AC3 Small business without a UID number
 
 Scenario: US-033-AC4 Outside the service area
   When an applicant enters a first location in Graz
-  Then the application is not submitted and the applicant sees ""Quartier ist derzeit nur in Wien verfügbar. Wir setzen Sie gerne auf die Warteliste.""",High,5,EP-06,S1,R1,quartier;ep-06;per-03,ONB
+  Then the application is not submitted and the applicant sees ""Die Plattform ist derzeit nur in Wien verfügbar. Wir setzen Sie gerne auf die Warteliste.""",High,5,EP-06,S1,R1,commerce;ep-06;per-03,ONB
 US-034,Story,Verify a business application,"As a Platform Admin, I want one queue with the evidence for each application, so that I can approve genuine businesses quickly and stop the others.
 
 Requirements: FR-ONB-02
@@ -1172,7 +1172,7 @@ Scenario: US-034-AC3 Reject or request information with a reason
 
 Scenario: US-034-AC4 Every decision is audited
   When Paul approves Mohnblume Kaffeehaus e.U.
-  Then an audit event ""verification.decided"" records Paul, the decision, the time and the UID check result",High,5,EP-06,S2,R1,quartier;ep-06;per-06,ONB
+  Then an audit event ""verification.decided"" records Paul, the decision, the time and the UID check result",High,5,EP-06,S2,R1,commerce;ep-06;per-06,ONB
 US-035,Story,Complete payment onboarding,"As an approved café owner, I want to complete the payment provider's checks from the portal, so that I can receive money from app orders.
 
 Requirements: FR-ONB-03
@@ -1195,7 +1195,7 @@ Scenario Outline: US-035-AC2 Status from the provider
 
 Scenario: US-035-AC3 Salons and spas skip payment onboarding in R1
   Given Haarstudio Linde Leitner GmbH is Approved
-  Then its go-live checklist has no payment step",High,5,EP-06,S3,R1,quartier;ep-06;per-03,ONB
+  Then its go-live checklist has no payment step",High,5,EP-06,S3,R1,commerce;ep-06;per-03,ONB
 US-036,Story,Set up the business page and go live,"As a business owner, I want a checklist that tells me what is missing and a business page that looks like mine, so that I can go live in days, not weeks.
 
 Requirements: FR-CAT-01, FR-CAT-02, FR-ONB-04
@@ -1229,7 +1229,7 @@ Scenario: US-036-AC4 Publish only when the gate passes
   When Paul tries to publish
   Then he sees ""Noch nicht alle Voraussetzungen erfüllt"" with ""Mindestens ein Artikel mit vollständigen Allergenangaben""
   When Elif publishes ""Topfengolatsche"" with a confirmed declaration
-  Then Paul can publish and the café appears in the app",High,5,EP-06,S6,R1,quartier;ep-06;per-03,"CAT, ONB"
+  Then Paul can publish and the café appears in the app",High,5,EP-06,S6,R1,commerce;ep-06;per-03,"CAT, ONB"
 US-037,Story,Suspend or reinstate a business with reasons,"As a Platform Admin, I want to suspend a business with a written statement of reasons and reinstate it when resolved, so that customers are protected and the business is treated fairly.
 
 Requirements: FR-ONB-05, FR-ONB-08
@@ -1253,8 +1253,8 @@ Scenario: US-037-AC3 Reinstate
 Scenario: US-037-AC4 Private feedback is not public
   Given Sophie sends feedback ""3 · Lange gewartet"" for a completed order
   Then Paul sees it in the Platform Admin portal
-  And it appears nowhere in the customer app or the Business Web Portal",High,3,EP-06,S6,R1,quartier;ep-06;per-06,ONB
-US-038,Story,Maintain VAT rates and review the audit trail,"As a Platform Admin, I want to change VAT rates as dated reference data, create Quartier-funded vouchers and search the audit trail, so that legal changes need no release and every sensitive change can be traced.
+  And it appears nowhere in the customer app or the Business Web Portal",High,3,EP-06,S6,R1,commerce;ep-06;per-06,ONB
+US-038,Story,Maintain VAT rates and review the audit trail,"As a Platform Admin, I want to change VAT rates as dated reference data, create platform-funded vouchers and search the audit trail, so that legal changes need no release and every sensitive change can be traced.
 
 Requirements: FR-ONB-06, FR-ONB-07, FR-ONB-09
 Business rules: BR-015, BR-035, BR-036, BR-045
@@ -1265,8 +1265,8 @@ Test cases: TC-ONB-006, TC-ONB-007, TC-ONB-009","Scenario: US-038-AC1 A future V
   Then an order placed on 2026-12-31 at 23:59 uses 10 %
   And an order placed on 2027-01-01 at 00:00 uses 8 %
 
-Scenario: US-038-AC2 Quartier-funded voucher
-  Given Paul created ""WILLKOMMEN3"", € 3,00 off from € 15,00, funded by Quartier
+Scenario: US-038-AC2 platform-funded voucher
+  Given Paul created ""WILLKOMMEN3"", € 3,00 off from € 15,00, funded by the platform
   When Sophie uses it on the canonical basket of € 18,70
   Then she pays € 15,70
   And the commission base is € 18,70 and Café Mohnblume is reimbursed € 3,00 in the weekly payout
@@ -1277,4 +1277,4 @@ Scenario: US-038-AC3 Search the audit trail
 
 Scenario: US-038-AC4 Audit events cannot be changed
   When anyone attempts to update or delete an audit event through any API
-  Then the request is refused and the attempt itself is logged",High,3,EP-06,S7,R1,quartier;ep-06;per-06,ONB
+  Then the request is refused and the attempt itself is logged",High,3,EP-06,S7,R1,commerce;ep-06;per-06,ONB

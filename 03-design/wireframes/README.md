@@ -77,7 +77,7 @@ Frame A is the canonical basket at 11:43 (VAT worked example). Frame B shows the
 | 4 | Voucher | One code per order; the effect is shown before ordering; rejection messages per table 3.4a. | FR-PAY-06, BR-036 |
 | 5 | Totals and VAT | Subtotal € 18,70, voucher − € 3,00, total € 15,70; "darin enthalten" USt. 10 % € 1,05 and USt. 20 % € 0,70. | FR-PAY-05, BR-035 |
 | 6 | Payment method | Card or wallet through the card payment provider's hosted components; pay at pickup where the business offers it. | FR-PAY-01, FR-PAY-03, BR-032 |
-| 7 | Seller identity | The business is the seller; "Vermittelt über Quartier". | FR-ORD-04, BR-038 |
+| 7 | Seller identity | The business is the seller; "Vermittelt über die Plattform". | FR-ORD-04, BR-038 |
 | 8 | Order button | "Zahlungspflichtig bestellen · € 15,70" (FAGG section 8). | FR-ORD-04 |
 | 9 | Status timeline | Updates live; only the business or a timeout moves it. | FR-ORD-06, BR-021 |
 | 10 | Pickup code | 4 characters and a QR code, matched by staff at hand-over. | FR-ORD-05, BR-024 |

@@ -1,4 +1,4 @@
-# Requirements Traceability Matrix: Quartier
+# Requirements Traceability Matrix: Local Commerce & Booking Platform
 
 ## Document control
 
